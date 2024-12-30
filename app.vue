@@ -1,96 +1,98 @@
 <template>
-  <div
-    class="relative overflow-hidden"
-    :style="{ height: `${itemHeight}px` }"
-    @touchstart="startSwipe"
-    @touchmove="moveSwipe"
-    @touchend="endSwipe"
-  >
+  <div class="bg-black">
     <div
-      class="flex flex-col transition-transform duration-300 ease-out"
-      :style="{ transform: `translateY(${currentOffset}px)` }"
+      class="m-auto max-w-md relative overflow-hidden"
+      :style="{ height: `${itemHeight}px` }"
+      @touchstart="startSwipe"
+      @touchmove="moveSwipe"
+      @touchend="endSwipe"
     >
       <div
-        v-for="(video, index) in videos"
-        :key="index"
-        class="relative flex items-center justify-center bg-black"
-        :style="{ height: `${itemHeight}px` }"
+        class="flex flex-col transition-transform duration-300 ease-out"
+        :style="{ transform: `translateY(${currentOffset}px)` }"
       >
-        <video
-          ref="videoElements"
-          class="h-full w-full object-contain"
-          muted
-          playsinline
-          loop
-          :src="video"
-        ></video>
-
-        <div class="absolute bottom-20 left-5 text-white w-3/4">
-          <h3 class="text-lg font-semibold mb-2">
-            ようわからん芸人の動画 {{ index + 1 }}
-          </h3>
-          <p class="text-sm text-gray-300">
-            完全再現できたのでこれで大金持ち確定です。仕事辞めます
-          </p>
-        </div>
-
         <div
-          class="absolute bottom-20 right-5 flex flex-col items-center space-y-4"
+          v-for="(video, index) in videos"
+          :key="index"
+          class="relative flex items-center justify-center bg-black"
+          :style="{ height: `${itemHeight}px` }"
         >
-          <div class="flex flex-col items-center">
-            <button class="p-1 rounded-full shadow-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-8 w-8 text-white"
-              >
-                <path :d="mdiHeart" />
-              </svg>
-            </button>
-            <span class="text-white text-sm mt-1">123</span>
+          <video
+            ref="videoElements"
+            class="h-full w-full object-contain"
+            muted
+            playsinline
+            loop
+            :src="video"
+          ></video>
+
+          <div class="absolute bottom-20 left-5 text-white w-3/4">
+            <h3 class="text-lg font-semibold mb-2">
+              ようわからん芸人の動画 {{ index + 1 }}
+            </h3>
+            <p class="text-sm text-gray-300">
+              完全再現できたのでこれで大金持ち確定です。仕事辞めます
+            </p>
           </div>
 
-          <div class="flex flex-col items-center">
-            <button class="p-1 rounded-full shadow-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-8 w-8 text-white"
-              >
-                <path :d="mdiComment" />
-              </svg>
-            </button>
-            <span class="text-white text-sm mt-1">45</span>
-          </div>
+          <div
+            class="absolute bottom-20 right-5 flex flex-col items-center space-y-4"
+          >
+            <div class="flex flex-col items-center">
+              <button class="p-1 rounded-full shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="h-8 w-8 text-white"
+                >
+                  <path :d="mdiHeart" />
+                </svg>
+              </button>
+              <span class="text-white text-sm mt-1">123</span>
+            </div>
 
-          <div class="flex flex-col items-center">
-            <button class="p-1 rounded-full shadow-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-8 w-8 text-white"
-              >
-                <path :d="mdiBookmark" />
-              </svg>
-            </button>
-            <span class="text-white text-sm mt-1">23</span>
-          </div>
+            <div class="flex flex-col items-center">
+              <button class="p-1 rounded-full shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="h-8 w-8 text-white"
+                >
+                  <path :d="mdiComment" />
+                </svg>
+              </button>
+              <span class="text-white text-sm mt-1">45</span>
+            </div>
 
-          <div class="flex flex-col items-center">
-            <button class="p-1 rounded-full shadow-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-8 w-8 text-white"
-              >
-                <path :d="mdiShare" />
-              </svg>
-            </button>
-            <span class="text-white text-sm mt-1">1,535</span>
+            <div class="flex flex-col items-center">
+              <button class="p-1 rounded-full shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="h-8 w-8 text-white"
+                >
+                  <path :d="mdiBookmark" />
+                </svg>
+              </button>
+              <span class="text-white text-sm mt-1">23</span>
+            </div>
+
+            <div class="flex flex-col items-center">
+              <button class="p-1 rounded-full shadow-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="h-8 w-8 text-white"
+                >
+                  <path :d="mdiShare" />
+                </svg>
+              </button>
+              <span class="text-white text-sm mt-1">1,535</span>
+            </div>
           </div>
         </div>
       </div>
