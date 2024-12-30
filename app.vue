@@ -140,8 +140,13 @@ onMounted(async () => {
   const content = await $fetch(response.files[config.public.fileName].raw_url);
   // @note メモリ食いすぎて死ぬのでとりあえず20件ぐらい
   videos.value = (JSON.parse(content) as Video[]).slice(0, 20);
-
   await nextTick();
+  const videoElements = document.querySelectorAll("video");
+  videoElements.forEach((video) => {
+    video.play().catch((err) => {
+      console.error("Video autoplay failed:", err);
+    });
+  });
 });
 
 onUnmounted(() => {
