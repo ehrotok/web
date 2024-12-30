@@ -6,7 +6,16 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       token: process.env.TOKEN,
-      gistId: process.env.GISTID,
+      gistId:
+        process.env.NODE_ENV === "development"
+          ? process.env.GISTID_DEV
+          : process.env.GISTID,
+      fileName:
+        process.env.NODE_ENV === "development"
+          ? process.env.FILENAME_DEV
+          : process.env.FILENAME,
+      // gistId: process.env.GISTID,
+      // fileName: process.env.FILENAME,
     },
   },
 });

@@ -21,6 +21,7 @@
             ref="videoElements"
             class="h-full w-full object-contain"
             muted
+            autoplay
             playsinline
             loop
             :src="video.url"
@@ -136,16 +137,11 @@ onMounted(async () => {
       },
     }
   )) as any;
-  const content = await $fetch(response.files["ehrotok.json"].raw_url);
-  videos.value = JSON.parse(content) as Video[];
+  const content = await $fetch(response.files[config.public.fileName].raw_url);
+  // @note メモリ食いすぎて死ぬのでとりあえず20件ぐらい
+  videos.value = (JSON.parse(content) as Video[]).slice(0, 20);
 
   await nextTick();
-
-  videoElements.value.forEach((video) => {
-    video.play().catch((_) => {
-      alert("ビデオが読み込めませんでした！");
-    });
-  });
 });
 
 onUnmounted(() => {
