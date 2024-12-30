@@ -23,15 +23,15 @@
             muted
             playsinline
             loop
-            :src="video"
+            :src="video.url"
           ></video>
 
           <div class="absolute bottom-20 left-5 text-white w-3/4">
             <h3 class="text-lg font-semibold mb-2">
-              ようわからん芸人の動画 {{ index + 1 }}
+              {{ video.title }}
             </h3>
             <p class="text-sm text-gray-300">
-              完全再現できたのでこれで大金持ち確定です。仕事辞めます
+              {{ video.description }}
             </p>
           </div>
 
@@ -100,35 +100,50 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { mdiHeart, mdiShare, mdiBookmark, mdiComment } from "@mdi/js";
 
-const videos = ref([
-  "//cc3001.dmm.co.jp/litevideo/freepv/n/n_6/n_613pcbe12119/n_613pcbe12119_mhb_w.mp4",
-  "//cc3001.dmm.co.jp/litevideo/freepv/n/n_6/n_666ssbx2668/n_666ssbx2668_mhb_w.mp4",
-  "//cc3001.dmm.co.jp/litevideo/freepv/5/523/5234ctl00011/5234ctl00011_dmb_w.mp4",
-  "https://cc3001.dmm.co.jp/litevideo/freepv/n/n_6/n_666ansb55213/n_666ansb55213_dmb_w.mp4",
-  "https://cc3001.dmm.co.jp/litevideo/freepv/n/n_9/n_976zepe75/n_976zepe75mhb.mp4",
-]);
+interface Video {
+  title: string;
+  url: string;
+  description: string;
+}
+
+const config = useRuntimeConfig();
+const videos = ref<Video[]>([]);
 
 const startY = ref(0);
 const currentOffset = ref(0);
 const currentIndex = ref(0);
 const itemHeight = ref(0);
+const videoElements = ref<HTMLVideoElement[]>([] as HTMLVideoElement[]);
 
 const updateItemHeight = () => {
   itemHeight.value = window.innerHeight;
 };
 
-onMounted(() => {
+onMounted(async () => {
   updateItemHeight();
   window.addEventListener("resize", updateItemHeight);
 
-  const videoElements = document.querySelectorAll("video");
-  videoElements.forEach((video) => {
-    video.play().catch((err) => {
-      console.error("Video autoplay failed:", err);
+  // ref. https://gist.github.com/ikuosaito1989/6f0c86b520aafb30ec4125646e033d57
+  const response = (await $fetch(
+    `https://api.github.com/gists/${config.public.gistId}`,
+    {
+      headers: {
+        Authorization: `token ${config.public.token}`,
+      },
+    }
+  )) as any;
+  const content = await $fetch(response.files["ehrotok.json"].raw_url);
+  videos.value = JSON.parse(content) as Video[];
+
+  await nextTick();
+
+  videoElements.value.forEach((video) => {
+    video.play().catch((_) => {
+      alert("ビデオが読み込めませんでした！");
     });
   });
 });
@@ -137,18 +152,18 @@ onUnmounted(() => {
   window.removeEventListener("resize", updateItemHeight);
 });
 
-const startSwipe = (e) => {
+const startSwipe = (e: any) => {
   e.preventDefault();
   startY.value = e.touches[0].clientY;
 };
 
-const moveSwipe = (e) => {
+const moveSwipe = (e: any) => {
   e.preventDefault();
   const deltaY = e.touches[0].clientY - startY.value;
   currentOffset.value = -currentIndex.value * itemHeight.value + deltaY;
 };
 
-const endSwipe = (e) => {
+const endSwipe = (e: any) => {
   e.preventDefault();
   const deltaY = e.changedTouches[0].clientY - startY.value;
 
