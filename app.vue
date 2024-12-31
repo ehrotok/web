@@ -186,6 +186,11 @@ const play = async (index: number) => {
   const videoElements = document.querySelectorAll("video");
   videoElements.forEach((video) => {
     if (!video.paused) {
+      videos.value[index] = {
+        title: "",
+        url: "",
+        description: "",
+      };
       video.pause();
       video.src = "";
       video.load();
