@@ -21,7 +21,6 @@
             ref="videoElements"
             class="h-full w-full object-contain"
             muted
-            autoplay
             playsinline
             loop
             :src="video.url"
@@ -113,7 +112,7 @@ interface Video {
 
 const config = useRuntimeConfig();
 const videos = ref<Video[]>([]);
-
+const videoData = ref<Video[]>([]);
 const startY = ref(0);
 const currentOffset = ref(0);
 const currentIndex = ref(0);
@@ -138,15 +137,20 @@ onMounted(async () => {
     }
   )) as any;
   const content = await $fetch(response.files[config.public.fileName].raw_url);
-  // @note メモリ食いすぎて死ぬのでとりあえず20件ぐらい
-  videos.value = (JSON.parse(content) as Video[]).slice(0, 20);
+  const _videos = JSON.parse(content) as Video[];
+  videoData.value = _videos;
+  videos.value = Array.from(
+    { length: _videos.length - 1 },
+    () =>
+      ({
+        title: "",
+        url: "",
+        description: "",
+      } as Video)
+  );
+  videos.value.unshift(_videos[0]);
   await nextTick();
-  const videoElements = document.querySelectorAll("video");
-  videoElements.forEach((video) => {
-    video.play().catch((err) => {
-      console.error("Video autoplay failed:", err);
-    });
-  });
+  play(currentIndex.value);
 });
 
 onUnmounted(() => {
@@ -175,5 +179,27 @@ const endSwipe = (e: any) => {
   }
 
   currentOffset.value = -currentIndex.value * itemHeight.value;
+  play(currentIndex.value);
+};
+
+const play = async (index: number) => {
+  const videoElements = document.querySelectorAll("video");
+  videoElements.forEach((video) => {
+    if (!video.paused) {
+      video.pause();
+      video.src = "";
+      video.load();
+    }
+  });
+
+  if (!videos.value[index].title) {
+    videos.value[index] = videoData.value[index];
+  }
+
+  await nextTick();
+
+  videoElements[index].play().catch((err) => {
+    console.error("Video autoplay failed:", err);
+  });
 };
 </script>
