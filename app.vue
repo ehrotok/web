@@ -183,28 +183,33 @@ const endSwipe = (e: any) => {
 };
 
 const play = async (index: number) => {
-  const videoElements = document.querySelectorAll("video");
-  videoElements.forEach((video) => {
-    if (!video.paused) {
+  const videoElements = Array.from(document.querySelectorAll("video"));
+  videoElements
+    .filter((v) => !v.paused)
+    .forEach((video) => {
       videos.value[index] = {
         title: "",
         url: "",
         description: "",
       };
+
+      // @note リソース解放
       video.pause();
       video.src = "";
       video.load();
-    }
-  });
+    });
 
   if (!videos.value[index].title) {
-    videos.value[index] = videoData.value[index];
+    videos.value.splice(index, 1, videoData.value[index]);
   }
 
   await nextTick();
 
+  // @note 再描画してもvideo起動しないのでsrcを入れ直す
+  videoElements[index].src = videoData.value[index].url;
+  videoElements[index].load();
   videoElements[index].play().catch((err) => {
-    console.error("Video autoplay failed:", err);
+    console.error("動画が再生できません！！！:", err);
   });
 };
 </script>
