@@ -18,7 +18,6 @@
           :style="{ height: `${itemHeight}px` }"
         >
           <video
-            ref="videoElements"
             class="h-full w-full object-contain"
             controls
             muted
@@ -82,7 +81,6 @@ const startY = ref(0);
 const currentOffset = ref(0);
 const currentIndex = ref(0);
 const itemHeight = ref(0);
-const videoElements = ref<HTMLVideoElement[]>([] as HTMLVideoElement[]);
 
 const updateItemHeight = () => {
   itemHeight.value = window.innerHeight;
@@ -100,7 +98,6 @@ onMounted(async () => {
   );
 
   videos.value.result.unshift(videoData.value.result[0]);
-  console.log(videos.value.result);
   await nextTick();
   play(currentIndex.value);
 });
@@ -161,7 +158,7 @@ const play = async (index: number) => {
   videoElements[index].src = videoData.value.result[index].url;
   videoElements[index].load();
   videoElements[index].play().catch((err) => {
-    console.error("動画が再生できません！！！:", err);
+    alert(`動画が再生できません！！！:${err}`);
   });
 };
 </script>
