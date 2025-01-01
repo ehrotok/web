@@ -6,7 +6,7 @@ export interface Videos {
   result: VideoItem[];
 }
 
-interface VideoItem {
+export interface VideoItem {
   id: number;
   title: string;
   content_id: string;

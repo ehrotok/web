@@ -12,7 +12,7 @@
         :style="{ transform: `translateY(${currentOffset}px)` }"
       >
         <div
-          v-for="(video, index) in videos"
+          v-for="(video, index) in videos.result"
           :key="index"
           class="relative flex items-center justify-center bg-black"
           :style="{ height: `${itemHeight}px` }"
@@ -29,10 +29,10 @@
 
           <div class="absolute bottom-20 left-5 text-white w-3/4">
             <h3 class="text-lg font-semibold mb-2">
-              {{ video.title }}
+              {{ video.actress_name }}
             </h3>
             <p class="text-sm text-gray-300">
-              {{ video.description }}
+              {{ video.title }}
             </p>
           </div>
 
@@ -50,7 +50,9 @@
                   <path :d="mdiHeart" />
                 </svg>
               </button>
-              <span class="text-white text-sm mt-1">123</span>
+              <span class="text-white text-sm mt-1">{{
+                video.review_count
+              }}</span>
             </div>
 
             <div class="flex flex-col items-center">
@@ -61,10 +63,12 @@
                   fill="currentColor"
                   class="h-8 w-8 text-white"
                 >
-                  <path :d="mdiComment" />
+                  <path :d="mdiStar" />
                 </svg>
               </button>
-              <span class="text-white text-sm mt-1">45</span>
+              <span class="text-white text-sm mt-1"
+                >{{ video.review_average }}点</span
+              >
             </div>
 
             <div class="flex flex-col items-center">
@@ -78,21 +82,6 @@
                   <path :d="mdiBookmark" />
                 </svg>
               </button>
-              <span class="text-white text-sm mt-1">23</span>
-            </div>
-
-            <div class="flex flex-col items-center">
-              <button class="p-1 rounded-full shadow-lg">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-8 w-8 text-white"
-                >
-                  <path :d="mdiShare" />
-                </svg>
-              </button>
-              <span class="text-white text-sm mt-1">1,535</span>
             </div>
           </div>
         </div>
@@ -103,18 +92,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { mdiHeart, mdiShare, mdiBookmark, mdiComment } from "@mdi/js";
+import { mdiHeart, mdiBookmark, mdiStar } from "@mdi/js";
 import { fetchVideos } from "./repositories";
 
-interface Video {
-  title: string;
-  url: string;
-  description: string;
-}
-
-const config = useRuntimeConfig();
-const videos = ref<Video[]>([]);
-const videoData = ref<Video[]>([]);
+const videos = ref<Videos>({} as Videos);
+const videoData = ref<Videos>({} as Videos);
 const startY = ref(0);
 const currentOffset = ref(0);
 const currentIndex = ref(0);
@@ -130,21 +112,14 @@ onMounted(async () => {
   window.addEventListener("resize", updateItemHeight);
 
   const _videos = await fetchVideos(1);
-  videoData.value = _videos.result.map((v) => ({
-    title: v.actress_name,
-    url: v.url,
-    description: v.title,
-  }));
-  videos.value = Array.from(
-    { length: videoData.value.length - 1 },
-    () =>
-      ({
-        title: "",
-        url: "",
-        description: "",
-      } as Video)
+  videoData.value = _videos;
+  videos.value.result = Array.from(
+    { length: videoData.value.result.length - 1 },
+    () => ({} as VideoItem)
   );
-  videos.value.unshift(videoData.value[0]);
+
+  videos.value.result.unshift(videoData.value.result[0]);
+  console.log(videos.value.result);
   await nextTick();
   play(currentIndex.value);
 });
@@ -174,7 +149,7 @@ const endSwipe = (e: any) => {
     const direction = deltaY > 0 ? -1 : 1;
     const newIndex = currentIndex.value + direction;
 
-    if (newIndex >= 0 && newIndex < videos.value.length) {
+    if (newIndex >= 0 && newIndex < videos.value.result.length) {
       currentIndex.value = newIndex;
       play(currentIndex.value);
     }
@@ -188,11 +163,7 @@ const play = async (index: number) => {
   videoElements
     .filter((v) => !v.paused)
     .forEach((video) => {
-      videos.value[index] = {
-        title: "",
-        url: "",
-        description: "",
-      };
+      videos.value.result[index] = {} as VideoItem;
 
       // @note リソース解放
       video.pause();
@@ -200,13 +171,13 @@ const play = async (index: number) => {
       video.load();
     });
 
-  if (!videos.value[index].title) {
-    videos.value.splice(index, 1, videoData.value[index]);
+  if (!videos.value.result[index].title) {
+    videos.value.result.splice(index, 1, videoData.value.result[index]);
     await nextTick();
   }
 
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
-  videoElements[index].src = videoData.value[index].url;
+  videoElements[index].src = videoData.value.result[index].url;
   videoElements[index].load();
   videoElements[index].play().catch((err) => {
     console.error("動画が再生できません！！！:", err);
