@@ -20,6 +20,7 @@
           <video
             ref="videoElements"
             class="h-full w-full object-contain"
+            controls
             muted
             playsinline
             loop
@@ -137,10 +138,15 @@ onMounted(async () => {
     }
   )) as any;
   const content = await $fetch(response.files[config.public.fileName].raw_url);
-  const _videos = JSON.parse(content) as Video[];
-  videoData.value = _videos;
+  const _videos = JSON.parse(content) as Videos;
+  videoData.value = _videos.result.map((v) => ({
+    title: v.actress_name,
+    url: v.url,
+    description: v.title,
+  }));
+
   videos.value = Array.from(
-    { length: _videos.length - 1 },
+    { length: videoData.value.length - 1 },
     () =>
       ({
         title: "",
@@ -148,7 +154,7 @@ onMounted(async () => {
         description: "",
       } as Video)
   );
-  videos.value.unshift(_videos[0]);
+  videos.value.unshift(videoData.value[0]);
   await nextTick();
   play(currentIndex.value);
 });
@@ -170,16 +176,21 @@ const moveSwipe = (e: any) => {
 
 const endSwipe = (e: any) => {
   e.preventDefault();
-  const deltaY = e.changedTouches[0].clientY - startY.value;
 
-  if (deltaY > 50 && currentIndex.value > 0) {
-    currentIndex.value -= 1;
-  } else if (deltaY < -50 && currentIndex.value < videos.value.length - 1) {
-    currentIndex.value += 1;
+  const deltaY = e.changedTouches[0].clientY - startY.value;
+  const swipeThreshold = 50;
+
+  if (Math.abs(deltaY) > swipeThreshold) {
+    const direction = deltaY > 0 ? -1 : 1;
+    const newIndex = currentIndex.value + direction;
+
+    if (newIndex >= 0 && newIndex < videos.value.length) {
+      currentIndex.value = newIndex;
+      play(currentIndex.value);
+    }
   }
 
   currentOffset.value = -currentIndex.value * itemHeight.value;
-  play(currentIndex.value);
 };
 
 const play = async (index: number) => {
@@ -201,9 +212,8 @@ const play = async (index: number) => {
 
   if (!videos.value[index].title) {
     videos.value.splice(index, 1, videoData.value[index]);
+    await nextTick();
   }
-
-  await nextTick();
 
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
   videoElements[index].src = videoData.value[index].url;

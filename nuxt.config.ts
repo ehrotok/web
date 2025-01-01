@@ -18,4 +18,13 @@ export default defineNuxtConfig({
       // fileName: process.env.FILENAME,
     },
   },
+  imports: {
+    dirs: ["models/**"],
+  },
+
+  routeRules: {
+    "/v1/**": {
+      proxy: `${process.env.PROXY_URL}/**`, // '/api/' から始まるすべてのリクエストをプロキシ
+    },
+  },
 });
