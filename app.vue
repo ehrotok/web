@@ -145,6 +145,7 @@ onMounted(async () => {
     description: v.title,
   }));
 
+  await $fetch("/v1/api/videos?page=1").catch((v) => v);
   videos.value = Array.from(
     { length: videoData.value.length - 1 },
     () =>
