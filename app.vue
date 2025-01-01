@@ -83,6 +83,14 @@
                 </svg>
               </button>
             </div>
+            <div class="flex flex-col items-center">
+              <nuxt-img
+                class="rounded-full"
+                src="https://avatars.githubusercontent.com/u/193193167?s=200&v=4"
+                width="40"
+                height="40"
+              />
+            </div>
           </div>
         </div>
       </div>
