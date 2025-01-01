@@ -57,10 +57,9 @@
             </div>
             <div class="flex flex-col items-center">
               <nuxt-img
-                class="rounded-full"
-                src="https://avatars.githubusercontent.com/u/193193167?s=200&v=4"
-                width="40"
-                height="40"
+                class="rounded-full h-10 w-10 object-contain"
+                placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/FANZA_logo.svg/252px-FANZA_logo.svg.png"
               />
             </div>
           </div>
@@ -90,14 +89,7 @@ onMounted(async () => {
   updateItemHeight();
   window.addEventListener("resize", updateItemHeight);
 
-  const _videos = await fetchVideos(1);
-  videoData.value = _videos;
-  videos.value.result = Array.from(
-    { length: videoData.value.result.length - 1 },
-    () => ({} as VideoItem)
-  );
-
-  videos.value.result.unshift(videoData.value.result[0]);
+  await fetch(1);
   await nextTick();
   play(currentIndex.value);
 });
@@ -105,6 +97,22 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener("resize", updateItemHeight);
 });
+
+const fetch = async (page: number) => {
+  const _videos = await fetchVideos(page);
+  videoData.value = _videos;
+  videos.value.result = videos.value.result ?? [];
+  videos.value.result.push(
+    ...Array.from(
+      { length: videoData.value.result.length - 1 },
+      () => ({} as VideoItem)
+    )
+  );
+
+  videos.value.result.unshift(
+    videoData.value.result[videos.value.result.findIndex((v) => !v.title)]
+  );
+};
 
 const startSwipe = (e: any) => {
   e.preventDefault();
@@ -149,10 +157,8 @@ const play = async (index: number) => {
       video.load();
     });
 
-  if (!videos.value.result[index].title) {
-    videos.value.result.splice(index, 1, videoData.value.result[index]);
-    await nextTick();
-  }
+  videos.value.result.splice(index, 1, videoData.value.result[index]);
+  await nextTick();
 
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
   videoElements[index].src = videoData.value.result[index].url;
