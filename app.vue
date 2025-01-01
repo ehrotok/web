@@ -40,48 +40,21 @@
             class="absolute bottom-20 right-5 flex flex-col items-center space-y-4"
           >
             <div class="flex flex-col items-center">
-              <button class="p-1 rounded-full shadow-lg">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-8 w-8 text-white"
-                >
-                  <path :d="mdiHeart" />
-                </svg>
-              </button>
-              <span class="text-white text-sm mt-1">{{
-                video.review_count
-              }}</span>
+              <IconButton
+                :icon="mdiHeart"
+                :text="video.review_count"
+              ></IconButton>
             </div>
 
             <div class="flex flex-col items-center">
-              <button class="p-1 rounded-full shadow-lg">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-8 w-8 text-white"
-                >
-                  <path :d="mdiStar" />
-                </svg>
-              </button>
-              <span class="text-white text-sm mt-1"
-                >{{ video.review_average }}点</span
-              >
+              <IconButton
+                :icon="mdiStar"
+                :text="`${video.review_average}点`"
+              ></IconButton>
             </div>
 
             <div class="flex flex-col items-center">
-              <button class="p-1 rounded-full shadow-lg">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-8 w-8 text-white"
-                >
-                  <path :d="mdiBookmark" />
-                </svg>
-              </button>
+              <IconButton :icon="mdiBookmark"></IconButton>
             </div>
             <div class="flex flex-col items-center">
               <nuxt-img
