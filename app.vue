@@ -104,6 +104,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import { mdiHeart, mdiShare, mdiBookmark, mdiComment } from "@mdi/js";
+import { fetchVideos } from "./repositories";
 
 interface Video {
   title: string;
@@ -128,24 +129,12 @@ onMounted(async () => {
   updateItemHeight();
   window.addEventListener("resize", updateItemHeight);
 
-  // ref. https://gist.github.com/ikuosaito1989/6f0c86b520aafb30ec4125646e033d57
-  const response = (await $fetch(
-    `https://api.github.com/gists/${config.public.gistId}`,
-    {
-      headers: {
-        Authorization: `token ${config.public.token}`,
-      },
-    }
-  )) as any;
-  const content = await $fetch(response.files[config.public.fileName].raw_url);
-  const _videos = JSON.parse(content) as Videos;
+  const _videos = await fetchVideos(1);
   videoData.value = _videos.result.map((v) => ({
     title: v.actress_name,
     url: v.url,
     description: v.title,
   }));
-
-  await $fetch("/v1/api/videos?page=1").catch((v) => v);
   videos.value = Array.from(
     { length: videoData.value.length - 1 },
     () =>

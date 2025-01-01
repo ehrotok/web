@@ -6,16 +6,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       token: process.env.TOKEN,
-      gistId:
-        process.env.NODE_ENV === "development"
-          ? process.env.GISTID_DEV
-          : process.env.GISTID,
-      fileName:
-        process.env.NODE_ENV === "development"
-          ? process.env.FILENAME_DEV
-          : process.env.FILENAME,
-      // gistId: process.env.GISTID,
-      // fileName: process.env.FILENAME,
+      development: {
+        gistId: process.env.GISTID_DEV,
+        fileName: process.env.FILENAME_DEV,
+      },
+      isDevelopment: process.env.NODE_ENV === "development",
     },
   },
   imports: {
@@ -24,7 +19,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     "/v1/**": {
-      proxy: `${process.env.PROXY_URL}/**`, // '/api/' から始まるすべてのリクエストをプロキシ
+      proxy: `${process.env.PROXY_URL}/**`,
     },
   },
 });
