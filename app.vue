@@ -152,7 +152,7 @@ const endSwipe = async (e: any) => {
         currentPage.value++;
         await reFetch(currentPage.value);
       }
-      await play(currentIndex.value);
+      play(currentIndex.value);
     }
   }
 
