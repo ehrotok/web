@@ -81,7 +81,7 @@ const startY = ref(0);
 const currentOffset = ref(0);
 const currentIndex = ref(0);
 const itemHeight = ref(0);
-
+const currentPage = ref(1);
 const updateItemHeight = () => {
   itemHeight.value = window.innerHeight;
 };
@@ -91,13 +91,8 @@ onMounted(async () => {
   window.addEventListener("resize", updateItemHeight);
 
   useWait(async () => {
-    await fetch(1);
-    await nextTick();
-
-    await play(currentIndex.value).catch((err) => {
-      alert(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
-      currentIndex.value++;
-    });
+    await fetch(currentPage.value);
+    await play(currentIndex.value);
   });
 });
 
@@ -108,7 +103,7 @@ onUnmounted(() => {
 const fetch = async (page: number) => {
   const _videos = await fetchVideos(page);
   videoData.value = _videos;
-  videos.value.result = videos.value.result ?? [];
+  videos.value.result = [];
   videos.value.result.push(
     ...Array.from(
       { length: videoData.value.result.length - 1 },
@@ -119,6 +114,15 @@ const fetch = async (page: number) => {
   videos.value.result.unshift(
     videoData.value.result[videos.value.result.findIndex((v) => !v.title)]
   );
+  await nextTick();
+};
+
+const reFetch = async (page: number) => {
+  return await useWait(async () => {
+    currentIndex.value = 0;
+    await fetch(page);
+    await play(currentIndex.value);
+  });
 };
 
 const startSwipe = (e: any) => {
@@ -132,7 +136,7 @@ const moveSwipe = (e: any) => {
   currentOffset.value = -currentIndex.value * itemHeight.value + deltaY;
 };
 
-const endSwipe = (e: any) => {
+const endSwipe = async (e: any) => {
   e.preventDefault();
 
   const deltaY = e.changedTouches[0].clientY - startY.value;
@@ -144,7 +148,11 @@ const endSwipe = (e: any) => {
 
     if (newIndex >= 0 && newIndex < videos.value.result.length) {
       currentIndex.value = newIndex;
-      play(currentIndex.value);
+      if (!videoData.value.result[newIndex + 1]) {
+        currentPage.value++;
+        await reFetch(currentPage.value);
+      }
+      await play(currentIndex.value);
     }
   }
 
@@ -170,6 +178,9 @@ const play = async (index: number): Promise<void> => {
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
   videoElements[index].src = videoData.value.result[index].url;
   videoElements[index].load();
-  return videoElements[index].play();
+  return videoElements[index].play().catch((err) => {
+    alert(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
+    currentIndex.value++;
+  });
 };
 </script>
