@@ -179,8 +179,7 @@ const play = async (index: number): Promise<void> => {
   videoElements[index].src = videoData.value.result[index].url;
   videoElements[index].load();
   return videoElements[index].play().catch((err) => {
-    alert(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
-    currentIndex.value++;
+    console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
   });
 };
 </script>
