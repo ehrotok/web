@@ -1,4 +1,5 @@
 <template>
+  <Loader></Loader>
   <div class="bg-black">
     <div
       class="m-auto max-w-md relative overflow-hidden"
@@ -59,7 +60,7 @@
               <nuxt-img
                 class="rounded-full h-10 w-10 object-contain"
                 placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/FANZA_logo.svg/252px-FANZA_logo.svg.png"
+                src="/logo.webp"
               />
             </div>
           </div>
@@ -89,9 +90,15 @@ onMounted(async () => {
   updateItemHeight();
   window.addEventListener("resize", updateItemHeight);
 
-  await fetch(1);
-  await nextTick();
-  play(currentIndex.value);
+  useWait(async () => {
+    await fetch(1);
+    await nextTick();
+
+    await play(currentIndex.value).catch((err) => {
+      alert(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
+      currentIndex.value++;
+    });
+  });
 });
 
 onUnmounted(() => {
@@ -144,7 +151,7 @@ const endSwipe = (e: any) => {
   currentOffset.value = -currentIndex.value * itemHeight.value;
 };
 
-const play = async (index: number) => {
+const play = async (index: number): Promise<void> => {
   const videoElements = Array.from(document.querySelectorAll("video"));
   videoElements
     .filter((v) => !v.paused)
@@ -163,8 +170,6 @@ const play = async (index: number) => {
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
   videoElements[index].src = videoData.value.result[index].url;
   videoElements[index].load();
-  videoElements[index].play().catch((err) => {
-    alert(`動画が再生できません！！！:${err}`);
-  });
+  return videoElements[index].play();
 };
 </script>
