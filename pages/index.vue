@@ -38,6 +38,7 @@
           :reviewCoun="video.review_count"
           :reviewAverage="video.review_average"
           :imageUrl="'/logo.webp'"
+          @click:home="onClickHome"
         ></IndexSideMenu>
       </div>
     </div>
@@ -72,6 +73,10 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener("resize", updateItemHeight);
 });
+
+const onClickHome = async (page: number) => {
+  await navigateTo(`/my-page`);
+};
 
 const fetch = async (page: number) => {
   const _videos = await fetchVideos(page);
