@@ -124,6 +124,7 @@ const endSwipe = async (e: any) => {
     const newIndex = currentIndex.value + direction;
 
     if (newIndex >= 0 && newIndex < videos.value.result.length) {
+      inheritPreviousMuted(currentIndex.value, newIndex);
       currentIndex.value = newIndex;
       if (!videoData.value.result[newIndex + 1]) {
         currentPage.value++;
@@ -134,6 +135,16 @@ const endSwipe = async (e: any) => {
   }
 
   currentOffset.value = -currentIndex.value * itemHeight.value;
+};
+
+const inheritPreviousMuted = async (
+  prevIndex: number,
+  currentIndex: number
+): Promise<void> => {
+  const videoElements = Array.from(document.querySelectorAll("video"));
+  if (!videoElements[prevIndex].muted) {
+    videoElements[currentIndex].muted = false;
+  }
 };
 
 const play = async (index: number): Promise<void> => {
