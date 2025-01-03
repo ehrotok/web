@@ -142,9 +142,7 @@ const inheritPreviousMuted = async (
   currentIndex: number
 ): Promise<void> => {
   const videoElements = Array.from(document.querySelectorAll("video"));
-  if (!videoElements[prevIndex].muted) {
-    videoElements[currentIndex].muted = false;
-  }
+  videoElements[currentIndex].muted = videoElements[prevIndex].muted;
 };
 
 const play = async (index: number): Promise<void> => {
