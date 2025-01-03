@@ -1,5 +1,11 @@
 <template>
-  <button :class="buttonClass">
+  <button
+    @touchstart.stop
+    @touchmove.stop
+    @touchend.stop
+    @click="onClick"
+    :class="buttonClass"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -20,7 +26,7 @@ defineProps({
   },
   buttonClass: {
     type: String,
-    default: "p-1 rounded-full shadow-lg",
+    default: "p-1 rounded-full shadow-lg z-50",
   },
   iconClass: {
     type: String,
@@ -35,4 +41,10 @@ defineProps({
     default: undefined,
   },
 });
+
+const emit = defineEmits(["click"]);
+
+const onClick = () => {
+  emit("click");
+};
 </script>
