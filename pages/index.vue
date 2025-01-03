@@ -153,6 +153,7 @@ const play = async (index: number): Promise<void> => {
   videos.value.result.splice(index, 1, videoData.value.result[index]);
   await nextTick();
 
+  localStorageUtil.push;
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
   videoElements[index].src = videoData.value.result[index].url;
   videoElements[index].load();
