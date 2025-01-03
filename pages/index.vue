@@ -1,46 +1,44 @@
 <template>
-  <div class="bg-black">
+  <div
+    class="relative overflow-hidden"
+    :style="{ height: `${itemHeight}px` }"
+    @touchstart="startSwipe"
+    @touchmove="moveSwipe"
+    @touchend="endSwipe"
+  >
     <div
-      class="m-auto max-w-md relative overflow-hidden"
-      :style="{ height: `${itemHeight}px` }"
-      @touchstart="startSwipe"
-      @touchmove="moveSwipe"
-      @touchend="endSwipe"
+      class="flex flex-col transition-transform duration-300 ease-out"
+      :style="{ transform: `translateY(${currentOffset}px)` }"
     >
       <div
-        class="flex flex-col transition-transform duration-300 ease-out"
-        :style="{ transform: `translateY(${currentOffset}px)` }"
+        v-for="(video, index) in videos.result"
+        :key="index"
+        class="relative flex items-center justify-center bg-black"
+        :style="{ height: `${itemHeight}px` }"
       >
-        <div
-          v-for="(video, index) in videos.result"
-          :key="index"
-          class="relative flex items-center justify-center bg-black"
-          :style="{ height: `${itemHeight}px` }"
-        >
-          <video
-            class="h-full w-full object-contain"
-            controls
-            muted
-            playsinline
-            loop
-            :src="video.url"
-          ></video>
+        <video
+          class="h-full w-full object-contain"
+          controls
+          muted
+          playsinline
+          loop
+          :src="video.url"
+        ></video>
 
-          <div class="absolute bottom-20 left-5 text-white w-3/4">
-            <h3 class="text-lg font-semibold mb-2">
-              {{ video.actress_name }}
-            </h3>
-            <p class="text-sm text-gray-300">
-              {{ video.title }}
-            </p>
-          </div>
-
-          <IndexSideMenu
-            :reviewCoun="video.review_count"
-            :reviewAverage="video.review_average"
-            :imageUrl="'/logo.webp'"
-          ></IndexSideMenu>
+        <div class="absolute bottom-20 left-5 text-white w-3/4">
+          <h3 class="text-lg font-semibold mb-2">
+            {{ video.actress_name }}
+          </h3>
+          <p class="text-sm text-gray-300">
+            {{ video.title }}
+          </p>
         </div>
+
+        <IndexSideMenu
+          :reviewCoun="video.review_count"
+          :reviewAverage="video.review_average"
+          :imageUrl="'/logo.webp'"
+        ></IndexSideMenu>
       </div>
     </div>
   </div>
@@ -48,7 +46,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { mdiHeart, mdiBookmark, mdiStar } from "@mdi/js";
 import { fetchVideos } from "../repositories";
 
 const videos = ref<Videos>({} as Videos);

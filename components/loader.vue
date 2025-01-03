@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="loading.value"
-    class="bg-black h-screen flex justify-center items-center w-full h-screen perspective-[100px] fixed top-0 left-0 z-[100]"
+    class="bg-black flex justify-center items-center w-full h-screen perspective-[100px] fixed top-0 left-0 z-[100]"
   >
     <nuxt-img
       src="/logo.webp"
