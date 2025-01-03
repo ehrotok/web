@@ -35,34 +35,11 @@
             </p>
           </div>
 
-          <div
-            class="absolute bottom-20 right-5 flex flex-col items-center space-y-4"
-          >
-            <div class="flex flex-col items-center">
-              <IconButton
-                :icon="mdiHeart"
-                :text="video.review_count"
-              ></IconButton>
-            </div>
-
-            <div class="flex flex-col items-center">
-              <IconButton
-                :icon="mdiStar"
-                :text="`${video.review_average}点`"
-              ></IconButton>
-            </div>
-
-            <div class="flex flex-col items-center">
-              <IconButton :icon="mdiBookmark"></IconButton>
-            </div>
-            <div class="flex flex-col items-center">
-              <nuxt-img
-                class="rounded-full h-10 w-10 object-contain"
-                placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="
-                src="/logo.webp"
-              />
-            </div>
-          </div>
+          <IndexSideMenu
+            :reviewCoun="video.review_count"
+            :reviewAverage="video.review_average"
+            :imageUrl="'/logo.webp'"
+          ></IndexSideMenu>
         </div>
       </div>
     </div>
