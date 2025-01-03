@@ -50,7 +50,6 @@ defineProps({
 const emit = defineEmits(["click:home"]);
 
 const onClickHome = () => {
-  console.log("click:home");
   emit("click:home");
 };
 </script>

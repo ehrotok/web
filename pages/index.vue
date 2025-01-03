@@ -107,19 +107,15 @@ const reFetch = async (page: number) => {
 };
 
 const startSwipe = (e: any) => {
-  // e.preventDefault();
   startY.value = e.touches[0].clientY;
 };
 
 const moveSwipe = (e: any) => {
-  // e.preventDefault();
   const deltaY = e.touches[0].clientY - startY.value;
   currentOffset.value = -currentIndex.value * itemHeight.value + deltaY;
 };
 
 const endSwipe = async (e: any) => {
-  // e.preventDefault();
-
   const deltaY = e.changedTouches[0].clientY - startY.value;
   const swipeThreshold = 50;
 
@@ -156,7 +152,6 @@ const play = async (index: number): Promise<void> => {
   videos.value.result.splice(index, 1, videoData.value.result[index]);
   await nextTick();
 
-  localStorageUtil.push;
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
   videoElements[index].src = videoData.value.result[index].url;
   videoElements[index].load();
