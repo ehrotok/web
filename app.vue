@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-black h-screen">
+  <div class="bg-black">
     <NuxtLayout>
       <Loader></Loader>
-      <div class="m-auto max-w-md">
+      <div class="min-h-screen m-auto max-w-md">
         <NuxtPage />
       </div>
     </NuxtLayout>
