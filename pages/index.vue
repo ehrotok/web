@@ -69,6 +69,10 @@ const updateItemHeight = () => {
   itemHeight.value = window.innerHeight;
 };
 
+const videoSelectorAll = computed(() => {
+  return Array.from(document.querySelectorAll("video"));
+});
+
 onMounted(async () => {
   updateItemHeight();
   window.addEventListener("resize", updateItemHeight);
@@ -133,12 +137,17 @@ const endSwipe = async (e: any) => {
     const newIndex = currentIndex.value + direction;
 
     if (newIndex >= 0 && newIndex < videos.value.result.length) {
-      inheritPreviousMuted(currentIndex.value, newIndex);
+      const prevIndex = currentIndex.value;
       currentIndex.value = newIndex;
+
+      // @note 次のvideoが見つからなかったら再取得を行う
       if (!videoData.value.result[newIndex + 1]) {
         currentPage.value++;
         await reFetch(currentPage.value);
       }
+
+      inheritPreviousState(newIndex, prevIndex);
+      await cleanupVideoDom(currentIndex.value);
       play(currentIndex.value);
     }
   }
@@ -146,41 +155,56 @@ const endSwipe = async (e: any) => {
   currentOffset.value = -currentIndex.value * itemHeight.value;
 };
 
-const inheritPreviousMuted = async (
-  prevIndex: number,
-  currentIndex: number
-): Promise<void> => {
-  const videoElements = Array.from(document.querySelectorAll("video"));
-  videoElements[currentIndex].muted = videoElements[prevIndex].muted;
+/**
+ * 前回表示した動画の状態を引き継ぐ
+ *
+ * @param newIndex
+ * @param prevIndex
+ */
+const inheritPreviousState = async (newIndex: number, prevIndex: number) => {
+  // @note 前回表示した動画のミュート状態を引き継ぐ
+  videoSelectorAll.value[newIndex].muted =
+    videoSelectorAll.value[prevIndex].muted;
 };
 
-const play = async (index: number): Promise<void> => {
-  const videoElements = Array.from(document.querySelectorAll("video"));
-  const currentVideoElements = videoElements[index];
-
-  cleanupVideo(videoElements);
-
-  videos.value.result[index] = {} as VideoItem;
-  videos.value.result.splice(index, 1, videoData.value.result[index]);
-  await nextTick();
-
-  // @note 再描画してもvideo起動しないのでsrcを入れ直す
-  currentVideoElements.src = videoData.value.result[index].url;
-  currentVideoElements.load();
-  return currentVideoElements.play().catch((err) => {
-    console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
-  });
-};
-
-const cleanupVideo = async (
-  videoElements: HTMLVideoElement[]
-): Promise<void> => {
-  videoElements
+/**
+ * VideoのDOMをクリーンアップする
+ *
+ * @param videoElements
+ * @param currentIndex
+ */
+const cleanupVideoDom = async (currentIndex: number): Promise<void> => {
+  // @note 再生中の動画を解放する
+  videoSelectorAll.value
     .filter((v) => !v.paused)
     .forEach((video) => {
       video.pause();
       video.src = "";
       video.load();
     });
+
+  // @note domを再描画する
+  videos.value.result.splice(
+    currentIndex,
+    1,
+    videoData.value.result[currentIndex]
+  );
+  await nextTick();
+};
+
+/**
+ * 動画を再生する
+ *
+ * @param videoElements
+ * @param currentIndex
+ */
+const play = async (currentIndex: number): Promise<void> => {
+  const currentVideoElements = videoSelectorAll.value[currentIndex];
+  // @note 再描画してもvideo起動しないのでsrcを入れ直す
+  currentVideoElements.src = videoData.value.result[currentIndex].url;
+  currentVideoElements.load();
+  return currentVideoElements.play().catch((err) => {
+    console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
+  });
 };
 </script>
