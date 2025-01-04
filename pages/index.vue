@@ -156,25 +156,31 @@ const inheritPreviousMuted = async (
 
 const play = async (index: number): Promise<void> => {
   const videoElements = Array.from(document.querySelectorAll("video"));
-  videoElements
-    .filter((v) => !v.paused)
-    .forEach((video) => {
-      videos.value.result[index] = {} as VideoItem;
+  const currentVideoElements = videoElements[index];
 
-      // @note リソース解放
-      video.pause();
-      video.src = "";
-      video.load();
-    });
+  cleanupVideo(videoElements);
 
+  videos.value.result[index] = {} as VideoItem;
   videos.value.result.splice(index, 1, videoData.value.result[index]);
   await nextTick();
 
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
-  videoElements[index].src = videoData.value.result[index].url;
-  videoElements[index].load();
-  return videoElements[index].play().catch((err) => {
+  currentVideoElements.src = videoData.value.result[index].url;
+  currentVideoElements.load();
+  return currentVideoElements.play().catch((err) => {
     console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
   });
+};
+
+const cleanupVideo = async (
+  videoElements: HTMLVideoElement[]
+): Promise<void> => {
+  videoElements
+    .filter((v) => !v.paused)
+    .forEach((video) => {
+      video.pause();
+      video.src = "";
+      video.load();
+    });
 };
 </script>
