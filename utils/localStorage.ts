@@ -5,9 +5,18 @@ export const localStorageUtil = {
   /**
    * Tをpush
    * @param key
+   * @param duplicateCheckKey
    * @param items
    */
-  push: async <T>(key: string, ...items: T[]): Promise<T[]> => {
+  push: async <T>({
+    key,
+    duplicateCheckKey,
+    items,
+  }: {
+    key: string;
+    duplicateCheckKey?: string;
+    items: T[];
+  }): Promise<T[]> => {
     const storage: T[] = [];
     const data = localStorage.getItem(key);
     if (data) {
@@ -15,7 +24,17 @@ export const localStorageUtil = {
     }
 
     for (const item of items) {
-      if (data?.includes(JSON.stringify(item))) {
+      if (
+        duplicateCheckKey &&
+        typeof item === "object" &&
+        item !== null &&
+        duplicateCheckKey in item
+      ) {
+        const value = (item as { [key: string]: string })[duplicateCheckKey];
+        if (data?.includes(value)) {
+          continue;
+        }
+      } else if (data?.includes(JSON.stringify(item))) {
         continue;
       }
 
@@ -29,18 +48,33 @@ export const localStorageUtil = {
   /**
    * Tをsplice
    * @param key
+   * @param duplicateCheckKey
    * @param items
    */
-  splice: async <T>(key: string, ...items: T[]): Promise<T[]> => {
+  splice: async <T>({
+    key,
+    duplicateCheckKey,
+    items,
+  }: {
+    key: string;
+    duplicateCheckKey: string;
+    items: T[];
+  }): Promise<T[]> => {
     const storage: T[] = [];
     const data = localStorage.getItem(key);
+
     if (data) {
       storage.push(...JSON.parse(data));
     }
 
     for (const item of items) {
+      // 指定されたキーで重複チェック
       const index = storage.findIndex(
-        (v) => JSON.stringify(v) === JSON.stringify(item)
+        (v) =>
+          typeof v === "object" &&
+          v !== null &&
+          duplicateCheckKey in v &&
+          v[duplicateCheckKey as keyof T] === item[duplicateCheckKey as keyof T]
       );
       if (index !== -1) {
         storage.splice(index, 1);
