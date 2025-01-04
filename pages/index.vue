@@ -114,6 +114,7 @@ onUnmounted(() => {
 });
 
 const onClickHome = async () => {
+  await cleanupVideoDom(currentIndex.value);
   await navigateTo(`/my-page`);
 };
 
