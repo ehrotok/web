@@ -5,9 +5,9 @@ export const localStorageUtil = {
   /**
    * Tをpush
    * @param key
-   * @param ids
+   * @param items
    */
-  push: <T>(key: string, ...items: T[]): T[] => {
+  push: async <T>(key: string, ...items: T[]): Promise<T[]> => {
     const storage: T[] = [];
     const data = localStorage.getItem(key);
     if (data) {
@@ -23,14 +23,15 @@ export const localStorageUtil = {
     }
 
     localStorage.setItem(key, JSON.stringify(storage));
-    return storage;
+    return Promise.resolve(storage);
   },
+
   /**
    * Tをsplice
    * @param key
-   * @param ids
+   * @param items
    */
-  splice: <T>(key: string, ...items: T[]): T[] => {
+  splice: async <T>(key: string, ...items: T[]): Promise<T[]> => {
     const storage: T[] = [];
     const data = localStorage.getItem(key);
     if (data) {
@@ -47,19 +48,20 @@ export const localStorageUtil = {
     }
 
     localStorage.setItem(key, JSON.stringify(storage));
-    return storage;
+    return Promise.resolve(storage);
   },
+
   /**
    * keyのデータを取得する
    *
-   * @param items
+   * @param key
    */
-  getItem: <T>(key: string) => {
+  getItem: async <T>(key: string): Promise<T[]> => {
     const data = localStorage.getItem(key);
     if (data) {
-      return JSON.parse(data) as T[];
+      return Promise.resolve(JSON.parse(data) as T[]);
     }
 
-    return [];
+    return Promise.resolve([]);
   },
 };
