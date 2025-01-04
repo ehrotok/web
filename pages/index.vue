@@ -43,11 +43,13 @@
         </div>
 
         <IndexSideMenu
-          :reviewCoun="video.review_count"
+          :reviewCount="video.review_count"
           :reviewAverage="video.review_average"
           :imageUrl="'/logo.webp'"
           :productUrl="video.product_url"
+          :isBookmark="isBookmark"
           @click:home="onClickHome"
+          @click:bookmark="onClickBookmark"
         ></IndexSideMenu>
       </div>
     </div>
@@ -56,7 +58,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { fetchVideos } from "../repositories";
+import { fetchVideos } from "~/repositories";
+import { Constants } from "~/config";
 
 const videos = ref<Videos>({} as Videos);
 const videoData = ref<Videos>({} as Videos);
@@ -68,6 +71,30 @@ const currentPage = ref(1);
 const updateItemHeight = () => {
   itemHeight.value = window.innerHeight;
 };
+const bookmarks = ref<LocalStorage[]>([]);
+
+const isBookmark = computed(() => {
+  return !!bookmarks.value.find(
+    (v) => v.url === videos.value.result[currentIndex.value].url
+  );
+});
+
+const localStorageItem = computed(
+  () =>
+    ({
+      url: videos.value.result[currentIndex.value].url,
+      product_url: videos.value.result[currentIndex.value].product_url,
+      actress_name: videos.value.result[currentIndex.value].actress_name,
+      title: videos.value.result[currentIndex.value].title,
+      review_count: videos.value.result[currentIndex.value].review_count,
+      review_average: videos.value.result[currentIndex.value].review_average,
+      create_at: Date(),
+    } as LocalStorage)
+);
+
+const videoSelectorAll = computed(() => {
+  return Array.from(document.querySelectorAll("video"));
+});
 
 onMounted(async () => {
   updateItemHeight();
@@ -76,6 +103,9 @@ onMounted(async () => {
   useWait(async () => {
     await fetch(currentPage.value);
     await play(currentIndex.value);
+    bookmarks.value = await localStorageUtil.getItem<LocalStorage>(
+      Constants.STORAGE_KEYS.BOOKMARK
+    );
   });
 });
 
@@ -83,8 +113,33 @@ onUnmounted(() => {
   window.removeEventListener("resize", updateItemHeight);
 });
 
-const onClickHome = async (page: number) => {
+const onClickHome = async () => {
+  await cleanupVideoDom(currentIndex.value);
   await navigateTo(`/my-page`);
+};
+
+const onClickBookmark = async () => {
+  console.log(localStorageItem.value.url.toString());
+  if (isBookmark.value) {
+    await localStorageUtil.splice({
+      key: Constants.STORAGE_KEYS.BOOKMARK,
+      duplicateCheckKey: "url",
+      items: [localStorageItem.value],
+    });
+    alert("ブックマークを解除しました");
+  } else {
+    await localStorageUtil.push<LocalStorage>({
+      key: Constants.STORAGE_KEYS.BOOKMARK,
+      items: [localStorageItem.value],
+    });
+    alert(
+      "動画をブックマークしました\nブックマークした動画は、プロフィール（👤）からいつでも確認できます"
+    );
+  }
+
+  bookmarks.value = await localStorageUtil.getItem<LocalStorage>(
+    Constants.STORAGE_KEYS.BOOKMARK
+  );
 };
 
 const fetch = async (page: number) => {
@@ -133,12 +188,17 @@ const endSwipe = async (e: any) => {
     const newIndex = currentIndex.value + direction;
 
     if (newIndex >= 0 && newIndex < videos.value.result.length) {
-      inheritPreviousMuted(currentIndex.value, newIndex);
+      const prevIndex = currentIndex.value;
       currentIndex.value = newIndex;
+
+      // @note 次のvideoが見つからなかったら再取得を行う
       if (!videoData.value.result[newIndex + 1]) {
         currentPage.value++;
         await reFetch(currentPage.value);
       }
+
+      inheritPreviousState(newIndex, prevIndex);
+      await cleanupVideoDom(currentIndex.value);
       play(currentIndex.value);
     }
   }
@@ -146,34 +206,60 @@ const endSwipe = async (e: any) => {
   currentOffset.value = -currentIndex.value * itemHeight.value;
 };
 
-const inheritPreviousMuted = async (
-  prevIndex: number,
-  currentIndex: number
-): Promise<void> => {
-  const videoElements = Array.from(document.querySelectorAll("video"));
-  videoElements[currentIndex].muted = videoElements[prevIndex].muted;
+/**
+ * 前回表示した動画の状態を引き継ぐ
+ *
+ * @param newIndex
+ * @param prevIndex
+ */
+const inheritPreviousState = async (newIndex: number, prevIndex: number) => {
+  // @note 前回表示した動画のミュート状態を引き継ぐ
+  videoSelectorAll.value[newIndex].muted =
+    videoSelectorAll.value[prevIndex].muted;
 };
 
-const play = async (index: number): Promise<void> => {
-  const videoElements = Array.from(document.querySelectorAll("video"));
-  videoElements
+/**
+ * VideoのDOMをクリーンアップする
+ *
+ * @param videoElements
+ * @param currentIndex
+ */
+const cleanupVideoDom = async (currentIndex: number): Promise<void> => {
+  // @note 再生中の動画を解放する
+  videoSelectorAll.value
     .filter((v) => !v.paused)
     .forEach((video) => {
-      videos.value.result[index] = {} as VideoItem;
-
-      // @note リソース解放
       video.pause();
       video.src = "";
       video.load();
     });
 
-  videos.value.result.splice(index, 1, videoData.value.result[index]);
+  // @note domを再描画する
+  videos.value.result.splice(
+    currentIndex,
+    1,
+    videoData.value.result[currentIndex]
+  );
   await nextTick();
+};
 
+/**
+ * 動画を再生する
+ *
+ * @param videoElements
+ * @param currentIndex
+ */
+const play = async (currentIndex: number): Promise<void> => {
+  const currentVideoElements = videoSelectorAll.value[currentIndex];
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
-  videoElements[index].src = videoData.value.result[index].url;
-  videoElements[index].load();
-  return videoElements[index].play().catch((err) => {
+  currentVideoElements.src = videoData.value.result[currentIndex].url;
+  currentVideoElements.load();
+  localStorageUtil.push<LocalStorage>({
+    key: Constants.STORAGE_KEYS.HISTORY,
+    duplicateCheckKey: "url",
+    items: [localStorageItem.value],
+  });
+  return currentVideoElements.play().catch((err) => {
     console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
   });
 };

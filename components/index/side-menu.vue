@@ -18,17 +18,21 @@
     </div>
 
     <div class="flex flex-col items-center">
-      <IconButton :icon="mdiBookmark"></IconButton>
+      <IconButton
+        :iconClass="isBookmark ? `h-8 w-8 text-yellow-300` : undefined"
+        @click="onClickBookmark"
+        :icon="mdiBookmark"
+      ></IconButton>
     </div>
 
     <div class="flex flex-col items-center">
-      <IconButton @click="onClickHome" :icon="mdiHomeOutline"></IconButton>
+      <IconButton @click="onClickHome" :icon="mdiAccountOutline"></IconButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { mdiHeart, mdiBookmark, mdiStar, mdiHomeOutline } from "@mdi/js";
+import { mdiHeart, mdiBookmark, mdiStar, mdiAccountOutline } from "@mdi/js";
 defineProps({
   reviewCount: {
     type: Number,
@@ -46,10 +50,18 @@ defineProps({
     type: String,
     default: "/logo.webp",
   },
+  isBookmark: {
+    type: Boolean,
+    default: false,
+  },
 });
-const emit = defineEmits(["click:home"]);
+const emit = defineEmits(["click:home", "click:bookmark"]);
 
 const onClickHome = () => {
   emit("click:home");
+};
+
+const onClickBookmark = () => {
+  emit("click:bookmark");
 };
 </script>

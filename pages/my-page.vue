@@ -1,22 +1,31 @@
 <template>
   <div
-    class="bg-black sticky top-0 z-50 text-white grid grid-cols-3 text-center border-b border-gray-300"
+    class="py-2 bg-black sticky top-0 z-50 text-white grid grid-cols-3 text-center border-b border-gray-300"
   >
     <div class="border-r border-gray-500">
       <IconButton
         iconClass="h-8 w-8 text-white opacity-30"
         buttonClass="p-1 rounded-full shadow-lg"
-        :icon="mdiHomeOutline"
+        :icon="mdiArrowULeftTop"
         @click="onClickHome"
       ></IconButton>
     </div>
     <div class="border-r border-gray-500">
-      <IconButton :icon="mdiBookmarkOutline"></IconButton>
+      <IconButton
+        :icon="mdiBookmarkOutline"
+        :iconClass="`h-8 w-8 text-white ${
+          isSelectTab === 'bookmark' ? '' : 'opacity-30'
+        }`"
+        @click="onClickBookmark"
+      ></IconButton>
     </div>
     <div>
       <IconButton
-        iconClass="h-8 w-8 text-white opacity-30"
+        :iconClass="`h-8 w-8 text-white ${
+          isSelectTab === 'history' ? '' : 'opacity-30'
+        }`"
         :icon="mdiHistory"
+        @click="onClickHistory"
       ></IconButton>
     </div>
   </div>
@@ -44,14 +53,48 @@
 </template>
 
 <script setup lang="ts">
-import { mdiHistory, mdiBookmarkOutline, mdiHomeOutline } from "@mdi/js";
+import { mdiHistory, mdiBookmarkOutline, mdiArrowULeftTop } from "@mdi/js";
+import { Constants } from "~/config";
+
+const isSelectTab = ref<"bookmark" | "history">("bookmark");
+const bookmarks = ref<LocalStorage[]>([]);
+const histories = ref<LocalStorage[]>([]);
+
+const tiles = computed(() => {
+  if (isSelectTab.value === "history") {
+    return histories.value.map((v) => ({
+      image: "/logo.webp",
+      title: v.title,
+    }));
+  }
+
+  return bookmarks.value.map((v) => ({
+    image: "/logo.webp",
+    title: v.title,
+  }));
+});
+
+onMounted(async () => {
+  bookmarks.value = await localStorageUtil.getItem<LocalStorage>(
+    Constants.STORAGE_KEYS.BOOKMARK
+  );
+});
 
 const onClickHome = async () => {
   await navigateTo(`/`);
 };
 
-const tiles = Array.from({ length: 20 }, () => ({
-  image: "/logo.webp",
-  title: "動画タイトル1動画タイトル1動画タイトル1動画タイトル1動画タイトル1",
-}));
+const onClickBookmark = async () => {
+  isSelectTab.value = "bookmark";
+  bookmarks.value = await localStorageUtil.getItem<LocalStorage>(
+    Constants.STORAGE_KEYS.BOOKMARK
+  );
+};
+
+const onClickHistory = async () => {
+  isSelectTab.value = "history";
+  histories.value = await localStorageUtil.getItem<LocalStorage>(
+    Constants.STORAGE_KEYS.HISTORY
+  );
+};
 </script>
