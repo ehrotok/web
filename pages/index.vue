@@ -23,7 +23,7 @@
         :style="{ height: `${itemHeight}px` }"
       >
         <video
-          class="h-full w-full object-contain"
+          class="h-dvh w-full object-contain"
           controls
           muted
           playsinline
@@ -224,8 +224,7 @@ const endSwipe = async (e: any) => {
       }
 
       inheritPreviousState(newIndex, prevIndex);
-      await cleanupVideoDom(currentIndex.value);
-      play(currentIndex.value);
+      cleanupVideoDom(currentIndex.value).then(() => play(currentIndex.value));
     }
   }
 
