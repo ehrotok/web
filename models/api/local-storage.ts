@@ -8,5 +8,6 @@ export type LocalStorage = {
   title: string;
   review_count: number;
   review_average: number;
-  create_at: string;
+  created_at: string;
+  image_url: string;
 };
