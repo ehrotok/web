@@ -22,4 +22,9 @@ export default defineNuxtConfig({
       proxy: `${process.env.PROXY_URL}/**`,
     },
   },
+
+  image: {
+    provider: "netlify",
+    domains: ["pics.dmm.co.jp"],
+  },
 });
