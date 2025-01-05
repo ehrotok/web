@@ -6,6 +6,12 @@
     @touchmove="moveSwipe"
     @touchend="endSwipe"
   >
+    <IconButton
+      v-if="props.fetchType"
+      buttonClass="absolute top-0 m-4 rounded-full shadow-lg z-50"
+      :icon="mdiArrowULeftTop"
+      @click="onClickReturn"
+    ></IconButton>
     <div
       class="flex flex-col transition-transform duration-300 ease-out"
       :style="{ transform: `translateY(${currentOffset}px)` }"
@@ -26,13 +32,7 @@
         ></video>
 
         <div class="absolute bottom-20 left-5 text-white w-3/4">
-          <a
-            @touchstart.stop
-            @touchmove.stop
-            @touchend.stop
-            :href="video.product_url"
-            target="_blank"
-          >
+          <a :href="video.product_url" target="_blank">
             <h3 class="text-lg font-semibold mb-2">
               {{ video.actress_name }}
             </h3>
@@ -45,7 +45,7 @@
         <IndexSideMenu
           :reviewCount="video.review_count"
           :reviewAverage="video.review_average"
-          :imageUrl="'/logo.webp'"
+          :imageUrl="video.image_url"
           :productUrl="video.product_url"
           :isBookmark="isBookmark"
           @click:home="onClickHome"
@@ -57,9 +57,19 @@
 </template>
 
 <script setup lang="ts">
+import { mdiArrowULeftTop } from "@mdi/js";
 import { ref, onMounted, onUnmounted } from "vue";
 import { fetchVideos } from "~/repositories";
 import { Constants } from "~/config";
+
+const props = defineProps({
+  fetchType: {
+    type: String as PropType<"bookmarks" | "histories">,
+    default: undefined,
+  },
+});
+
+const route = useRoute();
 
 const videos = ref<Videos>({} as Videos);
 const videoData = ref<Videos>({} as Videos);
@@ -75,7 +85,7 @@ const bookmarks = ref<LocalStorage[]>([]);
 
 const isBookmark = computed(() => {
   return !!bookmarks.value.find(
-    (v) => v.url === videos.value.result[currentIndex.value].url
+    (v) => v.url === videos.value.result[currentIndex.value]?.url
   );
 });
 
@@ -88,7 +98,8 @@ const localStorageItem = computed(
       title: videos.value.result[currentIndex.value].title,
       review_count: videos.value.result[currentIndex.value].review_count,
       review_average: videos.value.result[currentIndex.value].review_average,
-      create_at: Date(),
+      created_at: Date(),
+      image_url: videos.value.result[currentIndex.value].image_url,
     } as LocalStorage)
 );
 
@@ -101,6 +112,10 @@ onMounted(async () => {
   window.addEventListener("resize", updateItemHeight);
 
   useWait(async () => {
+    if (route.query.position) {
+      currentIndex.value = +route.query.position;
+      currentOffset.value = -currentIndex.value * itemHeight.value;
+    }
     await fetch(currentPage.value);
     await play(currentIndex.value);
     bookmarks.value = await localStorageUtil.getItem<LocalStorage>(
@@ -118,8 +133,12 @@ const onClickHome = async () => {
   await navigateTo(`/my-page`);
 };
 
+const onClickReturn = async () => {
+  await cleanupVideoDom(currentIndex.value);
+  await navigateTo(`/my-page?selected=${props.fetchType}`);
+};
+
 const onClickBookmark = async () => {
-  console.log(localStorageItem.value.url.toString());
   if (isBookmark.value) {
     await localStorageUtil.splice({
       key: Constants.STORAGE_KEYS.BOOKMARK,
@@ -128,10 +147,7 @@ const onClickBookmark = async () => {
     });
     alert("ブックマークを解除しました");
   } else {
-    await localStorageUtil.push<LocalStorage>({
-      key: Constants.STORAGE_KEYS.BOOKMARK,
-      items: [localStorageItem.value],
-    });
+    await setLocalStorage(Constants.STORAGE_KEYS.BOOKMARK);
     alert(
       "動画をブックマークしました\nブックマークした動画は、プロフィール（👤）からいつでも確認できます"
     );
@@ -143,19 +159,32 @@ const onClickBookmark = async () => {
 };
 
 const fetch = async (page: number) => {
-  const _videos = await fetchVideos(page);
-  videoData.value = _videos;
-  videos.value.result = [];
-  videos.value.result.push(
-    ...Array.from(
-      { length: videoData.value.result.length - 1 },
-      () => ({} as VideoItem)
-    )
+  const key = props.fetchType
+    ? props.fetchType === "bookmarks"
+      ? Constants.STORAGE_KEYS.BOOKMARK
+      : Constants.STORAGE_KEYS.HISTORY
+    : "";
+
+  videoData.value.result = key
+    ? (await localStorageUtil.getItem<LocalStorage>(key)).map(
+        (v) => ({ ...v } as VideoItem)
+      )
+    : (await fetchVideos(page)).result;
+
+  videos.value.result =
+    videoData.value.result.length > 1
+      ? Array.from(
+          { length: videoData.value.result.length - 1 },
+          () => ({} as VideoItem)
+        )
+      : [];
+
+  videos.value.result.splice(
+    currentIndex.value,
+    0,
+    videoData.value.result[currentIndex.value]
   );
 
-  videos.value.result.unshift(
-    videoData.value.result[videos.value.result.findIndex((v) => !v.title)]
-  );
   await nextTick();
 };
 
@@ -168,18 +197,15 @@ const reFetch = async (page: number) => {
 };
 
 const startSwipe = (e: any) => {
-  e.preventDefault();
   startY.value = e.touches[0].clientY;
 };
 
 const moveSwipe = (e: any) => {
-  e.preventDefault();
   const deltaY = e.touches[0].clientY - startY.value;
   currentOffset.value = -currentIndex.value * itemHeight.value + deltaY;
 };
 
 const endSwipe = async (e: any) => {
-  e.preventDefault();
   const deltaY = e.changedTouches[0].clientY - startY.value;
   const swipeThreshold = 50;
 
@@ -192,7 +218,7 @@ const endSwipe = async (e: any) => {
       currentIndex.value = newIndex;
 
       // @note 次のvideoが見つからなかったら再取得を行う
-      if (!videoData.value.result[newIndex + 1]) {
+      if (!props.fetchType && !videoData.value.result[newIndex + 1]) {
         currentPage.value++;
         await reFetch(currentPage.value);
       }
@@ -246,7 +272,6 @@ const cleanupVideoDom = async (currentIndex: number): Promise<void> => {
 /**
  * 動画を再生する
  *
- * @param videoElements
  * @param currentIndex
  */
 const play = async (currentIndex: number): Promise<void> => {
@@ -254,13 +279,23 @@ const play = async (currentIndex: number): Promise<void> => {
   // @note 再描画してもvideo起動しないのでsrcを入れ直す
   currentVideoElements.src = videoData.value.result[currentIndex].url;
   currentVideoElements.load();
-  localStorageUtil.push<LocalStorage>({
-    key: Constants.STORAGE_KEYS.HISTORY,
-    duplicateCheckKey: "url",
-    items: [localStorageItem.value],
-  });
+  setLocalStorage(Constants.STORAGE_KEYS.HISTORY);
   return currentVideoElements.play().catch((err) => {
     console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
+  });
+};
+
+const setLocalStorage = async (
+  key: (typeof Constants.STORAGE_KEYS)[keyof typeof Constants.STORAGE_KEYS]
+): Promise<void> => {
+  if (props.fetchType) {
+    return;
+  }
+
+  localStorageUtil.push<LocalStorage>({
+    key: key,
+    duplicateCheckKey: "url",
+    items: [localStorageItem.value],
   });
 };
 </script>

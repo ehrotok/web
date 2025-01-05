@@ -1,32 +1,62 @@
 <template>
+  <IconButton
+    buttonClass="absolute top-0 right-0 m-4 rounded-full shadow-lg z-50"
+    :icon="mdiTrashCanOutline"
+    @click="onClickTrash"
+  ></IconButton>
+  <div class="text-white text-center p-5">
+    <nuxt-img
+      class="m-auto rounded-full h-20 w-20 object-contain"
+      placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="
+      src="/logo.webp"
+    />
+    <div class="flex justify-evenly p-3">
+      <div class="w-full border-r border-gray-500">
+        <div class="text-2xl font-bold">{{ histories.length }}</div>
+        <div class="text-xs mt-1">再生</div>
+      </div>
+      <div class="w-full">
+        <div class="text-2xl font-bold">{{ bookmarks.length }}</div>
+        <div class="text-xs mt-1">ブックマーク</div>
+      </div>
+    </div>
+    <div class="w-full text-sm m-2">
+      お気に入りの動画を簡単にブックマーク！履歴から見つけて、いつでも楽しめるよう保存しましょう
+    </div>
+  </div>
   <div
-    class="py-2 bg-black sticky top-0 z-50 text-white grid grid-cols-3 text-center border-b border-gray-300"
+    class="py-2 bg-black sticky top-0 z-50 text-white grid grid-cols-3 text-center border-b border-gray-300 border-t"
   >
     <div class="border-r border-gray-500">
       <IconButton
-        iconClass="h-8 w-8 text-white opacity-30"
-        buttonClass="p-1 rounded-full shadow-lg"
-        :icon="mdiArrowULeftTop"
+        iconClass="h-8 w-8 text-white m-auto opacity-30"
+        buttonClass="rounded-full shadow-lg w-full"
+        :icon="mdiHomeOutline"
         @click="onClickHome"
       ></IconButton>
+      <div class="text-white text-xs leading-3">レコメンド</div>
     </div>
     <div class="border-r border-gray-500">
       <IconButton
         :icon="mdiBookmarkOutline"
-        :iconClass="`h-8 w-8 text-white ${
-          isSelectTab === 'bookmark' ? '' : 'opacity-30'
+        buttonClass="rounded-full shadow-lg w-full"
+        :iconClass="`h-8 w-8 text-white m-auto ${
+          isSelectBookmarkTab ? '' : 'opacity-30'
         }`"
-        @click="onClickBookmark"
+        @click="onClickIcon('bookmarks')"
       ></IconButton>
+      <div class="text-white text-xs leading-3">ブックマーク</div>
     </div>
     <div>
       <IconButton
-        :iconClass="`h-8 w-8 text-white ${
-          isSelectTab === 'history' ? '' : 'opacity-30'
+        buttonClass="rounded-full shadow-lg w-full"
+        :iconClass="`h-8 w-8 text-white m-auto ${
+          !isSelectBookmarkTab ? '' : 'opacity-30'
         }`"
         :icon="mdiHistory"
-        @click="onClickHistory"
+        @click="onClickIcon('histories')"
       ></IconButton>
+      <div class="text-white text-xs leading-3">履歴</div>
     </div>
   </div>
 
@@ -35,6 +65,7 @@
       v-for="(tile, index) in tiles"
       :key="index"
       class="border-r border-b border-gray-500 [&:nth-child(3n)]:border-r-0"
+      @click="onClickTile(index)"
     >
       <div class="relative overflow-hidden shadow-md">
         <nuxt-img
@@ -53,48 +84,75 @@
 </template>
 
 <script setup lang="ts">
-import { mdiHistory, mdiBookmarkOutline, mdiArrowULeftTop } from "@mdi/js";
+import {
+  mdiHistory,
+  mdiBookmarkOutline,
+  mdiHomeOutline,
+  mdiTrashCanOutline,
+} from "@mdi/js";
 import { Constants } from "~/config";
+const route = useRoute();
 
-const isSelectTab = ref<"bookmark" | "history">("bookmark");
+const PATHS = {
+  BOOKMARK: "bookmarks",
+  HISTORY: "histories",
+} as const;
+
 const bookmarks = ref<LocalStorage[]>([]);
 const histories = ref<LocalStorage[]>([]);
 
-const tiles = computed(() => {
-  if (isSelectTab.value === "history") {
-    return histories.value.map((v) => ({
-      image: "/logo.webp",
-      title: v.title,
-    }));
-  }
+const isSelectBookmarkTab = computed(
+  () => !route.query.selected || route.query.selected === PATHS.BOOKMARK
+);
 
-  return bookmarks.value.map((v) => ({
-    image: "/logo.webp",
+const tiles = computed(() =>
+  (isSelectBookmarkTab.value ? bookmarks : histories).value.map((v) => ({
+    image: v.image_url,
     title: v.title,
-  }));
-});
+  }))
+);
 
 onMounted(async () => {
-  bookmarks.value = await localStorageUtil.getItem<LocalStorage>(
-    Constants.STORAGE_KEYS.BOOKMARK
-  );
+  await fetch();
 });
+
+const fetch = async () => {
+  useWait(async () => {
+    const [_bookmarks, _histories] = await Promise.all([
+      localStorageUtil.getItem<LocalStorage>(Constants.STORAGE_KEYS.BOOKMARK),
+      localStorageUtil.getItem<LocalStorage>(Constants.STORAGE_KEYS.HISTORY),
+    ]);
+    bookmarks.value = _bookmarks;
+    histories.value = _histories;
+  });
+};
+
+const onClickTrash = async () => {
+  if (
+    window.confirm("ブックマークと履歴のデータを削除してもよろしいですか？")
+  ) {
+    localStorage.clear();
+    alert("削除しました");
+    await navigateTo(`/my-page`, { external: true });
+  }
+};
 
 const onClickHome = async () => {
   await navigateTo(`/`);
 };
 
-const onClickBookmark = async () => {
-  isSelectTab.value = "bookmark";
-  bookmarks.value = await localStorageUtil.getItem<LocalStorage>(
-    Constants.STORAGE_KEYS.BOOKMARK
-  );
+const onClickTile = async (index: number) => {
+  const param = isSelectBookmarkTab.value ? PATHS.BOOKMARK : PATHS.HISTORY;
+  await navigateTo(`/${param}?position=${index}`);
 };
 
-const onClickHistory = async () => {
-  isSelectTab.value = "history";
-  histories.value = await localStorageUtil.getItem<LocalStorage>(
-    Constants.STORAGE_KEYS.HISTORY
-  );
+const onClickIcon = async (selected: (typeof PATHS)[keyof typeof PATHS]) => {
+  await fetch();
+  await navigateTo({
+    path: "/my-page",
+    query: {
+      selected: selected,
+    },
+  });
 };
 </script>
