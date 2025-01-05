@@ -1,11 +1,5 @@
 <template>
-  <button
-    @touchstart.stop
-    @touchmove.stop
-    @touchend.stop
-    @click="onClick"
-    :class="buttonClass"
-  >
+  <button @click="onClick" :class="buttonClass">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
@@ -26,11 +20,11 @@ defineProps({
   },
   buttonClass: {
     type: String,
-    default: "p-1 rounded-full shadow-lg z-50",
+    default: "p-1 rounded-full shadow-lg z-50 w-full",
   },
   iconClass: {
     type: String,
-    default: "h-8 w-8 text-white",
+    default: "h-8 w-8 text-white m-auto",
   },
   fill: {
     type: String,

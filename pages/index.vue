@@ -26,13 +26,7 @@
         ></video>
 
         <div class="absolute bottom-20 left-5 text-white w-3/4">
-          <a
-            @touchstart.stop
-            @touchmove.stop
-            @touchend.stop
-            :href="video.product_url"
-            target="_blank"
-          >
+          <a :href="video.product_url" target="_blank">
             <h3 class="text-lg font-semibold mb-2">
               {{ video.actress_name }}
             </h3>
@@ -168,18 +162,15 @@ const reFetch = async (page: number) => {
 };
 
 const startSwipe = (e: any) => {
-  e.preventDefault();
   startY.value = e.touches[0].clientY;
 };
 
 const moveSwipe = (e: any) => {
-  e.preventDefault();
   const deltaY = e.touches[0].clientY - startY.value;
   currentOffset.value = -currentIndex.value * itemHeight.value + deltaY;
 };
 
 const endSwipe = async (e: any) => {
-  e.preventDefault();
   const deltaY = e.changedTouches[0].clientY - startY.value;
   const swipeThreshold = 50;
 
