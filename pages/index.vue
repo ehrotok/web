@@ -76,12 +76,13 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const positionState = usePositionState();
 
 const videos = ref<Videos>({} as Videos);
 const videoData = ref<Videos>({} as Videos);
 const startY = ref(0);
 const currentOffset = ref(0);
-const currentIndex = ref(0);
+const currentIndex = ref(positionState.value);
 const itemHeight = ref(0);
 const currentPage = ref(1);
 const updateItemHeight = () => {
@@ -120,8 +121,8 @@ onMounted(async () => {
   useWait(async () => {
     if (route.query.position) {
       currentIndex.value = +route.query.position;
-      currentOffset.value = -currentIndex.value * itemHeight.value;
     }
+    currentOffset.value = -currentIndex.value * itemHeight.value;
     await fetch(currentPage.value);
     await play(currentIndex.value);
     bookmarks.value = await localStorageUtil.getItem<LocalStorage>(
@@ -135,6 +136,7 @@ onUnmounted(() => {
 });
 
 const onClickHome = async () => {
+  positionState.value = currentIndex.value;
   await cleanupVideoDom(currentIndex.value);
   await navigateTo(`/my-page`);
 };

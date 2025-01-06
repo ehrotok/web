@@ -10,3 +10,9 @@ export const useLoader = () => useState<boolean>("loader", () => false);
  */
 export const useLandscapeMode = () =>
   useState<boolean>("landscapeMode", () => false);
+
+/**
+ * 選択した位置
+ * @returns
+ */
+export const usePositionState = () => useState<number>("position", () => 0);
