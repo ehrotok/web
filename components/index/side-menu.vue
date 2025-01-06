@@ -1,7 +1,13 @@
 <template>
   <div class="absolute bottom-20 right-5 flex flex-col items-center space-y-4">
     <div class="flex flex-col items-center">
-      <a :href="productUrl" target="_blank">
+      <a
+        @touchstart.stop
+        @touchmove.stop
+        @touchend.stop
+        :href="productUrl"
+        target="_blank"
+      >
         <nuxt-img
           class="rounded-full h-10 w-10 object-contain"
           placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="

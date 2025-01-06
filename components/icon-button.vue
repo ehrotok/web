@@ -1,5 +1,11 @@
 <template>
-  <button @click="onClick" :class="buttonClass">
+  <button
+    @touchstart.stop
+    @touchmove.stop
+    @touchend.stop
+    @click="onClick"
+    :class="buttonClass"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
