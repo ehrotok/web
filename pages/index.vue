@@ -8,7 +8,7 @@
   >
     <IconButton
       v-if="props.fetchType"
-      buttonClass="absolute top-0 m-4 rounded-full shadow-lg z-50"
+      buttonClass="absolute top-10 m-4 rounded-full shadow-lg z-50"
       :icon="mdiArrowULeftTop"
       @click="onClickReturn"
     ></IconButton>
@@ -201,6 +201,7 @@ const reFetch = async (page: number) => {
     currentIndex.value = 0;
     await fetch(page);
     await play(currentIndex.value);
+    await nextTick();
   });
 };
 
