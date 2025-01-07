@@ -38,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import { mdiHeart, mdiBookmark, mdiStar, mdiAccountOutline } from "@mdi/js";
 defineProps({
   reviewCount: {
     type: Number,
