@@ -90,12 +90,25 @@ export const localStorageUtil = {
    *
    * @param key
    */
-  getItem: async <T>(key: string): Promise<T[]> => {
+  getItem: async <T>(key: string): Promise<T> => {
+    const data = localStorage.getItem(key);
+    if (data) {
+      return Promise.resolve(JSON.parse(data) as T);
+    }
+
+    return Promise.resolve({} as T);
+  },
+
+  getItems: async <T>(key: string): Promise<T[]> => {
     const data = localStorage.getItem(key);
     if (data) {
       return Promise.resolve(JSON.parse(data) as T[]);
     }
 
     return Promise.resolve([]);
+  },
+
+  updateItem: async <T>(key: string, items: T): Promise<void> => {
+    localStorage.setItem(key, JSON.stringify(items));
   },
 };

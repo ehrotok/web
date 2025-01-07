@@ -9,7 +9,7 @@
         target="_blank"
       >
         <nuxt-img
-          class="rounded-full h-10 w-10 object-contain"
+          class="h-10 w-10 object-contain"
           placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="
           :src="imageUrl"
         />
@@ -20,7 +20,7 @@
     </div>
 
     <div class="flex flex-col items-center">
-      <IconButton :icon="mdiStar" :text="`${reviewAverage}点`"></IconButton>
+      <IconButton :icon="mdiStar" :text="reviewAverageText"></IconButton>
     </div>
 
     <div class="flex flex-col items-center">
@@ -38,8 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiHeart, mdiBookmark, mdiStar, mdiAccountOutline } from "@mdi/js";
-defineProps({
+const props = defineProps({
   reviewCount: {
     type: Number,
     default: 0,
@@ -62,6 +61,10 @@ defineProps({
   },
 });
 const emit = defineEmits(["click:home", "click:bookmark"]);
+
+const reviewAverageText = computed(() =>
+  props.reviewAverage > 0 ? `${props.reviewAverage}点` : ""
+);
 
 const onClickHome = () => {
   emit("click:home");

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isLandscapeMode.value"
-    class="bg-black flex justify-center items-center flex-col w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[9999]"
+    class="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-lg bg-black flex justify-center items-center flex-col w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[9999]"
   >
     <nuxt-img
       src="/logo.webp"
