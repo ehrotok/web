@@ -23,7 +23,7 @@ const isFullscreen = ref(false);
 onMounted(async () => {
   init();
   setupEvents();
-  setupWebStorage();
+  await setupWebStorage();
 });
 
 onUnmounted(() => {
@@ -55,7 +55,7 @@ const setupWebStorage = async () => {
   );
 
   if (!accounts.token) {
-    accounts = await $envFetch<Accounts>("/v1/api/accounts");
+    accounts = await $envFetch<Accounts>(Constants.API_URLS.ACCOUNTS);
     localStorageUtil.updateItem(Constants.STORAGE_KEYS.ACCOUNTS, accounts);
   }
 
