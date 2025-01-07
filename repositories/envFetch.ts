@@ -1,13 +1,10 @@
 export const $envFetch = async <T>(url: string, opts?: any): Promise<T> => {
   const config = useRuntimeConfig();
   const isGetMethod = !opts?.method || opts.method == "GET";
-  if (config.public.isDevelopment) {
+  if (!config.public.isDevelopment) {
     return isGetMethod ? fetchDev<T>(url) : Promise.resolve({} as T);
   }
-  if (!isGetMethod) {
-    opts.headers = { Authorization: `Bearer ${config.public.bearerToken}` };
-  }
-
+  opts.headers = { Authorization: `Bearer ${config.public.bearerToken}` };
   return await $fetch<T>(url, { ...opts });
 };
 
