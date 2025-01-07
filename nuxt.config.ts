@@ -1,3 +1,4 @@
+const isDevelopment = process.env.NODE_ENV === "development";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
@@ -10,11 +11,12 @@ export default defineNuxtConfig({
         gistId: process.env.GISTID_DEV,
         fileName: process.env.FILENAME_DEV,
       },
-      isDevelopment: process.env.NODE_ENV === "development",
+      isDevelopment: isDevelopment,
+      bearerToken: process.env.BEARER_TOKEN,
     },
   },
   imports: {
-    dirs: ["models/**"],
+    dirs: ["models/**", "config/**", "repositories/**"],
   },
 
   routeRules: {
@@ -23,8 +25,10 @@ export default defineNuxtConfig({
     },
   },
 
-  image: {
-    provider: "netlify",
-    domains: ["pics.dmm.co.jp"],
-  },
+  image: isDevelopment
+    ? {}
+    : {
+        provider: "netlify",
+        domains: ["pics.dmm.co.jp"],
+      },
 });
