@@ -13,6 +13,8 @@ const COOKIE_KEYS = {
 const API_URLS = {
   VIDEOS: "/v1/api/videos",
   ACCOUNTS: "/v1/api/accounts",
+  BOOKMARK: "/v1/api/accounts/bookmark",
+  UNBOOKMARK: "/v1/api/accounts/unbookmark",
   BOOKMARKS: "/v1/api/accounts/bookmarks",
   HISTORIES: "/v1/api/accounts/histories",
   WATCH: "/v1/api/accounts/watch",
