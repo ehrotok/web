@@ -1,9 +1,4 @@
 <template>
-  <IconButton
-    buttonClass="absolute top-0 right-0 m-4 rounded-full shadow-lg z-50"
-    :icon="mdiTrashCanOutline"
-    @click="onClickTrash"
-  ></IconButton>
   <div class="text-white text-center p-5">
     <nuxt-img
       class="m-auto rounded-full h-20 w-20 object-contain"
@@ -12,11 +7,11 @@
     />
     <div class="flex justify-evenly p-3">
       <div class="w-full border-r border-gray-500">
-        <div class="text-2xl font-bold">{{ histories.length }}</div>
+        <div class="text-2xl font-bold">{{ histories.count }}</div>
         <div class="text-xs mt-1">再生</div>
       </div>
       <div class="w-full">
-        <div class="text-2xl font-bold">{{ bookmarks.length }}</div>
+        <div class="text-2xl font-bold">{{ bookmarks.count }}</div>
         <div class="text-xs mt-1">ブックマーク</div>
       </div>
     </div>
@@ -84,32 +79,28 @@
 </template>
 
 <script setup lang="ts">
-import {
-  mdiHistory,
-  mdiBookmarkOutline,
-  mdiHomeOutline,
-  mdiTrashCanOutline,
-} from "@mdi/js";
-import { Constants } from "~/config";
 const route = useRoute();
+const tokenState = useTokenState();
 
 const PATHS = {
   BOOKMARK: "bookmarks",
   HISTORY: "histories",
 } as const;
 
-const bookmarks = ref<LocalStorage[]>([]);
-const histories = ref<LocalStorage[]>([]);
+const bookmarks = ref<Videos>({} as Videos);
+const histories = ref<Videos>({} as Videos);
 
 const isSelectBookmarkTab = computed(
   () => !route.query.selected || route.query.selected === PATHS.BOOKMARK
 );
 
 const tiles = computed(() =>
-  (isSelectBookmarkTab.value ? bookmarks : histories).value.map((v) => ({
-    image: v.image_url,
-    title: v.title,
-  }))
+  (isSelectBookmarkTab.value ? bookmarks : histories).value.result?.map(
+    (v) => ({
+      image: v.image_url,
+      title: v.title,
+    })
+  )
 );
 
 onMounted(async () => {
@@ -118,23 +109,14 @@ onMounted(async () => {
 
 const fetch = async () => {
   useWait(async () => {
+    const query = { token: tokenState.value };
     const [_bookmarks, _histories] = await Promise.all([
-      localStorageUtil.getItem<LocalStorage>(Constants.STORAGE_KEYS.BOOKMARK),
-      localStorageUtil.getItem<LocalStorage>(Constants.STORAGE_KEYS.HISTORY),
+      $envFetch<Videos>(Constants.API_URLS.BOOKMARKS, { query }),
+      $envFetch<Videos>(Constants.API_URLS.HISTORIES, { query }),
     ]);
     bookmarks.value = _bookmarks;
     histories.value = _histories;
   });
-};
-
-const onClickTrash = async () => {
-  if (
-    window.confirm("ブックマークと履歴のデータを削除してもよろしいですか？")
-  ) {
-    localStorage.clear();
-    alert("削除しました");
-    await navigateTo(`/my-page`, { external: true });
-  }
 };
 
 const onClickHome = async () => {
