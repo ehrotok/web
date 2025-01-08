@@ -3,7 +3,7 @@ const title: string = "EhroTok - 大人のためのショート動画プラッ�
 const description: string =
   "EhroTokは、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。";
 const url = "https://ehrotok.netlify.app";
-const imagePath: string = "logo_with_text.png";
+const imagePath: string = "ogp.png";
 const twitterCard: string = "summary";
 const image = `${url}/${imagePath}`;
 
@@ -84,8 +84,16 @@ export default defineNuxtConfig({
           name: "robots",
           content: "noarchive",
         },
+        {
+          name: "apple-mobile-web-app-status-bar-style",
+          content: "black-translucent",
+        },
+        { name: "theme-color", content: "#1a1a1a" },
       ],
-      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+      link: [
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      ],
     },
   },
 
