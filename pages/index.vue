@@ -78,6 +78,7 @@ const props = defineProps({
 const route = useRoute();
 const positionState = usePositionState();
 const tokenState = useTokenState();
+const recommendationState = useRecommendationsState();
 const videos = ref<Videos>({} as Videos);
 const videoData = ref<Videos>({} as Videos);
 const startY = ref(0);
@@ -182,6 +183,16 @@ const onClickBookmark = async () => {
 };
 
 const fetch = async (page: number) => {
+  const videoFetch = async () => {
+    const result = (
+      await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
+        query: { page: page },
+      })
+    ).result;
+    result.unshift(...recommendationState.value);
+    return result;
+  };
+
   videoData.value.result = props.fetchType
     ? // @todo 1ページ目しかとれないのであとでどうにかする
       (
@@ -190,11 +201,7 @@ const fetch = async (page: number) => {
           { query: { token: tokenState.value } }
         )
       ).result
-    : (
-        await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
-          query: { page: page },
-        })
-      ).result;
+    : await videoFetch();
 
   videos.value.result =
     videoData.value.result.length > 1

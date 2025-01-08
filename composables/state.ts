@@ -28,10 +28,18 @@ const useAgeCheckState = () => useState<boolean>("age_check", () => true);
  */
 const useTokenState = () => useState<string>("token", () => "");
 
+/**
+ * レコメンド情報
+ * @returns
+ */
+const useRecommendationsState = () =>
+  useState<VideoItem[]>("recommendations", () => []);
+
 export {
   useLoader,
   useLandscapeMode,
   usePositionState,
   useAgeCheckState,
   useTokenState,
+  useRecommendationsState,
 };
