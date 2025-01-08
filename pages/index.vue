@@ -36,6 +36,9 @@
             @touchstart.stop
             @touchmove.stop
             @touchend.stop
+            @touchstart="startSwipe"
+            @touchmove="moveSwipe"
+            @touchend="endSwipeByTitle"
             :href="video.product_url"
             target="_blank"
           >
@@ -228,6 +231,14 @@ const moveSwipe = (e: any) => {
   e.preventDefault();
   const deltaY = e.touches[0].clientY - startY.value;
   currentOffset.value = -currentIndex.value * itemHeight.value + deltaY;
+};
+
+const endSwipeByTitle = async (e: any) => {
+  const prevIndex = currentIndex.value;
+  endSwipe(e);
+  if (prevIndex === currentIndex.value) {
+    location.href = videos.value.result[currentIndex.value].product_url;
+  }
 };
 
 const endSwipe = async (e: any) => {
