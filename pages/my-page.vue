@@ -2,7 +2,7 @@
   <div class="text-white text-center p-5">
     <nuxt-img
       class="m-auto rounded-full h-20 w-20 object-contain"
-      placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="
+      :placeholder="Constants.PLACEHOLDER_IMAGES.GRAY"
       src="/logo.webp"
     />
     <div class="flex justify-evenly p-3">
@@ -65,7 +65,7 @@
       <div class="relative overflow-hidden shadow-md">
         <nuxt-img
           class="w-full h-40 object-contain"
-          placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="
+          :placeholder="Constants.PLACEHOLDER_IMAGES.GRAY"
           :src="tile.image"
         />
         <div

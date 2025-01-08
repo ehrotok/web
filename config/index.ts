@@ -10,6 +10,15 @@ const COOKIE_KEYS = {
   BOOKMARK_ALERT: "bookmark_alert",
 } as const;
 
+/**
+ * プレースホルダーのイメージ
+ */
+const PLACEHOLDER_IMAGES = {
+  GRAY: "data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw==",
+  BLACK:
+    "data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==",
+};
+
 const API_URLS = {
   VIDEOS: "/v1/api/videos",
   ACCOUNTS: "/v1/api/accounts",
@@ -24,4 +33,5 @@ export const Constants = {
   STORAGE_KEYS,
   COOKIE_KEYS,
   API_URLS,
+  PLACEHOLDER_IMAGES,
 };
