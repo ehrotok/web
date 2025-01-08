@@ -17,13 +17,12 @@ import { Constants } from "./config";
 
 const isLandscapeMode = useLandscapeMode();
 const isAgeChecked = useAgeCheckState();
-const tokenState = useTokenState();
 const isFullscreen = ref(false);
 
 onMounted(async () => {
   init();
   setupEvents();
-  await setupWebStorage();
+  setupWebStorage();
 });
 
 onUnmounted(() => {
@@ -45,21 +44,10 @@ const removeEvents = async () => {
   window.removeEventListener("resize", checkOrientation);
 };
 
-const setupWebStorage = async () => {
+const setupWebStorage = () => {
   if (!Cookies.get(Constants.COOKIE_KEYS.AGE_CHECK)) {
     isAgeChecked.value = false;
   }
-
-  let accounts = await localStorageUtil.getItem<Accounts>(
-    Constants.STORAGE_KEYS.ACCOUNTS
-  );
-
-  if (!accounts.token) {
-    accounts = await $envFetch<Accounts>(Constants.API_URLS.ACCOUNTS);
-    localStorageUtil.updateItem(Constants.STORAGE_KEYS.ACCOUNTS, accounts);
-  }
-
-  tokenState.value = accounts.token;
 };
 
 const checkOrientation = () => {

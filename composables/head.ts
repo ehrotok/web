@@ -1,16 +1,25 @@
-const isDevelopment = process.env.NODE_ENV === "development";
-const title: string = "EhroTok - 大人のためのショート動画プラットフォーム";
-const description: string =
-  "EhroTokは、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。";
-const url = "https://ehrotok.netlify.app";
-const imagePath: string = "logo_with_text.png";
-const twitterCard: string = "summary";
-const image = `${url}/${imagePath}`;
+const useSeo =
+  /**
+   * 動的にheadタグを変更できるコンポーザブル
+   *
+   * @param title
+   * @param description
+   * @param imagePath
+   * @param type
+   * @param twitterCard
+   * @returns
+   */
+  (
+    title: string = "EhroTok - 大人のためのショート動画プラットフォーム",
+    description: string = "EhroTokは、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。",
+    imagePath: string = Constants.IMAGES.LOGO_WITH_TEXT,
+    type: string = "website",
+    twitterCard: string = "summary"
+  ) => {
+    const url = "https://ehrotok.netlify.app";
+    const image = `${url}/${imagePath}`;
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
-export default defineNuxtConfig({
-  app: {
-    head: {
+    return {
       title: title,
       meta: [
         {
@@ -32,7 +41,7 @@ export default defineNuxtConfig({
         {
           hid: "og:type",
           property: "og:type",
-          content: "website",
+          content: type,
         },
         {
           hid: "og:url",
@@ -86,37 +95,7 @@ export default defineNuxtConfig({
         },
       ],
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
-    },
-  },
+    };
+  };
 
-  compatibilityDate: "2024-11-01",
-  devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image"],
-  runtimeConfig: {
-    public: {
-      token: process.env.TOKEN,
-      development: {
-        gistId: process.env.GISTID_DEV,
-        fileName: process.env.FILENAME_DEV,
-      },
-      isDevelopment: isDevelopment,
-      bearerToken: process.env.BEARER_TOKEN,
-    },
-  },
-  imports: {
-    dirs: ["models/**", "config/**", "repositories/**"],
-  },
-
-  routeRules: {
-    "/v1/**": {
-      proxy: `${process.env.PROXY_URL}/**`,
-    },
-  },
-
-  image: isDevelopment
-    ? {}
-    : {
-        provider: "netlify",
-        domains: ["pics.dmm.co.jp"],
-      },
-});
+export { useSeo };

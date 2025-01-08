@@ -10,6 +10,18 @@ const COOKIE_KEYS = {
   BOOKMARK_ALERT: "bookmark_alert",
 } as const;
 
+/**
+ * プレースホルダーのイメージ
+ */
+const IMAGES = {
+  LOGO: "/logo.webp",
+  LOGO_WITH_TEXT: "/logo_with_text.webp",
+  BG_GRAY:
+    "data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw==",
+  BG_BLACK:
+    "data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==",
+};
+
 const API_URLS = {
   VIDEOS: "/v1/api/videos",
   ACCOUNTS: "/v1/api/accounts",
@@ -24,4 +36,5 @@ export const Constants = {
   STORAGE_KEYS,
   COOKIE_KEYS,
   API_URLS,
+  IMAGES,
 };

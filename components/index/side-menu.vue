@@ -10,7 +10,7 @@
       >
         <nuxt-img
           class="h-10 w-10 object-contain"
-          placeholder="data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw=="
+          :placeholder="Constants.IMAGES.BG_GRAY"
           :src="imageUrl"
         />
       </a>
@@ -49,11 +49,11 @@ const props = defineProps({
   },
   imageUrl: {
     type: String,
-    default: "/logo.webp",
+    default: Constants.IMAGES.BG_GRAY,
   },
   productUrl: {
     type: String,
-    default: "/logo.webp",
+    default: Constants.IMAGES.BG_GRAY,
   },
   isBookmark: {
     type: Boolean,

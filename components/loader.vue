@@ -4,7 +4,7 @@
     class="bg-black flex justify-center items-center w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[100]"
   >
     <nuxt-img
-      src="/logo.webp"
+      :src="Constants.IMAGES.LOGO_WITH_TEXT"
       class="w-[150px] h-auto animation origin-center"
     />
   </div>
@@ -16,21 +16,20 @@ const loading = computed(() => useLoader());
 
 <style scoped>
 .animation {
-  animation: rotate3d 2s infinite linear;
+  animation: bounceScale 2s infinite ease-in-out;
 }
 
-@keyframes rotate3d {
+@keyframes bounceScale {
   0% {
-    transform: rotateX(0deg) rotateY(0deg);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
   50% {
-    transform: rotateY(180deg);
+    transform: translateY(-10px) scale(1.1);
     opacity: 0.8;
   }
-
   100% {
-    transform: rotateY(360deg);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }

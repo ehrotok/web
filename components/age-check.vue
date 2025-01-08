@@ -4,8 +4,8 @@
     class="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-lg p-4 bg-black flex justify-center items-center flex-col w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[9999]"
   >
     <nuxt-img
-      src="/logo.webp"
-      placeholder="data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+      :src="Constants.IMAGES.LOGO"
+      :placeholder="Constants.IMAGES.BG_BLACK"
       class="w-[150px] h-auto animation origin-center"
     />
     <div class="text-gray-400 leading-8">
