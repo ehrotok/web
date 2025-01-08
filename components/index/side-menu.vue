@@ -10,7 +10,7 @@
       >
         <nuxt-img
           class="h-10 w-10 object-contain"
-          :placeholder="Constants.PLACEHOLDER_IMAGES.GRAY"
+          :placeholder="Constants.IMAGES.BG_GRAY"
           :src="imageUrl"
         />
       </a>
@@ -49,11 +49,11 @@ const props = defineProps({
   },
   imageUrl: {
     type: String,
-    default: Constants.PLACEHOLDER_IMAGES.GRAY,
+    default: Constants.IMAGES.BG_GRAY,
   },
   productUrl: {
     type: String,
-    default: Constants.PLACEHOLDER_IMAGES.GRAY,
+    default: Constants.IMAGES.BG_GRAY,
   },
   isBookmark: {
     type: Boolean,

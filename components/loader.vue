@@ -4,7 +4,7 @@
     class="bg-black flex justify-center items-center w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[100]"
   >
     <nuxt-img
-      src="/logo_with_text.webp"
+      :src="Constants.IMAGES.LOGO_WITH_TEXT"
       class="w-[150px] h-auto animation origin-center"
     />
   </div>

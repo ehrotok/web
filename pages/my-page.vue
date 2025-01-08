@@ -2,8 +2,8 @@
   <div class="text-white text-center p-5">
     <nuxt-img
       class="m-auto rounded-full h-20 w-20 object-contain"
-      :placeholder="Constants.PLACEHOLDER_IMAGES.GRAY"
-      src="/logo.webp"
+      :placeholder="Constants.IMAGES.BG_GRAY"
+      :src="Constants.IMAGES.LOGO"
     />
     <div class="flex justify-evenly p-3">
       <div class="w-full border-r border-gray-500">
@@ -65,7 +65,7 @@
       <div class="relative overflow-hidden shadow-md">
         <nuxt-img
           class="w-full h-40 object-contain"
-          :placeholder="Constants.PLACEHOLDER_IMAGES.GRAY"
+          :placeholder="Constants.IMAGES.BG_GRAY"
           :src="tile.image"
         />
         <div

@@ -13,9 +13,12 @@ const COOKIE_KEYS = {
 /**
  * プレースホルダーのイメージ
  */
-const PLACEHOLDER_IMAGES = {
-  GRAY: "data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw==",
-  BLACK:
+const IMAGES = {
+  LOGO: "/logo.webp",
+  LOGO_WITH_TEXT: "/logo_with_text.webp",
+  BG_GRAY:
+    "data:image/gif;base64,R0lGODdhAQABAIEAAO/v7wAAAAAAAAAAACwAAAAAAQABAAAIBAABBAQAOw==",
+  BG_BLACK:
     "data:image/gif;base64,R0lGODlhAQABAPAAAP///wAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==",
 };
 
@@ -33,5 +36,5 @@ export const Constants = {
   STORAGE_KEYS,
   COOKIE_KEYS,
   API_URLS,
-  PLACEHOLDER_IMAGES,
+  IMAGES,
 };

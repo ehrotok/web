@@ -12,7 +12,7 @@ const useSeo =
   (
     title: string = "EhroTok - 大人のためのショート動画プラットフォーム",
     description: string = "EhroTokは、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。",
-    imagePath: string = "logo_with_text.png",
+    imagePath: string = Constants.IMAGES.LOGO_WITH_TEXT,
     type: string = "website",
     twitterCard: string = "summary"
   ) => {
