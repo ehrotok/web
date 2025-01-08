@@ -1,7 +1,8 @@
 const isDevelopment = process.env.NODE_ENV === "development";
-const title: string = "EhroTok - 大人のためのショート動画プラットフォーム";
+const title: string =
+  "EhroTok（エロトック） - 大人のためのショート動画プラットフォーム";
 const description: string =
-  "EhroTokは、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。";
+  "EhroTok（エロトック）は、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。";
 const url = "https://ehrotok.netlify.app";
 const imagePath: string = "ogp.png";
 const twitterCard: string = "summary";
