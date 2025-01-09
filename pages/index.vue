@@ -189,7 +189,11 @@ const fetch = async (page: number) => {
         query: { page: page },
       })
     ).result;
-    result.unshift(...recommendationState.value);
+
+    if (page === 1) {
+      result.unshift(...recommendationState.value);
+    }
+
     return result;
   };
 
