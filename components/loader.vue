@@ -22,15 +22,15 @@ const loading = computed(() => useLoader());
 @keyframes bounceScale {
   0% {
     transform: translateY(0) scale(1);
-    opacity: 1;
+    opacity: 0.7;
   }
   50% {
     transform: translateY(-10px) scale(1.1);
-    opacity: 0.8;
+    opacity: 1;
   }
   100% {
     transform: translateY(0) scale(1);
-    opacity: 1;
+    opacity: 0.7;
   }
 }
 </style>
