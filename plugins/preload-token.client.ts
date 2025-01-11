@@ -7,7 +7,7 @@ export default defineNuxtPlugin(async () => {
   );
 
   const query = accounts.token ? { token: accounts.token } : {};
-  accounts = await $fetch<Accounts>(Constants.API_URLS.ACCOUNTS, {
+  accounts = await $envFetch<Accounts>(Constants.API_URLS.ACCOUNTS, {
     headers: { Authorization: `Bearer ${config.public.bearerToken}` },
     query,
   });
