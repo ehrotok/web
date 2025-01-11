@@ -14,10 +14,11 @@
 <script setup lang="ts">
 import Cookies from "js-cookie";
 import { Constants } from "./config";
+import { useFullScreenMode } from "./composables/state";
 
 const isLandscapeMode = useLandscapeMode();
 const isAgeChecked = useAgeCheckState();
-const isFullscreen = ref(false);
+const isFullscreenMode = useFullScreenMode();
 
 onMounted(async () => {
   init();
@@ -30,17 +31,14 @@ onUnmounted(() => {
 });
 
 const init = async () => {
-  checkFullscreen();
   checkOrientation();
 };
 
 const setupEvents = async () => {
-  window.addEventListener("fullscreenchange", checkFullscreen);
   window.addEventListener("resize", checkOrientation);
 };
 
 const removeEvents = async () => {
-  window.removeEventListener("fullscreenchange", checkFullscreen);
   window.removeEventListener("resize", checkOrientation);
 };
 
@@ -51,14 +49,10 @@ const setupWebStorage = () => {
 };
 
 const checkOrientation = () => {
-  if (isFullscreen.value) {
+  if (isFullscreenMode.value) {
     return;
   }
 
   isLandscapeMode.value = window.innerHeight < window.innerWidth;
-};
-
-const checkFullscreen = () => {
-  isFullscreen.value = !!document.fullscreenElement;
 };
 </script>

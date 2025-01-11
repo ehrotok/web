@@ -11,6 +11,13 @@ const useLoader = () => useState<boolean>("loader", () => false);
 const useLandscapeMode = () => useState<boolean>("landscapeMode", () => false);
 
 /**
+ * 全画面
+ * @returns
+ */
+const useFullScreenMode = () =>
+  useState<boolean>("fullScreenMode", () => false);
+
+/**
  * 選択した位置
  * @returns
  */
@@ -38,6 +45,7 @@ const useRecommendationsState = () =>
 export {
   useLoader,
   useLandscapeMode,
+  useFullScreenMode,
   usePositionState,
   useAgeCheckState,
   useTokenState,
