@@ -99,10 +99,11 @@ const videoSelectorAll = computed(() => {
   return Array.from(document.querySelectorAll("video"));
 });
 
-onMounted(async () => {
+onMounted(() => {
   useWait(async () => {
     init();
     await fetch(currentPage.value);
+    await replaceDom(currentIndex.value, 0);
     await play(currentIndex.value);
     bookmarks.value = (
       await $envFetch<Videos>(Constants.API_URLS.BOOKMARKS, {
@@ -205,14 +206,13 @@ const fetch = async (page: number) => {
           () => ({} as VideoItem)
         )
       : [];
-
-  await replaceDom(currentIndex.value, 0);
 };
 
 const reFetch = async (page: number) => {
   useWait(async () => {
     currentIndex.value = 0;
     await fetch(page);
+    await replaceDom(currentIndex.value, 0);
     await play(currentIndex.value);
   });
 };
