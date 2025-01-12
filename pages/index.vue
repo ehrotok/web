@@ -115,36 +115,29 @@ onMounted(() => {
     await fetch(currentPage.value);
     await replaceDom(currentIndex.value, 0);
     await play(currentIndex.value);
-    bookmarks.value = (
-      await $envFetch<Videos>(Constants.API_URLS.BOOKMARKS, {
-        query: { token: tokenState.value },
-      })
-    ).result as VideoItemWithDisplayParams[];
+    setOffset();
   });
 });
 
 onUnmounted(() => {
   removeEvents();
-  cleanupResources();
   useEndTimer(videoSelectorAll.value[currentIndex.value]);
+  cleanupResources();
 });
+
+const init = () => {
+  setupEvents();
+  updateItemHeight();
+};
 
 const setupEvents = () => {
   window.addEventListener("resize", updateItemHeight);
   window.addEventListener("fullscreenchange", checkFullscreen);
 };
+
 const removeEvents = () => {
   window.removeEventListener("resize", updateItemHeight);
   window.removeEventListener("fullscreenchange", checkFullscreen);
-};
-
-const init = () => {
-  setupEvents();
-  updateItemHeight();
-  setOffset();
-  if (route.query.position) {
-    currentIndex.value = +route.query.position;
-  }
 };
 
 const updateItemHeight = () => {
@@ -208,7 +201,7 @@ const unbookmark = async (query: object) => {
 };
 
 const fetch = async (page: number) => {
-  const videoFetch = async () => {
+  const fetchVideo = async () => {
     const result: VideoItemWithDisplayParams[] = (
       await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
         query: { page: page },
@@ -229,14 +222,27 @@ const fetch = async (page: number) => {
     return result;
   };
 
+  const fetchUserVideo = async () => {
+    let videos: Videos;
+    if (props.fetchType === "bookmarks") {
+      videos = await fetchBookmarksAll();
+      bookmarks.value = videos.result;
+      await fetchBookmarksAll();
+    } else {
+      videos = await fetchHistoriesAll();
+    }
+
+    if (route.query.content_id) {
+      currentIndex.value = videos.result.findIndex(
+        (v) => v.content_id === route.query.content_id
+      );
+    }
+    return videos.result;
+  };
+
   videoData.value.result = props.fetchType
-    ? (
-        await $envFetch<ExtendedVideo>(
-          `${Constants.API_URLS.ACCOUNTS}/${props.fetchType}`,
-          { query: { token: tokenState.value } }
-        )
-      ).result
-    : await videoFetch();
+    ? await fetchUserVideo()
+    : await fetchVideo();
 
   videos.value.result =
     videoData.value.result.length > 1

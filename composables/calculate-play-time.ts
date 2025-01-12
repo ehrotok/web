@@ -9,9 +9,9 @@ const usePlayTimer = (video: HTMLVideoElement) => {
 
 const useEndTimer = (video: HTMLVideoElement) => {
   updatePlayedTime();
-  video.removeEventListener("play", onPlay);
-  video.removeEventListener("pause", updatePlayedTime);
-  video.removeEventListener("ended", updatePlayedTime);
+  video?.removeEventListener("play", onPlay);
+  video?.removeEventListener("pause", updatePlayedTime);
+  video?.removeEventListener("ended", updatePlayedTime);
   return totalTime.value;
 };
 
