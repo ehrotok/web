@@ -340,7 +340,7 @@ const play = async (currentIndex: number): Promise<void> => {
 const finish = async (): Promise<void> => {
   const time = useEndTimer(videoSelectorAll.value[currentIndex.value]);
 
-  if (props.fetchType) {
+  if (props.fetchType || time <= 1) {
     return;
   }
 
