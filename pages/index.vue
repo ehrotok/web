@@ -54,6 +54,7 @@
           :imageUrl="video.image_url"
           :productUrl="video.product_url"
           :isBookmark="currentBookmark.result"
+          :isRecommend="video.is_recommend"
           @click:home="onClickHome"
           @click:bookmark="onClickBookmark"
         ></IndexSideMenu>
@@ -68,6 +69,7 @@ import { useFullScreenMode } from "~/composables/state";
 
 type VideoItemWithDisplayParams = VideoItem & {
   is_fullscreen?: boolean;
+  is_recommend?: boolean;
 };
 type ExtendedVideo = Videos & { result: VideoItemWithDisplayParams[] };
 
@@ -194,14 +196,21 @@ const unbookmark = async (query: object) => {
 
 const fetch = async (page: number) => {
   const videoFetch = async () => {
-    const result = (
+    const result: VideoItemWithDisplayParams[] = (
       await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
         query: { page: page },
       })
     ).result;
 
     if (page === 1) {
-      result.unshift(...recommendationState.value);
+      const items = recommendationState.value.map(
+        (v) =>
+          ({
+            ...v,
+            is_recommend: true,
+          } as VideoItemWithDisplayParams)
+      );
+      result.unshift(...items);
     }
 
     return result;

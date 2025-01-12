@@ -1,6 +1,9 @@
 <template>
   <div class="absolute bottom-20 right-5 flex flex-col items-center space-y-4">
-    <div class="flex flex-col items-center">
+    <div
+      class="h-12 w-12 flex flex-col items-center rounded-full"
+      :class="{ ' bg-gradient-to-br from-[#f67b01] to-[#eaf601]': isRecommend }"
+    >
       <a
         @touchstart.stop
         @touchmove.stop
@@ -9,7 +12,7 @@
         target="_blank"
       >
         <nuxt-img
-          class="h-10 w-10 object-contain"
+          class="h-11 w-11 object-cover m-0.5 rounded-full"
           :placeholder="Constants.IMAGES.BG_GRAY"
           :src="imageUrl"
         />
@@ -56,6 +59,10 @@ const props = defineProps({
     default: Constants.IMAGES.BG_GRAY,
   },
   isBookmark: {
+    type: Boolean,
+    default: false,
+  },
+  isRecommend: {
     type: Boolean,
     default: false,
   },
