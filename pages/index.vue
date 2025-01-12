@@ -115,27 +115,33 @@ onMounted(() => {
     await fetch(currentPage.value);
     await replaceDom(currentIndex.value, 0);
     await play(currentIndex.value);
-    bookmarks.value = (
-      await $envFetch<Videos>(Constants.API_URLS.BOOKMARKS, {
-        query: { token: tokenState.value },
-      })
-    ).result as VideoItemWithDisplayParams[];
+    setOffset();
   });
 });
 
 onUnmounted(() => {
-  window.removeEventListener("fullscreenchange", checkFullscreen);
-  cleanupResources();
+  removeEvents();
   useEndTimer(videoSelectorAll.value[currentIndex.value]);
+  cleanupResources();
 });
 
 const init = () => {
+  setupEvents();
+  updateItemHeight();
+};
+
+const setupEvents = () => {
+  window.addEventListener("resize", updateItemHeight);
   window.addEventListener("fullscreenchange", checkFullscreen);
+};
+
+const removeEvents = () => {
+  window.removeEventListener("resize", updateItemHeight);
+  window.removeEventListener("fullscreenchange", checkFullscreen);
+};
+
+const updateItemHeight = () => {
   itemHeight.value = window.innerHeight;
-  setOffset();
-  if (route.query.position) {
-    currentIndex.value = +route.query.position;
-  }
 };
 
 const checkFullscreen = () => {
@@ -195,7 +201,7 @@ const unbookmark = async (query: object) => {
 };
 
 const fetch = async (page: number) => {
-  const videoFetch = async () => {
+  const fetchVideo = async () => {
     const result: VideoItemWithDisplayParams[] = (
       await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
         query: { page: page },
@@ -216,14 +222,27 @@ const fetch = async (page: number) => {
     return result;
   };
 
+  const fetchUserVideo = async () => {
+    let videos: Videos;
+    if (props.fetchType === "bookmarks") {
+      videos = await fetchBookmarksAll();
+      bookmarks.value = videos.result;
+      await fetchBookmarksAll();
+    } else {
+      videos = await fetchHistoriesAll();
+    }
+
+    if (route.query.content_id) {
+      currentIndex.value = videos.result.findIndex(
+        (v) => v.content_id === route.query.content_id
+      );
+    }
+    return videos.result;
+  };
+
   videoData.value.result = props.fetchType
-    ? (
-        await $envFetch<ExtendedVideo>(
-          `${Constants.API_URLS.ACCOUNTS}/${props.fetchType}`,
-          { query: { token: tokenState.value } }
-        )
-      ).result
-    : await videoFetch();
+    ? await fetchUserVideo()
+    : await fetchVideo();
 
   videos.value.result =
     videoData.value.result.length > 1
@@ -332,6 +351,7 @@ const play = async (currentIndex: number): Promise<void> => {
 
   usePlayTimer(element);
 
+  element.currentTime = 10;
   element.play().catch((err) => {
     console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
   });
@@ -340,7 +360,7 @@ const play = async (currentIndex: number): Promise<void> => {
 const finish = async (): Promise<void> => {
   const time = useEndTimer(videoSelectorAll.value[currentIndex.value]);
 
-  if (props.fetchType) {
+  if (props.fetchType || time <= 1) {
     return;
   }
 

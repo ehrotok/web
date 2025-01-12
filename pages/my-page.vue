@@ -109,10 +109,9 @@ onMounted(async () => {
 
 const fetch = async () => {
   useWait(async () => {
-    const query = { token: tokenState.value };
     const [_bookmarks, _histories] = await Promise.all([
-      $envFetch<Videos>(Constants.API_URLS.BOOKMARKS, { query }),
-      $envFetch<Videos>(Constants.API_URLS.HISTORIES, { query }),
+      !!bookmarks.value.count ? bookmarks.value : fetchBookmarksAll(),
+      !!histories.value.count ? histories.value : fetchHistoriesAll(),
     ]);
     bookmarks.value = _bookmarks;
     histories.value = _histories;
@@ -124,8 +123,17 @@ const onClickHome = async () => {
 };
 
 const onClickTile = async (index: number) => {
-  const param = isSelectBookmarkTab.value ? PATHS.BOOKMARK : PATHS.HISTORY;
-  await navigateTo(`/${param}?position=${index}`);
+  let param: "bookmarks" | "histories";
+  let videoItems: VideoItem[] = [];
+  if (isSelectBookmarkTab.value) {
+    videoItems = bookmarks.value.result;
+    param = PATHS.BOOKMARK;
+  } else {
+    videoItems = histories.value.result;
+    param = PATHS.HISTORY;
+  }
+
+  await navigateTo(`/${param}?content_id=${videoItems[index].content_id}`);
 };
 
 const onClickIcon = async (selected: (typeof PATHS)[keyof typeof PATHS]) => {

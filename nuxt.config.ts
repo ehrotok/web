@@ -100,7 +100,7 @@ export default defineNuxtConfig({
 
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "nuxt-gtag"],
   runtimeConfig: {
     public: {
       token: process.env.TOKEN,
@@ -120,6 +120,11 @@ export default defineNuxtConfig({
     "/v1/**": {
       proxy: `${process.env.PROXY_URL}/**`,
     },
+  },
+
+  gtag: {
+    id: process.env.GTAG,
+    loadingStrategy: "async",
   },
 
   image: isDevelopment
