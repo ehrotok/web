@@ -227,7 +227,6 @@ const fetch = async (page: number) => {
     if (props.fetchType === "bookmarks") {
       videos = await fetchBookmarksAll();
       bookmarks.value = videos.result;
-      await fetchBookmarksAll();
     } else {
       videos = await fetchHistoriesAll();
     }
@@ -243,6 +242,11 @@ const fetch = async (page: number) => {
   videoData.value.result = props.fetchType
     ? await fetchUserVideo()
     : await fetchVideo();
+
+  bookmarks.value =
+    props.fetchType === "bookmarks"
+      ? bookmarks.value
+      : (await fetchBookmarksAll()).result;
 
   videos.value.result =
     videoData.value.result.length > 1
