@@ -124,18 +124,31 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  window.removeEventListener("fullscreenchange", checkFullscreen);
+  removeEvents();
   cleanupResources();
   useEndTimer(videoSelectorAll.value[currentIndex.value]);
 });
 
-const init = () => {
+const setupEvents = () => {
+  window.addEventListener("resize", updateItemHeight);
   window.addEventListener("fullscreenchange", checkFullscreen);
-  itemHeight.value = window.innerHeight;
+};
+const removeEvents = () => {
+  window.removeEventListener("resize", updateItemHeight);
+  window.removeEventListener("fullscreenchange", checkFullscreen);
+};
+
+const init = () => {
+  setupEvents();
+  updateItemHeight();
   setOffset();
   if (route.query.position) {
     currentIndex.value = +route.query.position;
   }
+};
+
+const updateItemHeight = () => {
+  itemHeight.value = window.innerHeight;
 };
 
 const checkFullscreen = () => {
