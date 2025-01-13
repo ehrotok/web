@@ -206,8 +206,7 @@ const fetch = async (page: number) => {
       query: { token: tokenState.value, page: page },
     });
 
-    const result: VideoItemWithDisplayParams[] = videos.result;
-    videos.recommended
+    const result: VideoItemWithDisplayParams[] = videos.recommended
       ? videos.result.map(
           (v) =>
             ({
