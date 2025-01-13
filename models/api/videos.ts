@@ -4,6 +4,7 @@ export interface Videos {
   pages: number;
   count: number;
   result: VideoItem[];
+  recommended: boolean | null;
 }
 
 export interface VideoItem {

@@ -202,22 +202,20 @@ const unbookmark = async (query: object) => {
 
 const fetch = async (page: number) => {
   const fetchVideo = async () => {
-    const result: VideoItemWithDisplayParams[] = (
-      await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
-        query: { page: page },
-      })
-    ).result;
+    const videos: Videos = await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
+      query: { token: tokenState.value, page: page },
+    });
 
-    if (page === 1) {
-      const items = recommendationState.value.map(
-        (v) =>
-          ({
-            ...v,
-            is_recommend: true,
-          } as VideoItemWithDisplayParams)
-      );
-      result.unshift(...items);
-    }
+    const result: VideoItemWithDisplayParams[] = videos.result;
+    videos.recommended
+      ? videos.result.map(
+          (v) =>
+            ({
+              ...v,
+              is_recommend: true,
+            } as VideoItemWithDisplayParams)
+        )
+      : videos.result;
 
     return result;
   };
