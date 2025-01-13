@@ -27,7 +27,7 @@ defineProps({
   buttonClass: {
     type: String,
     default:
-      "p-1 rounded-full shadow-lg z-50 w-full transition active:scale-110",
+      "p-1 rounded-full shadow-lg z-50 w-full transition active:scale-150",
   },
   iconClass: {
     type: String,

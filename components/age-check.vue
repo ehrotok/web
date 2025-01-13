@@ -20,13 +20,13 @@
     <div class="flex w-full justify-evenly">
       <button
         @click="onClickYes"
-        class="w-5/12 bg-red-400 rounded-md text-neutral-50 px-6 transition active:scale-110"
+        class="w-5/12 bg-red-400 rounded-md text-neutral-50 px-6 transition active:scale-150"
       >
         はい
       </button>
       <button
         @click="onClickNo"
-        class="w-5/12 h-12 rounded-md bg-white text-black px-6 transition active:scale-110"
+        class="w-5/12 h-12 rounded-md bg-white text-black px-6 transition active:scale-150"
       >
         いいえ
       </button>

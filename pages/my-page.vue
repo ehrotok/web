@@ -24,7 +24,7 @@
   >
     <div class="border-r border-gray-500">
       <IconButton
-        iconClass="h-8 w-8 text-white m-auto opacity-30 transition active:scale-110"
+        iconClass="h-8 w-8 text-white m-auto opacity-30 transition active:scale-150"
         buttonClass="rounded-full shadow-lg w-full"
         :icon="mdiHomeOutline"
         @click="onClickHome"
@@ -34,7 +34,7 @@
     <div class="border-r border-gray-500">
       <IconButton
         :icon="mdiBookmarkOutline"
-        buttonClass="rounded-full shadow-lg w-full transition active:scale-110"
+        buttonClass="rounded-full shadow-lg w-full transition active:scale-150"
         :iconClass="`h-8 w-8 text-white m-auto ${
           isSelectBookmarkTab ? '' : 'opacity-30'
         }`"
@@ -44,7 +44,7 @@
     </div>
     <div>
       <IconButton
-        buttonClass="rounded-full shadow-lg w-full transition active:scale-110"
+        buttonClass="rounded-full shadow-lg w-full transition active:scale-150"
         :iconClass="`h-8 w-8 text-white m-auto ${
           !isSelectBookmarkTab ? '' : 'opacity-30'
         }`"

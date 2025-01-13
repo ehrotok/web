@@ -8,7 +8,7 @@
   >
     <IconButton
       v-if="props.fetchType"
-      buttonClass="absolute top-10 m-4 rounded-full shadow-lg z-50 transition active:scale-110"
+      buttonClass="absolute top-10 m-4 rounded-full shadow-lg z-50 transition active:scale-150"
       :icon="mdiArrowULeftTop"
       @click="onClickReturn"
     ></IconButton>
