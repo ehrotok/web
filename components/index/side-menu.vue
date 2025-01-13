@@ -78,6 +78,9 @@ const onClickHome = () => {
 };
 
 const onClickBookmark = () => {
+  if (navigator.vibrate) {
+    navigator.vibrate(100);
+  }
   emit("click:bookmark");
 };
 </script>
