@@ -3,7 +3,7 @@
     <nuxt-img
       class="m-auto rounded-full h-20 w-20 object-contain"
       :placeholder="Constants.IMAGES.BG_GRAY"
-      :src="Constants.IMAGES.LOGO"
+      :src="Constants.IMAGES.LOGO_WITH_TEXT"
     />
     <div class="flex justify-evenly p-3">
       <div class="w-full border-r border-gray-500">
