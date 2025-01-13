@@ -35,7 +35,7 @@ const useHeadTag =
     const url = "https://ehrotok.netlify.app";
     const image = `${url}/${imagePath}`;
 
-    return {
+    useHead({
       title: title,
       meta: [
         {
@@ -111,7 +111,7 @@ const useHeadTag =
         },
       ],
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
-    };
+    });
   };
 
 export { useSeoWithSpa };
