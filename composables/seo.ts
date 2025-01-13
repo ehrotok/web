@@ -1,4 +1,20 @@
-const useSeo =
+const useSeoWithSpa = (path: string, title: string, imagePath?: string) => {
+  const { gtag } = useGtag();
+  const config = useRuntimeConfig();
+
+  useHeadTag(title, undefined, imagePath);
+
+  history.replaceState(null, "", path);
+
+  if (import.meta.client && typeof gtag === "function") {
+    gtag("config", config.public.googleTag, {
+      page_path: path,
+      page_title: title,
+    });
+  }
+};
+
+const useHeadTag =
   /**
    * 動的にheadタグを変更できるコンポーザブル
    *
@@ -98,4 +114,4 @@ const useSeo =
     };
   };
 
-export { useSeo };
+export { useSeoWithSpa };

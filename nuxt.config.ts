@@ -110,6 +110,7 @@ export default defineNuxtConfig({
       },
       isDevelopment: isDevelopment,
       bearerToken: process.env.BEARER_TOKEN,
+      googleTag: process.env.GTAG,
     },
   },
   imports: {

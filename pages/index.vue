@@ -303,6 +303,13 @@ const endSwipe = async (e: any) => {
     }
   }
 
+  const currentVideo = videos.value.result[currentIndex.value];
+  useSeoWithSpa(
+    `/${currentVideo.content_id}`,
+    currentVideo.title,
+    currentVideo.image_url
+  );
+
   setOffset();
 };
 
