@@ -18,12 +18,6 @@ const useFullScreenMode = () =>
   useState<boolean>("fullScreenMode", () => false);
 
 /**
- * 選択した位置
- * @returns
- */
-const usePositionState = () => useState<number>("position", () => 0);
-
-/**
  * 年齢確認
  * @returns
  */
@@ -36,11 +30,10 @@ const useAgeCheckState = () => useState<boolean>("age_check", () => true);
 const useTokenState = () => useState<string>("token", () => "");
 
 /**
- * レコメンド情報
+ * ブックマーク情報
  * @returns
  */
-const useRecommendationsState = () =>
-  useState<VideoItem[]>("recommendations", () => []);
+const useBookmarkState = () => useState<VideoItem[]>("bookmarks", () => []);
 
 export {
   useLoader,
@@ -49,5 +42,5 @@ export {
   usePositionState,
   useAgeCheckState,
   useTokenState,
-  useRecommendationsState,
+  useBookmarkState,
 };
