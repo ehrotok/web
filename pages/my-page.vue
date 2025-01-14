@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <div class="overflow-scroll grid grid-cols-3">
+  <div class="grid grid-cols-3">
     <div
       v-for="(tile, index) in tiles"
       :key="index"
@@ -76,17 +76,26 @@
       </div>
     </div>
   </div>
+  <div
+    v-if="isLoading"
+    class="fixed bottom-5 left-1/2 transform -translate-x-1/2"
+  >
+    <div
+      class="animate-spin h-10 w-10 border-4 border-[#fe2c55] rounded-full border-t-transparent"
+    ></div>
+  </div>
 </template>
 
 <script setup lang="ts">
 const route = useRoute();
-const tokenState = useTokenState();
 
 const PATHS = {
   BOOKMARK: "bookmarks",
   HISTORY: "histories",
 } as const;
 
+const page = ref(1);
+const isLoading = ref(false);
 const bookmarks = ref<Videos>({} as Videos);
 const histories = ref<Videos>({} as Videos);
 
@@ -105,17 +114,60 @@ const tiles = computed(() =>
 
 onMounted(async () => {
   await fetch();
+  window.addEventListener("scroll", handleScroll);
 });
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
+const handleScroll = async () => {
+  const scrollPosition = window.scrollY + window.innerHeight;
+  const documentHeight = document.documentElement.scrollHeight;
+
+  const pages = isSelectBookmarkTab.value
+    ? bookmarks.value.pages
+    : histories.value.pages;
+
+  if (
+    scrollPosition >= documentHeight &&
+    !isLoading.value &&
+    pages > page.value
+  ) {
+    isLoading.value = true;
+    page.value++;
+    isSelectBookmarkTab.value ? await fetchBookmark() : await fetchHistory();
+    isLoading.value = false;
+  }
+};
 
 const fetch = async () => {
   useWait(async () => {
     const [_bookmarks, _histories] = await Promise.all([
-      !!bookmarks.value.count ? bookmarks.value : fetchBookmarksAll(),
-      !!histories.value.count ? histories.value : fetchHistoriesAll(),
+      !!bookmarks.value.count ? bookmarks.value : fetchBookmarks(page.value),
+      !!histories.value.count ? histories.value : fetchHistories(page.value),
     ]);
     bookmarks.value = _bookmarks;
     histories.value = _histories;
   });
+};
+
+const fetchBookmark = async () => {
+  const _histories = await fetchBookmarks(page.value);
+  if (!histories.value.count) {
+    histories.value = _histories;
+  }
+
+  histories.value.result.push(..._histories.result);
+};
+
+const fetchHistory = async () => {
+  const _histories = await fetchHistories(page.value);
+  if (!histories.value.count) {
+    histories.value = _histories;
+  }
+
+  histories.value.result.push(..._histories.result);
 };
 
 const onClickHome = async () => {

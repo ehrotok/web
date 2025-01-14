@@ -7,7 +7,7 @@
     @touchend="endSwipe"
   >
     <IconButton
-      v-if="props.fetchType"
+      v-if="routeName && routeName !== 'id'"
       buttonClass="absolute top-10 m-4 rounded-full shadow-lg z-50 transition active:scale-150"
       :icon="mdiArrowULeftTop"
       @click="onClickReturn"
@@ -67,33 +67,29 @@
 import Cookies from "js-cookie";
 import { useFullScreenMode } from "~/composables/state";
 
-type VideoItemWithDisplayParams = VideoItem & {
-  is_fullscreen?: boolean;
-  is_recommend?: boolean;
-};
-type ExtendedVideo = Videos & { result: VideoItemWithDisplayParams[] };
-
 const props = defineProps({
-  fetchType: {
-    type: String as PropType<"bookmarks" | "histories">,
+  contentId: {
+    type: String,
+    default: undefined,
+  },
+  videoData: {
+    type: Object as () => ExtendedVideo,
     default: undefined,
   },
 });
-
 const route = useRoute();
-const positionState = usePositionState();
 const tokenState = useTokenState();
-const recommendationState = useRecommendationsState();
+const bookmarkState = useBookmarkState();
 const isFullscreenMode = useFullScreenMode();
 
 const videos = ref<ExtendedVideo>({} as ExtendedVideo);
 const videoData = ref<ExtendedVideo>({} as ExtendedVideo);
 const startY = ref(0);
 const currentOffset = ref(0);
-const currentIndex = ref(positionState.value);
+const currentIndex = ref(0);
 const itemHeight = ref(0);
 const currentPage = ref(1);
-const bookmarks = ref<VideoItemWithDisplayParams[]>([]);
+const bookmarks = ref<VideoItemWithDisplayParams[]>(bookmarkState.value);
 
 const currentBookmark = computed(() => {
   const index = bookmarks.value.findIndex(
@@ -108,6 +104,13 @@ const currentBookmark = computed(() => {
 const videoSelectorAll = computed(() => {
   return Array.from(document.querySelectorAll("video"));
 });
+
+const routeName = computed(
+  () =>
+    (["bookmarks", "histories", "id"].includes(route.name as string)
+      ? route.name
+      : undefined) as string | undefined
+);
 
 onMounted(() => {
   useWait(async () => {
@@ -152,12 +155,11 @@ const checkFullscreen = () => {
 };
 
 const onClickHome = async () => {
-  positionState.value = currentIndex.value;
   await navigateTo(`/my-page`);
 };
 
 const onClickReturn = async () => {
-  await navigateTo(`/my-page?selected=${props.fetchType}`);
+  await navigateTo(`/my-page?selected=${routeName.value}`);
 };
 
 const onClickBookmark = async () => {
@@ -201,49 +203,9 @@ const unbookmark = async (query: object) => {
 };
 
 const fetch = async (page: number) => {
-  const fetchVideo = async () => {
-    const videos: Videos = await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
-      query: { token: tokenState.value, page: page },
-    });
-
-    const result: VideoItemWithDisplayParams[] = videos.recommended
-      ? videos.result.map(
-          (v) =>
-            ({
-              ...v,
-              is_recommend: true,
-            } as VideoItemWithDisplayParams)
-        )
-      : videos.result;
-
-    return result;
-  };
-
-  const fetchUserVideo = async () => {
-    let videos: Videos;
-    if (props.fetchType === "bookmarks") {
-      videos = await fetchBookmarksAll();
-      bookmarks.value = videos.result;
-    } else {
-      videos = await fetchHistoriesAll();
-    }
-
-    if (route.query.content_id) {
-      currentIndex.value = videos.result.findIndex(
-        (v) => v.content_id === route.query.content_id
-      );
-    }
-    return videos.result;
-  };
-
-  videoData.value.result = props.fetchType
-    ? await fetchUserVideo()
-    : await fetchVideo();
-
-  bookmarks.value =
-    props.fetchType === "bookmarks"
-      ? bookmarks.value
-      : (await fetchBookmarksAll()).result;
+  videoData.value.result = routeName.value
+    ? (props.videoData as ExtendedVideo).result
+    : (await fetchVideos(page)).result;
 
   videos.value.result =
     videoData.value.result.length > 1
@@ -252,6 +214,12 @@ const fetch = async (page: number) => {
           () => ({} as VideoItemWithDisplayParams)
         )
       : [];
+
+  if (props.contentId) {
+    currentIndex.value = videoData.value.result.findIndex(
+      (v) => v.content_id === props.contentId
+    );
+  }
 };
 
 const reFetch = async (page: number) => {
@@ -287,7 +255,7 @@ const endSwipe = async (e: any) => {
       const prevIndex = currentIndex.value;
       currentIndex.value = newIndex;
 
-      if (!props.fetchType && !videoData.value.result[newIndex + 1]) {
+      if (!routeName.value && !videoData.value.result[newIndex + 1]) {
         await reFetch(++currentPage.value);
       }
 
@@ -368,7 +336,7 @@ const play = async (currentIndex: number): Promise<void> => {
 const finish = async (): Promise<void> => {
   const time = useEndTimer(videoSelectorAll.value[currentIndex.value]);
 
-  if (props.fetchType || time <= 1) {
+  if (routeName.value || time <= 1) {
     return;
   }
 

@@ -1,33 +1,21 @@
-export const fetchBookmarksAll = async (): Promise<Videos> => {
-  return await fetch(Constants.API_URLS.BOOKMARKS);
-};
-
-export const fetchHistoriesAll = async (): Promise<Videos> => {
-  return await fetch(Constants.API_URLS.HISTORIES);
-};
-
-const fetch = async (url: string): Promise<Videos> => {
+export const fetchBookmarks = async (page: number): Promise<Videos> => {
   const tokenState = useTokenState();
 
-  const video = await $envFetch<Videos>(url, {
+  return await $envFetch<Videos>(Constants.API_URLS.BOOKMARKS, {
     query: {
       token: tokenState.value,
-      page: 1,
+      page,
     },
   });
+};
 
-  const pages = Array.from({ length: video.pages - 1 }, (_, i) => i + 2);
-  const requests = pages.map((page) =>
-    $envFetch<Videos>(url, {
-      query: {
-        token: tokenState.value,
-        page,
-      },
-    })
-  );
+export const fetchHistories = async (page: number): Promise<Videos> => {
+  const tokenState = useTokenState();
 
-  const results = await Promise.all(requests);
-  results.unshift(video);
-  video.result = results.map((item) => item.result).flat();
-  return video;
+  return await $envFetch<Videos>(Constants.API_URLS.HISTORIES, {
+    query: {
+      token: tokenState.value,
+      page,
+    },
+  });
 };
