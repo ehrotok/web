@@ -141,6 +141,10 @@ const setupEvents = () => {
 const removeEvents = () => {
   window.removeEventListener("resize", updateItemHeight);
   window.removeEventListener("fullscreenchange", checkFullscreen);
+  videoSelectorAll.value[currentIndex.value].removeEventListener(
+    "volumechange",
+    checkVolumeChange
+  );
 };
 
 const updateItemHeight = () => {
@@ -152,6 +156,12 @@ const checkFullscreen = () => {
   videos.value.result[currentIndex.value].is_fullscreen =
     videos.value.result[currentIndex.value].is_fullscreen ||
     isFullscreenMode.value;
+};
+
+const checkVolumeChange = () => {
+  const element = videoSelectorAll.value[currentIndex.value];
+  const video = videos.value.result[currentIndex.value];
+  video.unmuted = video.unmuted || !element.muted;
 };
 
 const onClickHome = async () => {
@@ -174,14 +184,14 @@ const onClickBookmark = async () => {
     return;
   }
 
-  await bookmark(query, contentId);
-
   if (!Cookies.get(Constants.COOKIE_KEYS.BOOKMARK_ALERT)) {
     Cookies.set(Constants.COOKIE_KEYS.BOOKMARK_ALERT, "true", { expires: 90 });
     alert(
       "動画をブックマークしました\nブックマークした動画は、プロフィール（👤）からいつでも確認できます"
     );
   }
+
+  await bookmark(query, contentId);
 };
 
 const bookmark = async (query: object, contentId: string) => {
@@ -302,6 +312,7 @@ const cleanupResources = async (): Promise<void> => {
       video.pause();
       video.src = "";
       video.load();
+      video.removeEventListener("volumechange", checkVolumeChange);
     });
 };
 
@@ -322,6 +333,8 @@ const play = async (currentIndex: number): Promise<void> => {
   const element = videoSelectorAll.value[currentIndex];
   const video = videos.value.result[currentIndex];
 
+  element.addEventListener("volumechange", checkVolumeChange);
+
   element.src = video.url;
   element.load();
 
@@ -331,6 +344,8 @@ const play = async (currentIndex: number): Promise<void> => {
   element.play().catch((err) => {
     console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
   });
+
+  checkVolumeChange();
 };
 
 const finish = async (): Promise<void> => {
@@ -347,6 +362,7 @@ const finish = async (): Promise<void> => {
       content_id: videos.value.result[currentIndex.value].content_id,
       time: Math.floor(time),
       fullscreened: !!videos.value.result[currentIndex.value].is_fullscreen,
+      unmuted: !!videos.value.result[currentIndex.value].unmuted,
     },
   });
 };
