@@ -1,6 +1,20 @@
 {
+  "files": {
+    "ignore": [".nuxt/*"]
+  },
   "formatter": {
     "indentWidth": 2,
     "indentStyle": "space"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
+      "complexity": {
+        "noForEach": "off"
+      }
+    }
   }
 }

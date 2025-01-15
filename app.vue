@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 import Cookies from "js-cookie";
-import { Constants } from "./config";
 import { useFullScreenMode } from "./composables/state";
+import { Constants } from "./config";
 
 const isLandscapeMode = useLandscapeMode();
 const isAgeChecked = useAgeCheckState();

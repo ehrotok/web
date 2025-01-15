@@ -165,7 +165,7 @@ const checkVolumeChange = () => {
 };
 
 const onClickHome = async () => {
-  await navigateTo(`/my-page`);
+  await navigateTo("/my-page");
 };
 
 const onClickReturn = async () => {
@@ -318,7 +318,7 @@ const cleanupResources = async (): Promise<void> => {
 
 const replaceDom = async (
   currentIndex: number,
-  deleteCount: number = 1,
+  deleteCount = 1,
 ): Promise<void> => {
   videos.value.result.splice(
     currentIndex,

@@ -144,8 +144,8 @@ const handleScroll = async () => {
 const fetch = async () => {
   useWait(async () => {
     const [_bookmarks, _histories] = await Promise.all([
-      !!bookmarks.value.count ? bookmarks.value : fetchBookmarks(page.value),
-      !!histories.value.count ? histories.value : fetchHistories(page.value),
+      bookmarks.value.count ? bookmarks.value : fetchBookmarks(page.value),
+      histories.value.count ? histories.value : fetchHistories(page.value),
     ]);
     bookmarks.value = _bookmarks;
     histories.value = _histories;
@@ -171,7 +171,7 @@ const fetchHistory = async () => {
 };
 
 const onClickHome = async () => {
-  await navigateTo(`/`);
+  await navigateTo("/");
 };
 
 const onClickTile = async (index: number) => {

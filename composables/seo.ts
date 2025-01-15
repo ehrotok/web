@@ -26,11 +26,11 @@ const useHeadTag =
    * @returns
    */
   (
-    title: string = "EhroTok - 大人のためのショート動画プラットフォーム",
-    description: string = "EhroTokは、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。",
+    title = "EhroTok - 大人のためのショート動画プラットフォーム",
+    description = "EhroTokは、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。",
     imagePath: string = Constants.IMAGES.LOGO_WITH_TEXT,
-    type: string = "website",
-    twitterCard: string = "summary",
+    type = "website",
+    twitterCard = "summary",
   ) => {
     const url = "https://ehrotok.netlify.app";
     const image = `${url}/${imagePath}`;
