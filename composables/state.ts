@@ -2,38 +2,37 @@
  * ローディングを管理する状態
  * @returns
  */
-const useLoader = () => useState<boolean>("loader", () => false);
+const useLoader = () => useState<boolean>('loader', () => false)
 
 /**
  * 横画面か
  * @returns
  */
-const useLandscapeMode = () => useState<boolean>("landscapeMode", () => false);
+const useLandscapeMode = () => useState<boolean>('landscapeMode', () => false)
 
 /**
  * 全画面
  * @returns
  */
-const useFullScreenMode = () =>
-  useState<boolean>("fullScreenMode", () => false);
+const useFullScreenMode = () => useState<boolean>('fullScreenMode', () => false)
 
 /**
  * 年齢確認
  * @returns
  */
-const useAgeCheckState = () => useState<boolean>("age_check", () => true);
+const useAgeCheckState = () => useState<boolean>('age_check', () => true)
 
 /**
  * トークン
  * @returns
  */
-const useTokenState = () => useState<string>("token", () => "");
+const useTokenState = () => useState<string>('token', () => '')
 
 /**
  * ブックマーク情報
  * @returns
  */
-const useBookmarkState = () => useState<VideoItem[]>("bookmarks", () => []);
+const useBookmarkState = () => useState<VideoItem[]>('bookmarks', () => [])
 
 export {
   useLoader,
@@ -43,4 +42,4 @@ export {
   useAgeCheckState,
   useTokenState,
   useBookmarkState,
-};
+}

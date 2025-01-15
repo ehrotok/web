@@ -87,114 +87,106 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
+const route = useRoute()
 
 const PATHS = {
-  BOOKMARK: "bookmarks",
-  HISTORY: "histories",
-} as const;
+  BOOKMARK: 'bookmarks',
+  HISTORY: 'histories',
+} as const
 
-const page = ref(1);
-const isLoading = ref(false);
-const bookmarks = ref<Videos>({} as Videos);
-const histories = ref<Videos>({} as Videos);
+const page = ref(1)
+const isLoading = ref(false)
+const bookmarks = ref<Videos>({} as Videos)
+const histories = ref<Videos>({} as Videos)
 
 const isSelectBookmarkTab = computed(
   () => !route.query.selected || route.query.selected === PATHS.BOOKMARK,
-);
+)
 
 const tiles = computed(() =>
-  (isSelectBookmarkTab.value ? bookmarks : histories).value.result?.map(
-    (v) => ({
-      image: v.image_url,
-      title: v.title,
-    }),
-  ),
-);
+  (isSelectBookmarkTab.value ? bookmarks : histories).value.result?.map((v) => ({
+    image: v.image_url,
+    title: v.title,
+  })),
+)
 
 onMounted(async () => {
-  await fetch();
-  window.addEventListener("scroll", handleScroll);
-});
+  await fetch()
+  window.addEventListener('scroll', handleScroll)
+})
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
+  window.removeEventListener('scroll', handleScroll)
+})
 
 const handleScroll = async () => {
-  const scrollPosition = window.scrollY + window.innerHeight;
-  const documentHeight = document.documentElement.scrollHeight;
+  const scrollPosition = window.scrollY + window.innerHeight
+  const documentHeight = document.documentElement.scrollHeight
 
-  const pages = isSelectBookmarkTab.value
-    ? bookmarks.value.pages
-    : histories.value.pages;
+  const pages = isSelectBookmarkTab.value ? bookmarks.value.pages : histories.value.pages
 
-  if (
-    scrollPosition >= documentHeight &&
-    !isLoading.value &&
-    pages > page.value
-  ) {
-    isLoading.value = true;
-    page.value++;
-    isSelectBookmarkTab.value ? await fetchBookmark() : await fetchHistory();
-    isLoading.value = false;
+  if (scrollPosition >= documentHeight && !isLoading.value && pages > page.value) {
+    isLoading.value = true
+    page.value++
+    isSelectBookmarkTab.value ? await fetchBookmark() : await fetchHistory()
+    isLoading.value = false
   }
-};
+}
 
 const fetch = async () => {
   useWait(async () => {
     const [_bookmarks, _histories] = await Promise.all([
       bookmarks.value.count ? bookmarks.value : fetchBookmarks(page.value),
       histories.value.count ? histories.value : fetchHistories(page.value),
-    ]);
-    bookmarks.value = _bookmarks;
-    histories.value = _histories;
-  });
-};
+    ])
+    bookmarks.value = _bookmarks
+    histories.value = _histories
+  })
+}
 
 const fetchBookmark = async () => {
-  const _histories = await fetchBookmarks(page.value);
+  const _histories = await fetchBookmarks(page.value)
   if (!histories.value.count) {
-    histories.value = _histories;
+    histories.value = _histories
   }
 
-  histories.value.result.push(..._histories.result);
-};
+  histories.value.result.push(..._histories.result)
+}
 
 const fetchHistory = async () => {
-  const _histories = await fetchHistories(page.value);
+  const _histories = await fetchHistories(page.value)
   if (!histories.value.count) {
-    histories.value = _histories;
+    histories.value = _histories
   }
 
-  histories.value.result.push(..._histories.result);
-};
+  histories.value.result.push(..._histories.result)
+}
 
 const onClickHome = async () => {
-  await navigateTo("/");
-};
+  await navigateTo('/')
+}
 
 const onClickTile = async (index: number) => {
-  let param: "bookmarks" | "histories";
-  let videoItems: VideoItem[] = [];
+  let param: 'bookmarks' | 'histories'
+  let videoItems: VideoItem[] = []
   if (isSelectBookmarkTab.value) {
-    videoItems = bookmarks.value.result;
-    param = PATHS.BOOKMARK;
+    videoItems = bookmarks.value.result
+    param = PATHS.BOOKMARK
   } else {
-    videoItems = histories.value.result;
-    param = PATHS.HISTORY;
+    videoItems = histories.value.result
+    param = PATHS.HISTORY
   }
 
-  await navigateTo(`/${param}?content_id=${videoItems[index].content_id}`);
-};
+  await navigateTo(`/${param}?content_id=${videoItems[index].content_id}`)
+}
 
 const onClickIcon = async (selected: (typeof PATHS)[keyof typeof PATHS]) => {
-  await fetch();
+  await fetch()
   await navigateTo({
-    path: "/my-page",
+    path: '/my-page',
     query: {
       selected: selected,
     },
-  });
-};
+  })
+}
 </script>

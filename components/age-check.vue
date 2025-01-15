@@ -35,16 +35,16 @@
 </template>
 
 <script setup lang="ts">
-import Cookies from "js-cookie";
-const ageCheckedState = useAgeCheckState();
-const isAgeChecked = computed(() => ageCheckedState);
+import Cookies from 'js-cookie'
+const ageCheckedState = useAgeCheckState()
+const isAgeChecked = computed(() => ageCheckedState)
 
 const onClickYes = async () => {
-  Cookies.set(Constants.COOKIE_KEYS.AGE_CHECK, "true", { expires: 30 });
-  ageCheckedState.value = true;
-};
+  Cookies.set(Constants.COOKIE_KEYS.AGE_CHECK, 'true', { expires: 30 })
+  ageCheckedState.value = true
+}
 
 const onClickNo = async () => {
-  location.href = "https://example.com";
-};
+  location.href = 'https://example.com'
+}
 </script>

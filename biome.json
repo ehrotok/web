@@ -1,20 +1,34 @@
 {
-  "files": {
-    "ignore": [".nuxt/*"]
-  },
+  "files": { "ignore": [".nuxt/*"] },
   "formatter": {
+    "enabled": true,
+    "useEditorconfig": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
     "indentWidth": 2,
-    "indentStyle": "space"
+    "lineEnding": "lf",
+    "lineWidth": 100,
+    "attributePosition": "auto",
+    "bracketSpacing": true
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "suspicious": {
-        "noExplicitAny": "off"
-      },
-      "complexity": {
-        "noForEach": "off"
-      }
+      "complexity": { "noForEach": "off" },
+      "suspicious": { "noExplicitAny": "off" }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "all",
+      "semicolons": "asNeeded",
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "quoteStyle": "single",
+      "attributePosition": "auto",
+      "bracketSpacing": true
     }
   }
 }

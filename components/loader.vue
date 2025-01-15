@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-const loading = computed(() => useLoader());
+const loading = computed(() => useLoader())
 </script>
 
 <style scoped>

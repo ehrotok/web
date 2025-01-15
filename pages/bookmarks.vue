@@ -7,17 +7,17 @@
 </template>
 
 <script setup lang="ts">
-import IndexPage from "./index.vue";
+import IndexPage from './index.vue'
 
-const route = useRoute();
+const route = useRoute()
 const videoData = ref<ExtendedVideo>({
   result: [] as VideoItemWithDisplayParams[],
-} as ExtendedVideo);
-const contentId = ref<string>(route.query?.content_id as string);
+} as ExtendedVideo)
+const contentId = ref<string>(route.query?.content_id as string)
 
 onMounted(() => {
   useWait(async () => {
-    videoData.value.result.push(await fetchVideo(contentId.value));
-  });
-});
+    videoData.value.result.push(await fetchVideo(contentId.value))
+  })
+})
 </script>

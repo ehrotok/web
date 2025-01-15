@@ -7,7 +7,7 @@ import {
   mdiHistory,
   mdiHomeOutline,
   mdiStar,
-} from "@mdi/js";
+} from '@mdi/js'
 
 export {
   mdiArrowULeftTop,
@@ -18,4 +18,4 @@ export {
   mdiBookmark,
   mdiStar,
   mdiAccountOutline,
-};
+}

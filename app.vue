@@ -12,47 +12,47 @@
 </template>
 
 <script setup lang="ts">
-import Cookies from "js-cookie";
-import { useFullScreenMode } from "./composables/state";
-import { Constants } from "./config";
+import Cookies from 'js-cookie'
+import { useFullScreenMode } from './composables/state'
+import { Constants } from './config'
 
-const isLandscapeMode = useLandscapeMode();
-const isAgeChecked = useAgeCheckState();
-const isFullscreenMode = useFullScreenMode();
+const isLandscapeMode = useLandscapeMode()
+const isAgeChecked = useAgeCheckState()
+const isFullscreenMode = useFullScreenMode()
 
 onMounted(async () => {
-  init();
-  setupEvents();
-  setupWebStorage();
-});
+  init()
+  setupEvents()
+  setupWebStorage()
+})
 
 onUnmounted(() => {
-  removeEvents();
-});
+  removeEvents()
+})
 
 const init = async () => {
-  checkOrientation();
-};
+  checkOrientation()
+}
 
 const setupEvents = async () => {
-  window.addEventListener("resize", checkOrientation);
-};
+  window.addEventListener('resize', checkOrientation)
+}
 
 const removeEvents = async () => {
-  window.removeEventListener("resize", checkOrientation);
-};
+  window.removeEventListener('resize', checkOrientation)
+}
 
 const setupWebStorage = () => {
   if (!Cookies.get(Constants.COOKIE_KEYS.AGE_CHECK)) {
-    isAgeChecked.value = false;
+    isAgeChecked.value = false
   }
-};
+}
 
 const checkOrientation = () => {
   if (isFullscreenMode.value) {
-    return;
+    return
   }
 
-  isLandscapeMode.value = window.innerHeight < window.innerWidth;
-};
+  isLandscapeMode.value = window.innerHeight < window.innerWidth
+}
 </script>
