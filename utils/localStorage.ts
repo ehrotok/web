@@ -74,7 +74,8 @@ export const localStorageUtil = {
           typeof v === "object" &&
           v !== null &&
           duplicateCheckKey in v &&
-          v[duplicateCheckKey as keyof T] === item[duplicateCheckKey as keyof T]
+          v[duplicateCheckKey as keyof T] ===
+            item[duplicateCheckKey as keyof T],
       );
       if (index !== -1) {
         storage.splice(index, 1);

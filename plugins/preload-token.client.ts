@@ -3,7 +3,7 @@ export default defineNuxtPlugin(async () => {
   const tokenState = useTokenState();
   const bookmarkState = useBookmarkState();
   let accounts = await localStorageUtil.getItem<Accounts>(
-    Constants.STORAGE_KEYS.ACCOUNTS
+    Constants.STORAGE_KEYS.ACCOUNTS,
   );
 
   const query = accounts.token ? { token: accounts.token } : {};

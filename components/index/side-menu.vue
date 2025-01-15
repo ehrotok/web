@@ -70,7 +70,7 @@ const props = defineProps({
 const emit = defineEmits(["click:home", "click:bookmark"]);
 
 const reviewAverageText = computed(() =>
-  props.reviewAverage > 0 ? `${props.reviewAverage}点` : ""
+  props.reviewAverage > 0 ? `${props.reviewAverage}点` : "",
 );
 
 const onClickHome = () => {

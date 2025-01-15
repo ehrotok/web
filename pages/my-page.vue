@@ -100,7 +100,7 @@ const bookmarks = ref<Videos>({} as Videos);
 const histories = ref<Videos>({} as Videos);
 
 const isSelectBookmarkTab = computed(
-  () => !route.query.selected || route.query.selected === PATHS.BOOKMARK
+  () => !route.query.selected || route.query.selected === PATHS.BOOKMARK,
 );
 
 const tiles = computed(() =>
@@ -108,8 +108,8 @@ const tiles = computed(() =>
     (v) => ({
       image: v.image_url,
       title: v.title,
-    })
-  )
+    }),
+  ),
 );
 
 onMounted(async () => {

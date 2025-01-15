@@ -8,13 +8,13 @@ export const fetchVideos = async (page: number): Promise<Videos> => {
       ({
         ...v,
         is_recommend: !!videos.recommended,
-      } as VideoItemWithDisplayParams)
+      }) as VideoItemWithDisplayParams,
   );
   return videos;
 };
 
 export const fetchVideo = async (contentId: string): Promise<VideoItem> => {
   return await $envFetch<VideoItem>(
-    `${Constants.API_URLS.VIDEOS}/${contentId}`
+    `${Constants.API_URLS.VIDEOS}/${contentId}`,
   );
 };

@@ -93,7 +93,7 @@ const bookmarks = ref<VideoItemWithDisplayParams[]>(bookmarkState.value);
 
 const currentBookmark = computed(() => {
   const index = bookmarks.value.findIndex(
-    (v) => v.content_id === videos.value.result[currentIndex.value]?.content_id
+    (v) => v.content_id === videos.value.result[currentIndex.value]?.content_id,
   );
   return {
     index,
@@ -109,7 +109,7 @@ const routeName = computed(
   () =>
     (["bookmarks", "histories", "id"].includes(route.name as string)
       ? route.name
-      : undefined) as string | undefined
+      : undefined) as string | undefined,
 );
 
 onMounted(() => {
@@ -143,7 +143,7 @@ const removeEvents = () => {
   window.removeEventListener("fullscreenchange", checkFullscreen);
   videoSelectorAll.value[currentIndex.value].removeEventListener(
     "volumechange",
-    checkVolumeChange
+    checkVolumeChange,
   );
 };
 
@@ -187,7 +187,7 @@ const onClickBookmark = async () => {
   if (!Cookies.get(Constants.COOKIE_KEYS.BOOKMARK_ALERT)) {
     Cookies.set(Constants.COOKIE_KEYS.BOOKMARK_ALERT, "true", { expires: 90 });
     alert(
-      "動画をブックマークしました\nブックマークした動画は、プロフィール（👤）からいつでも確認できます"
+      "動画をブックマークしました\nブックマークした動画は、プロフィール（👤）からいつでも確認できます",
     );
   }
 
@@ -221,13 +221,13 @@ const fetch = async (page: number) => {
     videoData.value.result.length > 1
       ? Array.from(
           { length: videoData.value.result.length - 1 },
-          () => ({} as VideoItemWithDisplayParams)
+          () => ({}) as VideoItemWithDisplayParams,
         )
       : [];
 
   if (props.contentId) {
     currentIndex.value = videoData.value.result.findIndex(
-      (v) => v.content_id === props.contentId
+      (v) => v.content_id === props.contentId,
     );
   }
 };
@@ -282,7 +282,7 @@ const endSwipe = async (e: any) => {
   useSeoWithSpa(
     `/${currentVideo.content_id}`,
     `${currentVideo.title} - EhroTok`,
-    currentVideo.image_url
+    currentVideo.image_url,
   );
 
   setOffset();
@@ -318,12 +318,12 @@ const cleanupResources = async (): Promise<void> => {
 
 const replaceDom = async (
   currentIndex: number,
-  deleteCount: number = 1
+  deleteCount: number = 1,
 ): Promise<void> => {
   videos.value.result.splice(
     currentIndex,
     deleteCount,
-    videoData.value.result[currentIndex]
+    videoData.value.result[currentIndex],
   );
 
   nextTick();

@@ -28,10 +28,10 @@ const fetchDev = async <T>(url: string): Promise<T> => {
       headers: {
         Authorization: `token ${config.public.token}`,
       },
-    }
+    },
   )) as any;
 
   return JSON.parse(
-    response.files[config.public.development.fileName].content
+    response.files[config.public.development.fileName].content,
   ) as T;
 };
