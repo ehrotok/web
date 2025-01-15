@@ -1,13 +1,13 @@
 import {
-  mdiArrowULeftTop,
-  mdiHistory,
-  mdiBookmarkOutline,
-  mdiHomeOutline,
-  mdiHeart,
-  mdiBookmark,
-  mdiStar,
   mdiAccountOutline,
-} from "@mdi/js";
+  mdiArrowULeftTop,
+  mdiBookmark,
+  mdiBookmarkOutline,
+  mdiHeart,
+  mdiHistory,
+  mdiHomeOutline,
+  mdiStar,
+} from '@mdi/js'
 
 export {
   mdiArrowULeftTop,
@@ -18,4 +18,4 @@ export {
   mdiBookmark,
   mdiStar,
   mdiAccountOutline,
-};
+}

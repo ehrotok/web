@@ -26,26 +26,25 @@ defineProps({
   },
   buttonClass: {
     type: String,
-    default:
-      "p-1 rounded-full shadow-lg z-50 w-full transition active:scale-150",
+    default: 'p-1 rounded-full shadow-lg z-50 w-full transition active:scale-150',
   },
   iconClass: {
     type: String,
-    default: "h-8 w-8 text-white m-auto",
+    default: 'h-8 w-8 text-white m-auto',
   },
   fill: {
     type: String,
-    default: "currentColor",
+    default: 'currentColor',
   },
   text: {
     type: [Number, String],
     default: undefined,
   },
-});
+})
 
-const emit = defineEmits(["click"]);
+const emit = defineEmits(['click'])
 
 const onClick = () => {
-  emit("click");
-};
+  emit('click')
+}
 </script>

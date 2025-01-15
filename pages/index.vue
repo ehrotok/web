@@ -64,8 +64,8 @@
 </template>
 
 <script setup lang="ts">
-import Cookies from "js-cookie";
-import { useFullScreenMode } from "~/composables/state";
+import Cookies from 'js-cookie'
+import { useFullScreenMode } from '~/composables/state'
 
 const props = defineProps({
   contentId: {
@@ -76,287 +76,273 @@ const props = defineProps({
     type: Object as () => ExtendedVideo,
     default: undefined,
   },
-});
-const route = useRoute();
-const tokenState = useTokenState();
-const bookmarkState = useBookmarkState();
-const isFullscreenMode = useFullScreenMode();
+})
+const route = useRoute()
+const tokenState = useTokenState()
+const bookmarkState = useBookmarkState()
+const isFullscreenMode = useFullScreenMode()
 
-const videos = ref<ExtendedVideo>({} as ExtendedVideo);
-const videoData = ref<ExtendedVideo>({} as ExtendedVideo);
-const startY = ref(0);
-const currentOffset = ref(0);
-const currentIndex = ref(0);
-const itemHeight = ref(0);
-const currentPage = ref(1);
-const bookmarks = ref<VideoItemWithDisplayParams[]>(bookmarkState.value);
+const videos = ref<ExtendedVideo>({} as ExtendedVideo)
+const videoData = ref<ExtendedVideo>({} as ExtendedVideo)
+const startY = ref(0)
+const currentOffset = ref(0)
+const currentIndex = ref(0)
+const itemHeight = ref(0)
+const currentPage = ref(1)
+const bookmarks = ref<VideoItemWithDisplayParams[]>(bookmarkState.value)
 
 const currentBookmark = computed(() => {
   const index = bookmarks.value.findIndex(
-    (v) => v.content_id === videos.value.result[currentIndex.value]?.content_id
-  );
+    (v) => v.content_id === videos.value.result[currentIndex.value]?.content_id,
+  )
   return {
     index,
     result: index >= 0,
-  };
-});
+  }
+})
 
 const videoSelectorAll = computed(() => {
-  return Array.from(document.querySelectorAll("video"));
-});
+  return Array.from(document.querySelectorAll('video'))
+})
 
 const routeName = computed(
   () =>
-    (["bookmarks", "histories", "id"].includes(route.name as string)
-      ? route.name
-      : undefined) as string | undefined
-);
+    (['bookmarks', 'histories', 'id'].includes(route.name as string) ? route.name : undefined) as
+      | string
+      | undefined,
+)
 
 onMounted(() => {
   useWait(async () => {
-    init();
-    await fetch(currentPage.value);
-    await replaceDom(currentIndex.value, 0);
-    await play(currentIndex.value);
-    setOffset();
-  });
-});
+    init()
+    await fetch(currentPage.value)
+    await replaceDom(currentIndex.value, 0)
+    await play(currentIndex.value)
+    setOffset()
+  })
+})
 
 onUnmounted(() => {
-  removeEvents();
-  useEndTimer(videoSelectorAll.value[currentIndex.value]);
-  cleanupResources();
-});
+  removeEvents()
+  useEndTimer(videoSelectorAll.value[currentIndex.value])
+  cleanupResources()
+})
 
 const init = () => {
-  setupEvents();
-  updateItemHeight();
-};
+  setupEvents()
+  updateItemHeight()
+}
 
 const setupEvents = () => {
-  window.addEventListener("resize", updateItemHeight);
-  window.addEventListener("fullscreenchange", checkFullscreen);
-};
+  window.addEventListener('resize', updateItemHeight)
+  window.addEventListener('fullscreenchange', checkFullscreen)
+}
 
 const removeEvents = () => {
-  window.removeEventListener("resize", updateItemHeight);
-  window.removeEventListener("fullscreenchange", checkFullscreen);
-  videoSelectorAll.value[currentIndex.value].removeEventListener(
-    "volumechange",
-    checkVolumeChange
-  );
-};
+  window.removeEventListener('resize', updateItemHeight)
+  window.removeEventListener('fullscreenchange', checkFullscreen)
+  videoSelectorAll.value[currentIndex.value].removeEventListener('volumechange', checkVolumeChange)
+}
 
 const updateItemHeight = () => {
-  itemHeight.value = window.innerHeight;
-};
+  itemHeight.value = window.innerHeight
+}
 
 const checkFullscreen = () => {
-  isFullscreenMode.value = !!document.fullscreenElement;
+  isFullscreenMode.value = !!document.fullscreenElement
   videos.value.result[currentIndex.value].is_fullscreen =
-    videos.value.result[currentIndex.value].is_fullscreen ||
-    isFullscreenMode.value;
-};
+    videos.value.result[currentIndex.value].is_fullscreen || isFullscreenMode.value
+}
 
 const checkVolumeChange = () => {
-  const element = videoSelectorAll.value[currentIndex.value];
-  const video = videos.value.result[currentIndex.value];
-  video.unmuted = video.unmuted || !element.muted;
-};
+  const element = videoSelectorAll.value[currentIndex.value]
+  const video = videos.value.result[currentIndex.value]
+  video.unmuted = video.unmuted || !element.muted
+}
 
 const onClickHome = async () => {
-  await navigateTo(`/my-page`);
-};
+  await navigateTo('/my-page')
+}
 
 const onClickReturn = async () => {
-  await navigateTo(`/my-page?selected=${routeName.value}`);
-};
+  await navigateTo(`/my-page?selected=${routeName.value}`)
+}
 
 const onClickBookmark = async () => {
-  const contentId = videos.value.result[currentIndex.value].content_id;
+  const contentId = videos.value.result[currentIndex.value].content_id
   const query = {
     token: tokenState.value,
     content_id: contentId,
-  };
+  }
 
   if (currentBookmark.value.result) {
-    await unbookmark(query);
-    return;
+    await unbookmark(query)
+    return
   }
 
   if (!Cookies.get(Constants.COOKIE_KEYS.BOOKMARK_ALERT)) {
-    Cookies.set(Constants.COOKIE_KEYS.BOOKMARK_ALERT, "true", { expires: 90 });
+    Cookies.set(Constants.COOKIE_KEYS.BOOKMARK_ALERT, 'true', { expires: 90 })
     alert(
-      "動画をブックマークしました\nブックマークした動画は、プロフィール（👤）からいつでも確認できます"
-    );
+      '動画をブックマークしました\nブックマークした動画は、プロフィール（👤）からいつでも確認できます',
+    )
   }
 
-  await bookmark(query, contentId);
-};
+  await bookmark(query, contentId)
+}
 
 const bookmark = async (query: object, contentId: string) => {
-  bookmarks.value.push({ content_id: contentId } as VideoItemWithDisplayParams);
+  bookmarks.value.push({ content_id: contentId } as VideoItemWithDisplayParams)
 
   await $envFetch<Videos>(Constants.API_URLS.BOOKMARK, {
-    method: "POST",
+    method: 'POST',
     query,
-  });
-};
+  })
+}
 
 const unbookmark = async (query: object) => {
-  bookmarks.value.splice(currentBookmark.value.index, 1);
+  bookmarks.value.splice(currentBookmark.value.index, 1)
 
   await $envFetch<Videos>(Constants.API_URLS.UNBOOKMARK, {
-    method: "DELETE",
+    method: 'DELETE',
     query,
-  });
-};
+  })
+}
 
 const fetch = async (page: number) => {
   videoData.value.result = routeName.value
     ? (props.videoData as ExtendedVideo).result
-    : (await fetchVideos(page)).result;
+    : (await fetchVideos(page)).result
 
   videos.value.result =
     videoData.value.result.length > 1
       ? Array.from(
           { length: videoData.value.result.length - 1 },
-          () => ({} as VideoItemWithDisplayParams)
+          () => ({}) as VideoItemWithDisplayParams,
         )
-      : [];
+      : []
 
   if (props.contentId) {
-    currentIndex.value = videoData.value.result.findIndex(
-      (v) => v.content_id === props.contentId
-    );
+    currentIndex.value = videoData.value.result.findIndex((v) => v.content_id === props.contentId)
   }
-};
+}
 
 const reFetch = async (page: number) => {
   useWait(async () => {
-    currentIndex.value = 0;
-    await fetch(page);
-    await replaceDom(currentIndex.value, 0);
-    await play(currentIndex.value);
-  });
-};
+    currentIndex.value = 0
+    await fetch(page)
+    await replaceDom(currentIndex.value, 0)
+    await play(currentIndex.value)
+  })
+}
 
 const startSwipe = (e: any) => {
-  stopEvent(e);
-  startY.value = e.touches[0].clientY;
-};
+  stopEvent(e)
+  startY.value = e.touches[0].clientY
+}
 
 const moveSwipe = (e: any) => {
-  stopEvent(e);
-  const deltaY = e.touches[0].clientY - startY.value;
-  currentOffset.value = -currentIndex.value * itemHeight.value + deltaY;
-};
+  stopEvent(e)
+  const deltaY = e.touches[0].clientY - startY.value
+  currentOffset.value = -currentIndex.value * itemHeight.value + deltaY
+}
 
 const endSwipe = async (e: any) => {
-  stopEvent(e);
-  const deltaY = e.changedTouches[0].clientY - startY.value;
+  stopEvent(e)
+  const deltaY = e.changedTouches[0].clientY - startY.value
 
   if (Math.abs(deltaY) > 50) {
-    const direction = deltaY > 0 ? -1 : 1;
-    const newIndex = currentIndex.value + direction;
+    const direction = deltaY > 0 ? -1 : 1
+    const newIndex = currentIndex.value + direction
 
     if (newIndex >= 0 && newIndex < videos.value.result.length) {
-      finish();
-      const prevIndex = currentIndex.value;
-      currentIndex.value = newIndex;
+      finish()
+      const prevIndex = currentIndex.value
+      currentIndex.value = newIndex
 
       if (!routeName.value && !videoData.value.result[newIndex + 1]) {
-        await reFetch(++currentPage.value);
+        await reFetch(++currentPage.value)
       }
 
-      videoSelectorAll.value[newIndex].muted =
-        videoSelectorAll.value[prevIndex].muted;
-      cleanupResources();
+      videoSelectorAll.value[newIndex].muted = videoSelectorAll.value[prevIndex].muted
+      cleanupResources()
       replaceDom(currentIndex.value).then(() => {
-        play(currentIndex.value);
-      });
+        play(currentIndex.value)
+      })
     }
   }
 
-  const currentVideo = videos.value.result[currentIndex.value];
+  const currentVideo = videos.value.result[currentIndex.value]
   useSeoWithSpa(
     `/${currentVideo.content_id}`,
     `${currentVideo.title} - EhroTok`,
-    currentVideo.image_url
-  );
+    currentVideo.image_url,
+  )
 
-  setOffset();
-};
+  setOffset()
+}
 
 const endSwipeByTitle = async (e: any) => {
-  const prevIndex = currentIndex.value;
-  endSwipe(e);
+  const prevIndex = currentIndex.value
+  endSwipe(e)
   if (prevIndex === currentIndex.value) {
-    location.href = videos.value.result[currentIndex.value].product_url;
+    location.href = videos.value.result[currentIndex.value].product_url
   }
-};
+}
 
 const stopEvent = (e: any) => {
-  e.preventDefault();
-  e.stopPropagation();
-};
+  e.preventDefault()
+  e.stopPropagation()
+}
 
 const setOffset = () => {
-  currentOffset.value = -currentIndex.value * itemHeight.value;
-};
+  currentOffset.value = -currentIndex.value * itemHeight.value
+}
 
 const cleanupResources = async (): Promise<void> => {
   videoSelectorAll.value
     .filter((v) => !v.paused)
     .forEach((video) => {
-      video.pause();
-      video.src = "";
-      video.load();
-      video.removeEventListener("volumechange", checkVolumeChange);
-    });
-};
+      video.pause()
+      video.src = ''
+      video.load()
+      video.removeEventListener('volumechange', checkVolumeChange)
+    })
+}
 
-const replaceDom = async (
-  currentIndex: number,
-  deleteCount: number = 1
-): Promise<void> => {
-  videos.value.result.splice(
-    currentIndex,
-    deleteCount,
-    videoData.value.result[currentIndex]
-  );
+const replaceDom = async (currentIndex: number, deleteCount = 1): Promise<void> => {
+  videos.value.result.splice(currentIndex, deleteCount, videoData.value.result[currentIndex])
 
-  nextTick();
-};
+  nextTick()
+}
 
 const play = async (currentIndex: number): Promise<void> => {
-  const element = videoSelectorAll.value[currentIndex];
-  const video = videos.value.result[currentIndex];
+  const element = videoSelectorAll.value[currentIndex]
+  const video = videos.value.result[currentIndex]
 
-  element.addEventListener("volumechange", checkVolumeChange);
+  element.addEventListener('volumechange', checkVolumeChange)
 
-  element.src = video.url;
-  element.load();
+  element.src = video.url
+  element.load()
 
-  usePlayTimer(element);
+  usePlayTimer(element)
 
-  element.currentTime = 10;
+  element.currentTime = 10
   element.play().catch((err) => {
-    console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`);
-  });
+    console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`)
+  })
 
-  checkVolumeChange();
-};
+  checkVolumeChange()
+}
 
 const finish = async (): Promise<void> => {
-  const time = useEndTimer(videoSelectorAll.value[currentIndex.value]);
+  const time = useEndTimer(videoSelectorAll.value[currentIndex.value])
 
   if (routeName.value || time <= 1) {
-    return;
+    return
   }
 
   $envFetch<Videos>(Constants.API_URLS.WATCH, {
-    method: "POST",
+    method: 'POST',
     query: {
       token: tokenState.value,
       content_id: videos.value.result[currentIndex.value].content_id,
@@ -364,6 +350,6 @@ const finish = async (): Promise<void> => {
       fullscreened: !!videos.value.result[currentIndex.value].is_fullscreen,
       unmuted: !!videos.value.result[currentIndex.value].unmuted,
     },
-  });
-};
+  })
+}
 </script>

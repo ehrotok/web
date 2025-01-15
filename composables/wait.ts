@@ -5,13 +5,13 @@
  * @returns 実行結果を返す Promise
  */
 const useWait = async <T>(proc: () => Promise<T>): Promise<T> => {
-  const loader: Ref<boolean> = useLoader();
-  loader.value = true;
+  const loader: Ref<boolean> = useLoader()
+  loader.value = true
   try {
-    return await proc();
+    return await proc()
   } finally {
-    loader.value = false;
+    loader.value = false
   }
-};
+}
 
-export { useWait };
+export { useWait }

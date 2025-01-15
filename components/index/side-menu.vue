@@ -66,21 +66,21 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
-const emit = defineEmits(["click:home", "click:bookmark"]);
+})
+const emit = defineEmits(['click:home', 'click:bookmark'])
 
 const reviewAverageText = computed(() =>
-  props.reviewAverage > 0 ? `${props.reviewAverage}点` : ""
-);
+  props.reviewAverage > 0 ? `${props.reviewAverage}点` : '',
+)
 
 const onClickHome = () => {
-  emit("click:home");
-};
+  emit('click:home')
+}
 
 const onClickBookmark = () => {
   if (navigator.vibrate) {
-    navigator.vibrate(100);
+    navigator.vibrate(100)
   }
-  emit("click:bookmark");
-};
+  emit('click:bookmark')
+}
 </script>

@@ -16,5 +16,5 @@
 </template>
 
 <script setup lang="ts">
-const isLandscapeMode = computed(() => useLandscapeMode());
+const isLandscapeMode = computed(() => useLandscapeMode())
 </script>
