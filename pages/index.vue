@@ -113,6 +113,7 @@ onMounted(() => {
   useWait(async () => {
     init()
     await fetch(currentPage.value)
+    await setupSeo()
     await replaceDom(currentIndex.value, 0)
     await play(currentIndex.value)
     setOffset()
@@ -128,6 +129,11 @@ onUnmounted(() => {
 const init = () => {
   setupEvents()
   updateItemHeight()
+}
+
+const setupSeo = async () => {
+  const video = videoData.value.result[currentIndex.value]
+  useSeoWithSpa(`/${video.content_id}`, `${video.title} - EhroTok`, video.image_url)
 }
 
 const setupEvents = () => {
@@ -266,11 +272,7 @@ const endSwipe = async (e: any) => {
     }
   }
 
-  useSeoWithSpa(
-    `/${current.value.video.content_id}`,
-    `${current.value.video.title} - EhroTok`,
-    current.value.video.image_url,
-  )
+  await setupSeo()
 
   setOffset()
 }
