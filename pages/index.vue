@@ -333,11 +333,9 @@ const play = async (currentIndex: number): Promise<void> => {
   usePlayTimer(element)
 
   element.currentTime = 10
-  setTimeout(() => {
-    element.play().catch((err) => {
-      console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`)
-    })
-  }, 1000)
+  element.play().catch((err) => {
+    console.error(`動画が再生できません！潔くこの動画は諦めろ！！！:${err}`)
+  })
 
   checkVolumeChange()
 }
