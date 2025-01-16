@@ -29,7 +29,7 @@
         :icon="mdiHomeOutline"
         @click="onClickHome"
       ></IconButton>
-      <div class="text-white text-xs leading-3">レコメンド</div>
+      <div class="text-white text-xs leading-3">おすすめ</div>
     </div>
     <div class="border-r border-gray-500">
       <IconButton
