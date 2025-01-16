@@ -28,6 +28,7 @@
           muted
           playsinline
           loop
+          autoplay
         ></video>
 
         <div class="absolute bottom-20 left-5 text-white w-3/4">
