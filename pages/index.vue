@@ -152,7 +152,8 @@ const checkFullscreen = () => {
 }
 
 const checkVolumeChange = () => {
-  current.value.video.unmuted = current.value.video.unmuted || !videoSelectorAll.value[currentIndex.value].muted
+  current.value.video.unmuted =
+    current.value.video.unmuted || !videoSelectorAll.value[currentIndex.value].muted
 }
 
 const onClickHome = async () => {
@@ -289,13 +290,13 @@ const stopEvent = (e: any) => {
 }
 
 const openControls = () => {
-  const video = videoSelectorAll.value[currentIndex.value];
-  video.removeAttribute('controls');
-  video.setAttribute('controls', 'controls');
-  video.focus();
+  const video = videoSelectorAll.value[currentIndex.value]
+  video.removeAttribute('controls')
+  video.setAttribute('controls', 'controls')
+  video.focus()
   setTimeout(() => {
     video.blur()
-  }, 3000);
+  }, 3000)
 }
 
 const setOffset = () => {
