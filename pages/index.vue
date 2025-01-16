@@ -53,7 +53,7 @@
           :reviewAverage="video.review_average"
           :imageUrl="video.image_url"
           :productUrl="video.product_url"
-          :isBookmark="currentBookmark.result"
+          :isBookmark="current.bookmark.result"
           :isRecommend="video.is_recommend"
           @click:home="onClickHome"
           @click:bookmark="onClickBookmark"
@@ -65,7 +65,6 @@
 
 <script setup lang="ts">
 import Cookies from 'js-cookie'
-import { useFullScreenMode } from '~/composables/state'
 
 const props = defineProps({
   contentId: {
@@ -91,18 +90,17 @@ const itemHeight = ref(0)
 const currentPage = ref(1)
 const bookmarks = ref<VideoItemWithDisplayParams[]>(bookmarkState.value)
 
-const currentBookmark = computed(() => {
-  const index = bookmarks.value.findIndex(
-    (v) => v.content_id === videos.value.result[currentIndex.value]?.content_id,
-  )
+const videoSelectorAll = computed(() => Array.from(document.querySelectorAll('video')))
+const current = computed(() => {
+  const video = videos.value.result[currentIndex.value]
+  const index = bookmarks.value.findIndex((v) => v.content_id === video.content_id)
   return {
-    index,
-    result: index >= 0,
+    video,
+    bookmark: {
+      index,
+      result: index >= 0,
+    },
   }
-})
-
-const videoSelectorAll = computed(() => {
-  return Array.from(document.querySelectorAll('video'))
 })
 
 const routeName = computed(
@@ -150,14 +148,11 @@ const updateItemHeight = () => {
 
 const checkFullscreen = () => {
   isFullscreenMode.value = !!document.fullscreenElement
-  videos.value.result[currentIndex.value].is_fullscreen =
-    videos.value.result[currentIndex.value].is_fullscreen || isFullscreenMode.value
+  current.value.video.is_fullscreen = current.value.video.is_fullscreen || isFullscreenMode.value
 }
 
 const checkVolumeChange = () => {
-  const element = videoSelectorAll.value[currentIndex.value]
-  const video = videos.value.result[currentIndex.value]
-  video.unmuted = video.unmuted || !element.muted
+  current.value.video.unmuted = current.value.video.unmuted || !videoSelectorAll.value[currentIndex.value].muted
 }
 
 const onClickHome = async () => {
@@ -169,13 +164,12 @@ const onClickReturn = async () => {
 }
 
 const onClickBookmark = async () => {
-  const contentId = videos.value.result[currentIndex.value].content_id
   const query = {
     token: tokenState.value,
-    content_id: contentId,
+    content_id: current.value.video.content_id,
   }
 
-  if (currentBookmark.value.result) {
+  if (current.value.bookmark.result) {
     await unbookmark(query)
     return
   }
@@ -187,7 +181,7 @@ const onClickBookmark = async () => {
     )
   }
 
-  await bookmark(query, contentId)
+  await bookmark(query, current.value.video.content_id)
 }
 
 const bookmark = async (query: object, contentId: string) => {
@@ -200,7 +194,7 @@ const bookmark = async (query: object, contentId: string) => {
 }
 
 const unbookmark = async (query: object) => {
-  bookmarks.value.splice(currentBookmark.value.index, 1)
+  bookmarks.value.splice(current.value.bookmark.index, 1)
 
   await $envFetch<Videos>(Constants.API_URLS.UNBOOKMARK, {
     method: 'DELETE',
@@ -271,11 +265,10 @@ const endSwipe = async (e: any) => {
     }
   }
 
-  const currentVideo = videos.value.result[currentIndex.value]
   useSeoWithSpa(
-    `/${currentVideo.content_id}`,
-    `${currentVideo.title} - EhroTok`,
-    currentVideo.image_url,
+    `/${current.value.video.content_id}`,
+    `${current.value.video.title} - EhroTok`,
+    current.value.video.image_url,
   )
 
   setOffset()
@@ -285,7 +278,7 @@ const endSwipeByTitle = async (e: any) => {
   const prevIndex = currentIndex.value
   endSwipe(e)
   if (prevIndex === currentIndex.value) {
-    location.href = videos.value.result[currentIndex.value].product_url
+    location.href = current.value.video.product_url
   }
 }
 
@@ -345,10 +338,10 @@ const finish = async (): Promise<void> => {
     method: 'POST',
     query: {
       token: tokenState.value,
-      content_id: videos.value.result[currentIndex.value].content_id,
+      content_id: current.value.video.content_id,
       time: Math.floor(time),
-      fullscreened: !!videos.value.result[currentIndex.value].is_fullscreen,
-      unmuted: !!videos.value.result[currentIndex.value].unmuted,
+      fullscreened: !!current.value.video.is_fullscreen,
+      unmuted: !!current.value.video.unmuted,
     },
   })
 }
