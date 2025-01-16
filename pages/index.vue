@@ -232,6 +232,7 @@ const reFetch = async (page: number) => {
 const startSwipe = (e: any) => {
   stopEvent(e)
   startY.value = e.touches[0].clientY
+  openControls()
 }
 
 const moveSwipe = (e: any) => {
@@ -285,6 +286,16 @@ const endSwipeByTitle = async (e: any) => {
 const stopEvent = (e: any) => {
   e.preventDefault()
   e.stopPropagation()
+}
+
+const openControls = () => {
+  const video = videoSelectorAll.value[currentIndex.value];
+  video.removeAttribute('controls');
+  video.setAttribute('controls', 'controls');
+  video.focus();
+  setTimeout(() => {
+    video.blur()
+  }, 3000);
 }
 
 const setOffset = () => {
