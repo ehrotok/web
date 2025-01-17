@@ -3,6 +3,7 @@
  */
 const STORAGE_KEYS = {
   ACCOUNTS: 'accounts',
+  HASHTAGS: 'hashtags',
 } as const
 
 const COOKIE_KEYS = {
@@ -29,6 +30,7 @@ const API_URLS = {
   BOOKMARKS: '/v1/api/accounts/bookmarks',
   HISTORIES: '/v1/api/accounts/histories',
   WATCH: '/v1/api/accounts/watch',
+  HASHTAGS: '/v1/api/hashtags',
 } as const
 
 export const Constants = {
