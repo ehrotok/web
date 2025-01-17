@@ -344,7 +344,7 @@ const play = async (currentIndex: number): Promise<void> => {
 const finish = async (): Promise<void> => {
   const time = useEndTimer(videoSelectorAll.value[currentIndex.value])
 
-  if (routeName.value || time <= 1) {
+  if (time <= 1) {
     return
   }
 
