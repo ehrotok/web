@@ -265,9 +265,7 @@ const fetchVideo = async (page: number) => {
   const items: VideoItem[] = []
   if (page === 1) {
     const hashtags = await localStorageUtil.getItem<string[]>(Constants.STORAGE_KEYS.HASHTAGS)
-    for (const tag of hashtags) {
-      items.push(...(await fetchVideos(page, tag)).result.slice(0, 10))
-    }
+    items.push(...(await fetchVideos(page, hashtags)).result)
   }
 
   items.push(...(await fetchVideos(page)).result)
