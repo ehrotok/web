@@ -1,7 +1,7 @@
-export const fetchVideos = async (page: number): Promise<Videos> => {
+export const fetchVideos = async (page: number, hashtag?: string): Promise<Videos> => {
   const tokenState = useTokenState()
   const videos = await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
-    query: { token: tokenState.value, page },
+    query: { token: tokenState.value, page, hashtag },
   })
   videos.result = videos.result.map(
     (v) =>
