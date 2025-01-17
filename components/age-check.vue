@@ -42,6 +42,7 @@ const isAgeChecked = computed(() => ageCheckedState)
 const onClickYes = async () => {
   Cookies.set(Constants.COOKIE_KEYS.AGE_CHECK, 'true', { expires: 30 })
   ageCheckedState.value = true
+  await navigateTo('/', { external: true })
 }
 
 const onClickNo = async () => {
