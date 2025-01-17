@@ -145,7 +145,7 @@ const setupEvents = () => {
 const removeEvents = () => {
   window.removeEventListener('resize', updateItemHeight)
   window.removeEventListener('fullscreenchange', checkFullscreen)
-  videoSelectorAll.value[currentIndex.value].removeEventListener('volumechange', checkVolumeChange)
+  videoSelectorAll.value[currentIndex.value]?.removeEventListener('volumechange', checkVolumeChange)
 }
 
 const updateItemHeight = () => {
