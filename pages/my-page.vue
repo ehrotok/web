@@ -62,7 +62,7 @@
       class="border-r border-b border-gray-500 [&:nth-child(3n)]:border-r-0"
       @click="onClickTile(index)"
     >
-      <div class="relative overflow-hidden shadow-md">
+      <div class="relative overflow-hidden shadow-md transition active:scale-150">
         <nuxt-img
           class="w-full h-40 object-contain"
           :placeholder="Constants.IMAGES.BG_GRAY"
