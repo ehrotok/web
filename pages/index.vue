@@ -158,8 +158,7 @@ const checkFullscreen = () => {
 }
 
 const checkVolumeChange = () => {
-  current.value.video.unmuted =
-    current.value.video.unmuted || !videoSelectorAll.value[currentIndex.value].muted
+  current.value.video.unmuted = !videoSelectorAll.value[currentIndex.value].muted
 }
 
 const onClickHome = async () => {
