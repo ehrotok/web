@@ -2,7 +2,6 @@
   <div class="bg-black">
     <NuxtLayout>
       <Loader></Loader>
-      <LandscapeMode></LandscapeMode>
       <AgeCheck></AgeCheck>
       <div class="min-h-dvh m-auto max-w-md">
         <NuxtPage />
