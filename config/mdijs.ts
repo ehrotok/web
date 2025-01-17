@@ -1,6 +1,8 @@
 import {
   mdiAccountOutline,
+  mdiArrowDown,
   mdiArrowULeftTop,
+  mdiArrowUp,
   mdiBookmark,
   mdiBookmarkOutline,
   mdiHeart,
@@ -18,4 +20,6 @@ export {
   mdiBookmark,
   mdiStar,
   mdiAccountOutline,
+  mdiArrowDown,
+  mdiArrowUp,
 }

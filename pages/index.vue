@@ -8,13 +8,13 @@
       :placeholder="Constants.IMAGES.BG_BLACK"
       class="w-[150px] h-auto animation origin-center"
     />
-    <div class="text-gray-400 leading-8 mb-5">
-      <div class="text-white text-center text-lg font-bold mb-4">
+    <div class="text-gray-400 leading-8 mb-3">
+      <div class="text-white text-center font-bold mb-4">
         選択したジャンル合わせた動画をお送りします
       </div>
     </div>
 
-    <div class="flex flex-wrap justify-center mb-5">
+    <div class="flex flex-wrap justify-center mb-3">
       <div
         v-for="(genre, index) in hashtags.result"
         :key="index"

@@ -2,9 +2,9 @@
   <div
     class="relative overflow-hidden"
     :style="{ height: `${itemHeight}px` }"
-    @touchstart="startSwipe"
-    @touchmove="moveSwipe"
-    @touchend="endSwipe"
+    @touchstart="onSwipeStart"
+    @touchmove="onSwipeMove"
+    @touchend="onSwipeEnd"
   >
     <IconButton
       v-if="routeName && routeName !== 'id'"
@@ -33,9 +33,9 @@
 
         <div class="absolute bottom-20 left-5 text-white w-3/4">
           <a
-            @touchstart="startSwipe"
-            @touchmove="moveSwipe"
-            @touchend="endSwipeByTitle"
+            @touchstart="onSwipeStart"
+            @touchmove="onSwipeMove"
+            @touchend="onSwipeEndByTitle"
             :href="video.product_url"
             target="_blank"
           >
@@ -59,6 +59,21 @@
           @click:bookmark="onClickBookmark"
         ></IndexSideMenu>
       </div>
+    </div>
+    <div v-if="!isTouchDevice">
+      <IconButton
+        v-if="currentIndex > 0"
+        buttonClass="text-lg absolute top-10 left-1/2 transform -translate-x-1/2 rounded-full shadow-lg z-50 transition active:scale-150"
+        iconClass="h-10 w-10 text-white m-auto"
+        :icon="mdiArrowUp"
+        @click="onClickArrow(-1)"
+      ></IconButton>
+      <IconButton
+        buttonClass="text-lg absolute bottom-10 left-1/2 transform -translate-x-1/2 rounded-full shadow-lg z-50 transition active:scale-150"
+        iconClass="h-10 w-10 text-white m-auto"
+        :icon="mdiArrowDown"
+        @click="onClickArrow(1)"
+      ></IconButton>
     </div>
   </div>
 </template>
@@ -89,6 +104,7 @@ const currentIndex = ref(0)
 const itemHeight = ref(0)
 const currentPage = ref(1)
 const bookmarks = ref<VideoItemWithDisplayParams[]>(bookmarkState.value)
+const isTouchDevice = ref(true)
 
 const videoSelectorAll = computed(() => Array.from(document.querySelectorAll('video')))
 const current = computed(() => {
@@ -128,6 +144,7 @@ onUnmounted(() => {
 })
 
 const init = () => {
+  isTouchDevice.value = 'ontouchstart' in window
   setupEvents()
   updateItemHeight()
 }
@@ -190,6 +207,42 @@ const onClickBookmark = async () => {
   await bookmark(query, current.value.video.content_id)
 }
 
+const onSwipeStart = (e: any) => {
+  stopEvent(e)
+  startY.value = e.touches[0].clientY
+  openControls()
+}
+
+const onSwipeMove = (e: any) => {
+  stopEvent(e)
+  const deltaY = e.touches[0].clientY - startY.value
+  currentOffset.value = -currentIndex.value * itemHeight.value + deltaY
+}
+
+const onSwipeEnd = async (e: any) => {
+  stopEvent(e)
+  const deltaY = e.changedTouches[0].clientY - startY.value
+
+  if (Math.abs(deltaY) > 50) {
+    const direction = deltaY > 0 ? -1 : 1
+    const newIndex = currentIndex.value + direction
+
+    if (newIndex >= 0 && newIndex < videos.value.result.length) {
+      setVideo(newIndex)
+    }
+  }
+
+  await setupSeo()
+  setOffset()
+}
+
+const onClickArrow = async (direction: number) => {
+  const newIndex = currentIndex.value + direction
+  setVideo(newIndex)
+  await setupSeo()
+  setOffset()
+}
+
 const bookmark = async (query: object, contentId: string) => {
   bookmarks.value.push({ content_id: contentId } as VideoItemWithDisplayParams)
 
@@ -249,51 +302,25 @@ const reFetch = async (page: number) => {
   })
 }
 
-const startSwipe = (e: any) => {
-  stopEvent(e)
-  startY.value = e.touches[0].clientY
-  openControls()
-}
+const setVideo = async (newIndex: number) => {
+  finish()
+  const prevIndex = currentIndex.value
+  currentIndex.value = newIndex
 
-const moveSwipe = (e: any) => {
-  stopEvent(e)
-  const deltaY = e.touches[0].clientY - startY.value
-  currentOffset.value = -currentIndex.value * itemHeight.value + deltaY
-}
-
-const endSwipe = async (e: any) => {
-  stopEvent(e)
-  const deltaY = e.changedTouches[0].clientY - startY.value
-
-  if (Math.abs(deltaY) > 50) {
-    const direction = deltaY > 0 ? -1 : 1
-    const newIndex = currentIndex.value + direction
-
-    if (newIndex >= 0 && newIndex < videos.value.result.length) {
-      finish()
-      const prevIndex = currentIndex.value
-      currentIndex.value = newIndex
-
-      if (!routeName.value && !videoData.value.result[newIndex + 1]) {
-        await reFetch(++currentPage.value)
-      }
-
-      videoSelectorAll.value[newIndex].muted = videoSelectorAll.value[prevIndex].muted
-      cleanupResources()
-      replaceDom(currentIndex.value).then(() => {
-        play(currentIndex.value)
-      })
-    }
+  if (!routeName.value && !videoData.value.result[newIndex + 1]) {
+    await reFetch(++currentPage.value)
   }
 
-  await setupSeo()
-
-  setOffset()
+  videoSelectorAll.value[newIndex].muted = videoSelectorAll.value[prevIndex].muted
+  cleanupResources()
+  replaceDom(currentIndex.value).then(() => {
+    play(currentIndex.value)
+  })
 }
 
-const endSwipeByTitle = async (e: any) => {
+const onSwipeEndByTitle = async (e: any) => {
   const prevIndex = currentIndex.value
-  endSwipe(e)
+  onSwipeEnd(e)
   if (prevIndex === currentIndex.value) {
     location.href = current.value.video.product_url
   }
