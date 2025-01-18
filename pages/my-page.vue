@@ -163,7 +163,7 @@ const fetchHistory = async () => {
 }
 
 const onClickHome = async () => {
-  await navigateTo('/recommend')
+  await navigateTo('/')
 }
 
 const onClickTile = async (index: number) => {

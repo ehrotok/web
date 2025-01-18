@@ -1,5 +1,5 @@
 <template>
-  <RecommendPage
+  <IndexPage
     v-if="videoData.count"
     :videoData="videoData"
     :contentId="contentId"
@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import RecommendPage from './recommend.vue'
+import IndexPage from './index.vue'
 
 const route = useRoute()
 const videoData = ref<ExtendedVideo>({} as ExtendedVideo)
