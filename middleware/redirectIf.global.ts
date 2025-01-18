@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     return navigateTo('https://ehrotok.com/', { external: true })
   }
 
-  if (to.path === '/genre') {
+  if (to.path === '/genre' || useGenreState().value.length > 0) {
     return
   }
 

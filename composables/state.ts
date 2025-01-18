@@ -34,6 +34,12 @@ const useTokenState = () => useState<string>('token', () => '')
  */
 const useBookmarkState = () => useState<VideoItem[]>('bookmarks', () => [])
 
+/**
+ * ジャンル
+ * @returns
+ */
+const useGenreState = () => useState<string[]>('genre', () => [])
+
 export {
   useLoader,
   useLandscapeMode,
@@ -42,4 +48,5 @@ export {
   useAgeCheckState,
   useTokenState,
   useBookmarkState,
+  useGenreState,
 }
