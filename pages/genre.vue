@@ -50,7 +50,6 @@ const onClickChip = async (index: number) => {
 }
 
 const onClickStart = async () => {
-  console.log('??????')
   const _hashtags = hashtags.value.result.filter((v) => v.checked).map((v) => v.name)
   localStorageUtil.updateItem(Constants.STORAGE_KEYS.HASHTAGS, _hashtags)
   useGenreState().value = _hashtags
