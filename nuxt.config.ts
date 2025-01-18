@@ -128,7 +128,7 @@ export default defineNuxtConfig({
     loadingStrategy: 'async',
   },
 
-  image: process.env.IS_NETLIFY
+  image: !process.env.IS_NETLIFY
     ? {}
     : {
         provider: 'netlify',
