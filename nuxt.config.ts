@@ -110,6 +110,7 @@ export default defineNuxtConfig({
       isDevelopment: isDevelopment,
       bearerToken: process.env.BEARER_TOKEN,
       googleTag: process.env.GTAG,
+      isNetlify: process.env.IS_NETLIFY,
     },
   },
   imports: {
@@ -127,7 +128,7 @@ export default defineNuxtConfig({
     loadingStrategy: 'async',
   },
 
-  image: isDevelopment
+  image: process.env.IS_NETLIFY
     ? {}
     : {
         provider: 'netlify',
