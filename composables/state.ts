@@ -29,12 +29,6 @@ const useAgeCheckState = () => useState<boolean>('age_check', () => true)
 const useTokenState = () => useState<string>('token', () => '')
 
 /**
- * ブックマーク情報
- * @returns
- */
-const useBookmarkState = () => useState<VideoItem[]>('bookmarks', () => [])
-
-/**
  * ジャンル
  * @returns
  */
@@ -47,6 +41,5 @@ export {
   usePositionState,
   useAgeCheckState,
   useTokenState,
-  useBookmarkState,
   useGenreState,
 }

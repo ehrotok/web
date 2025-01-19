@@ -1,7 +1,6 @@
 export default defineNuxtPlugin(async () => {
   const config = useRuntimeConfig()
   const tokenState = useTokenState()
-  const bookmarkState = useBookmarkState()
   let accounts = await localStorageUtil.getItem<Accounts>(Constants.STORAGE_KEYS.ACCOUNTS)
 
   const query = accounts.token ? { token: accounts.token } : {}
@@ -11,6 +10,5 @@ export default defineNuxtPlugin(async () => {
   })
   localStorageUtil.updateItem(Constants.STORAGE_KEYS.ACCOUNTS, accounts)
 
-  bookmarkState.value = accounts.bookmarks
   tokenState.value = accounts.token
 })

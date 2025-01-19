@@ -53,8 +53,8 @@
           :reviewAverage="video.review_average"
           :imageUrl="video.image_url"
           :productUrl="video.product_url"
-          :isBookmark="current.bookmark.result"
-          :isRecommend="video.is_recommend"
+          :isBookmark="current.bookmarked"
+          :isRecommend="!!video.recommended"
           @click:home="onClickHome"
           @click:bookmark="onClickBookmark"
         ></IndexSideMenu>
@@ -93,7 +93,6 @@ const props = defineProps({
 })
 const route = useRoute()
 const tokenState = useTokenState()
-const bookmarkState = useBookmarkState()
 const isFullscreenMode = useFullScreenMode()
 
 const videos = ref<ExtendedVideo>({} as ExtendedVideo)
@@ -103,19 +102,14 @@ const currentOffset = ref(0)
 const currentIndex = ref(0)
 const itemHeight = ref(0)
 const currentPage = ref(1)
-const bookmarks = ref<VideoItemWithDisplayParams[]>(bookmarkState.value)
 const isTouchDevice = ref(true)
 
 const videoSelectorAll = computed(() => Array.from(document.querySelectorAll('video')))
 const current = computed(() => {
   const video = videos.value.result[currentIndex.value]
-  const index = bookmarks.value.findIndex((v) => v.content_id === video.content_id)
   return {
     video,
-    bookmark: {
-      index,
-      result: index >= 0,
-    },
+    bookmarked: !!video.bookmarked,
   }
 })
 
@@ -192,7 +186,7 @@ const onClickBookmark = async () => {
     content_id: current.value.video.content_id,
   }
 
-  if (current.value.bookmark.result) {
+  if (current.value.bookmarked) {
     await unbookmark(query)
     return
   }
@@ -204,7 +198,7 @@ const onClickBookmark = async () => {
     )
   }
 
-  await bookmark(query, current.value.video.content_id)
+  await bookmark(query)
 }
 
 const onSwipeStart = (e: any) => {
@@ -243,8 +237,8 @@ const onClickArrow = async (direction: number) => {
   setOffset()
 }
 
-const bookmark = async (query: object, contentId: string) => {
-  bookmarks.value.push({ content_id: contentId } as VideoItemWithDisplayParams)
+const bookmark = async (query: object) => {
+  current.value.video.bookmarked = true
 
   await $envFetch<Videos>(Constants.API_URLS.BOOKMARK, {
     method: 'POST',
@@ -253,7 +247,7 @@ const bookmark = async (query: object, contentId: string) => {
 }
 
 const unbookmark = async (query: object) => {
-  bookmarks.value.splice(current.value.bookmark.index, 1)
+  current.value.video.bookmarked = false
 
   await $envFetch<Videos>(Constants.API_URLS.UNBOOKMARK, {
     method: 'DELETE',

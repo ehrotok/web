@@ -26,4 +26,6 @@ export interface VideoItem {
   created_at: string
   updated_at: string
   image_url: string
+  bookmarked?: boolean
+  recommended?: boolean
 }
