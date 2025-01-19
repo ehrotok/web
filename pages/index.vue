@@ -14,7 +14,7 @@
     ></IconButton>
 
     <IconButton
-      buttonClass="absolute top-10 right-5 m-4 rounded-full shadow-lg z-50 transition active:scale-150"
+      buttonClass="absolute top-10 right-4 m-4 rounded-full shadow-lg z-50 transition active:scale-150"
       :icon="mdiMagnify"
       @click="onClickSearch"
     ></IconButton>
