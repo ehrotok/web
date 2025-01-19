@@ -1,0 +1,74 @@
+<template>
+  <div
+    class=" top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-lg p-4 bg-white flex flex-col w-full min-h-dvh perspective-[100px] fixed top-0 left-0"
+  >
+    <div class="flex">   
+      <IconButton
+        buttonClass="p-1 rounded-full z-50 transition active:scale-150"
+        iconClass="h-6 w-6 text-black"
+        :icon="mdiArrowULeftTop"
+        @click="onClickBack"
+      ></IconButton>
+      <label for="search" class="mb-2 text-sm text-gray-900 sr-only">検索</label>
+      <div class="relative w-full">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+              </svg>
+          </div>
+          <input v-model="input" type="search" class="search-input block w-full p-3 ps-10 text-gray-900 rounded-lg bg-gray-50" placeholder="ジャンルや女優名を入力" />
+          <button
+            :disabled="!hasInput"
+            :class="{ 'opacity-60': !hasInput }"
+            @click="onClickSearch()"
+            type="submit"
+            class="text-red-400 absolute end-1.5 bottom-1.5 font-bold rounded-lg px-4 py-2"
+            >
+            検索
+          </button>
+      </div>
+    </div> 
+    
+    <div class="text-lg my-3 font-bold">あなたにおすすめ</div>
+    <ul class="">
+    <li 
+      class="px-2 py-4 hover:bg-gray-300"
+      v-for="(tag, index) in hashtags"
+      :key="index"
+      @click="onClickSearch(tag)"
+      >
+      <span class="font-bold text-red-400">・</span>
+      <span class="text-black">{{ tag }}</span>
+    </li>
+  </ul>
+  </div>
+</template>
+
+<script setup lang="ts">
+const hasInput = computed(() => !!input.value.length)
+const hashtags = ref<string[]>(['巨乳', '中出し', '痴女', '騎乗位', 'パイズリ', 'フェラ'])
+const input = ref<string>('')
+
+const onClickBack = async () => {
+  window.history.back()
+}
+
+const onClickSearch = async (tag?: string) => {
+  input.value = tag || input.value
+  await navigateTo(`/hashtags?q=${input.value}`)
+}
+</script>
+
+<style scoped>
+.search-input::-webkit-search-cancel-button {
+  @apply hidden;
+}
+
+.search-input::-ms-clear {
+  @apply hidden;
+}
+
+.search-input::-moz-search-clear {
+  @apply hidden;
+}
+</style>
