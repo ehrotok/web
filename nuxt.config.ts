@@ -82,7 +82,7 @@ export default defineNuxtConfig({
         {
           hid: 'robots',
           name: 'robots',
-          content: 'noarchive',
+          content: 'noindex',
         },
         {
           name: 'apple-mobile-web-app-status-bar-style',
