@@ -127,11 +127,4 @@ export default defineNuxtConfig({
     id: process.env.GTAG,
     loadingStrategy: 'async',
   },
-
-  image: !process.env.IS_NETLIFY
-    ? {}
-    : {
-        provider: 'netlify',
-        domains: ['pics.dmm.co.jp'],
-      },
 })
