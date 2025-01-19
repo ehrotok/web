@@ -27,7 +27,9 @@
     </div>
 
     <button
+      :disabled="!isSelected"
       @click="onClickStart"
+      :class="{ 'opacity-60': !isSelected }"
         class="bg-red-400 font-bold rounded-md text-neutral-50 px-3 py-2 transition active:scale-150"
       >
         動画をみる
@@ -38,6 +40,8 @@
 <script setup lang="ts">
 const tokenState = useTokenState()
 const hashtags = ref<Hashtags>({} as Hashtags)
+const isSelected = computed(() => hashtags.value?.result.some((v) => v.checked))
+
 onMounted(() => {
   useWait(async () => {
     hashtags.value = await $envFetch<Hashtags>(Constants.API_URLS.HASHTAGS, {
