@@ -12,6 +12,12 @@
       :icon="mdiArrowULeftTop"
       @click="onClickReturn"
     ></IconButton>
+
+    <IconButton
+      buttonClass="absolute top-10 right-5 m-4 rounded-full shadow-lg z-50 transition active:scale-150"
+      :icon="mdiMagnify"
+      @click="onClickSearch"
+    ></IconButton>
     <div
       class="flex flex-col transition-transform duration-300 ease-out"
       :style="{ transform: `translateY(${currentOffset}px)` }"
@@ -119,9 +125,9 @@ const current = computed(() => {
 
 const routeName = computed(
   () =>
-    (['bookmarks', 'histories', 'id'].includes(route.name as string) ? route.name : undefined) as
-      | string
-      | undefined,
+    (['bookmarks', 'histories', 'id', 'hashtags'].includes(route.name as string)
+      ? route.name
+      : undefined) as string | undefined,
 )
 
 const hashtags = computed(() => current.value.video.hashtags.map((v) => `#${v.name}`).join(' '))
@@ -183,7 +189,11 @@ const onClickHome = async () => {
 }
 
 const onClickReturn = async () => {
-  await navigateTo(`/my-page?selected=${routeName.value}`)
+  window.history.back()
+}
+
+const onClickSearch = async () => {
+  await navigateTo('/search')
 }
 
 const onClickBookmark = async () => {
