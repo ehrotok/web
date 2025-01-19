@@ -32,7 +32,7 @@
     <div class="text-lg my-3 font-bold">あなたにおすすめ</div>
     <ul class="">
     <li 
-      class="px-2 py-4 hover:bg-gray-300"
+      class="p-2 hover:bg-gray-300"
       v-for="(tag, index) in hashtags"
       :key="index"
       @click="onClickSearch(tag)"
@@ -46,7 +46,17 @@
 
 <script setup lang="ts">
 const hasInput = computed(() => !!input.value.length)
-const hashtags = ref<string[]>(['巨乳', '中出し', '痴女', '騎乗位', 'パイズリ', 'フェラ'])
+const hashtags = ref<string[]>([
+  '巨乳',
+  '中出し',
+  '痴女',
+  '騎乗位',
+  'パイズリ',
+  'フェラ',
+  '寝取り・寝取られ・NTR',
+  '美少女',
+  '淫乱・ハード系',
+])
 const input = ref<string>('')
 
 const onClickBack = async () => {
