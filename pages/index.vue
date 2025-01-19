@@ -261,22 +261,10 @@ const unbookmark = async (query: object) => {
   })
 }
 
-const fetchVideo = async (page: number) => {
-  const items: VideoItem[] = []
-  if (page === 1) {
-    const hashtags = await localStorageUtil.getItem<string[]>(Constants.STORAGE_KEYS.HASHTAGS)
-    items.push(...(await fetchVideos(page, hashtags)).result)
-  }
-
-  items.push(...(await fetchVideos(page)).result)
-
-  return items
-}
-
 const fetch = async (page: number) => {
   videoData.value.result = routeName.value
     ? (props.videoData as ExtendedVideo).result
-    : await fetchVideo(page)
+    : (await fetchVideos(page)).result
 
   videos.value.result =
     videoData.value.result.length > 1

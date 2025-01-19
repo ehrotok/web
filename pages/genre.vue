@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+const tokenState = useTokenState()
 const hashtags = ref<Hashtags>({} as Hashtags)
 onMounted(() => {
   useWait(async () => {
@@ -52,7 +53,17 @@ const onClickChip = async (index: number) => {
 const onClickStart = async () => {
   const _hashtags = hashtags.value.result.filter((v) => v.checked).map((v) => v.name)
   localStorageUtil.updateItem(Constants.STORAGE_KEYS.HASHTAGS, _hashtags)
-  useGenreState().value = _hashtags
-  await navigateTo('/')
+  useWait(async () => {
+    await $envFetch(Constants.API_URLS.HASHTAG_INTEREST, {
+      method: 'POST',
+      query: {
+        token: tokenState.value,
+        'hashtags[]': _hashtags,
+      },
+    })
+    useGenreState().value = _hashtags
+    alert('あなたにとって最高の動画体験をお届けします。さあ、楽しみましょう！')
+    await navigateTo('/')
+  })
 }
 </script>

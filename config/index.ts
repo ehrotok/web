@@ -31,6 +31,7 @@ const API_URLS = {
   HISTORIES: '/v1/api/accounts/histories',
   WATCH: '/v1/api/accounts/watch',
   HASHTAGS: '/v1/api/hashtags',
+  HASHTAG_INTEREST: '/v1/api/hashtags/interest',
 } as const
 
 export const Constants = {
