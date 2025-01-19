@@ -4,7 +4,6 @@ export interface Videos {
   pages: number
   count: number
   result: VideoItem[]
-  recommended: boolean | null
 }
 
 export interface VideoItem {
@@ -28,4 +27,12 @@ export interface VideoItem {
   image_url: string
   bookmarked?: boolean
   recommended?: boolean
+  hashtags: Hashtag[]
+}
+
+interface Hashtag {
+  kind: 'genre' | 'maker' | 'actress' | 'label'
+  name: string
+  followers_count: number
+  image_url?: string // "actress" の場合にのみ必要
 }

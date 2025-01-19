@@ -43,9 +43,13 @@
               {{ video.actress_name }}
             </h3>
           </a>
-          <p class="text-sm text-gray-300">
+          <p class="text-sm text-gray-300 line-clamp-3 mb-2">
             {{ video.title }}
           </p>
+          <p class="text-xs text-gray-300 line-clamp-2">
+            {{ hashtags }}
+          </p>
+          
         </div>
 
         <IndexSideMenu
@@ -119,6 +123,8 @@ const routeName = computed(
       | string
       | undefined,
 )
+
+const hashtags = computed(() => current.value.video.hashtags.map((v) => `#${v.name}`).join(' '))
 
 onMounted(() => {
   useWait(async () => {
