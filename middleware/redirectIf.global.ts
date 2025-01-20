@@ -1,11 +1,16 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const config = useRuntimeConfig()
 
   if (config.public.isNetlify) {
     return navigateTo('https://ehrotok.com/', { external: true })
   }
 
-  if (to.path === '/genre' || useGenreState().value.length > 0) {
+  if (!import.meta.client) {
+    return
+  }
+
+  const storage = await localStorageUtil.getItem<string[]>(Constants.STORAGE_KEYS.HASHTAGS)
+  if (storage.length || to.path === '/genre') {
     return
   }
 
