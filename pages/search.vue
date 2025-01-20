@@ -16,13 +16,19 @@
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
               </svg>
           </div>
-          <input v-model="input" type="search" class="search-input block w-full p-3 ps-10 text-gray-900 rounded-lg bg-gray-50" placeholder="ジャンルや女優名を入力" />
+          <input 
+            @input="onInput"
+            ref="inputRef"
+            v-model="input"
+            type="search"
+            class="search-input block w-full p-3 ps-10 text-gray-900 rounded-lg bg-gray-50"
+            placeholder="ジャンルや女優名を入力" />
           <button
             :disabled="!hasInput"
             :class="{ 'opacity-60': !hasInput }"
             @click="onClickSearch()"
             type="submit"
-            class="text-red-400 absolute end-1.5 bottom-1.5 font-bold rounded-lg px-4 py-2"
+            class="top-1 text-red-400 absolute end-1.5 bottom-1.5 font-bold rounded-lg px-4 py-2"
             >
             検索
           </button>
@@ -30,10 +36,10 @@
     </div> 
     
     <div class="text-lg my-3 font-bold">あなたにおすすめ</div>
-    <ul class="">
+    <ul class="overflow-y-auto max-h-[calc(100dvh-150px)]">
     <li 
       class="p-2 hover:bg-gray-300"
-      v-for="(tag, index) in hashtags"
+      v-for="(tag, index) in suggests"
       :key="index"
       @click="onClickSearch(tag)"
       >
@@ -45,8 +51,7 @@
 </template>
 
 <script setup lang="ts">
-const hasInput = computed(() => !!input.value.length)
-const hashtags = ref<string[]>([
+const defaultSugests = [
   '巨乳',
   '中出し',
   '痴女',
@@ -56,11 +61,42 @@ const hashtags = ref<string[]>([
   '寝取り・寝取られ・NTR',
   '美少女',
   '淫乱・ハード系',
-])
+]
+const hasInput = computed(() => !!input.value.length)
+const suggests = ref<string[]>(defaultSugests)
 const input = ref<string>('')
+const inputRef: Ref<HTMLInputElement | null> = ref(null)
+
+onMounted(async () => {
+  inputRef.value?.focus()
+})
+
+const fetch = () => {
+  if (!input.value) {
+    return
+  }
+
+  $envFetch<string[]>(formatUtil.replace(Constants.API_URLS.SUGGEST, input.value))
+    .then((v) => {
+      if (v.length === 0) {
+        suggests.value = defaultSugests
+        return
+      }
+      suggests.value = v
+    })
+    .catch(() => {
+      suggests.value = defaultSugests
+    })
+}
+
+const debouncedFetch = debounce(fetch, 300)
 
 const onClickBack = async () => {
   window.history.back()
+}
+
+const onInput = async () => {
+  debouncedFetch()
 }
 
 const onClickSearch = async (tag?: string) => {
