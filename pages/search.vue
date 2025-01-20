@@ -18,6 +18,7 @@
           </div>
           <input 
             @input="onInput"
+            @keypress="onClickEnter"
             ref="inputRef"
             v-model="input"
             type="search"
@@ -66,13 +67,39 @@ const hasInput = computed(() => !!input.value.length)
 const suggests = ref<string[]>(defaultSugests)
 const input = ref<string>('')
 const inputRef: Ref<HTMLInputElement | null> = ref(null)
+const isComposing = ref<boolean>(false)
 
 onMounted(async () => {
   inputRef.value?.focus()
 })
 
+const onClickBack = async () => {
+  window.history.back()
+}
+
+const onInput = async () => {
+  debouncedFetch()
+}
+
+const onClickSearch = async (tag?: string) => {
+  if (isComposing.value) {
+    return
+  }
+
+  input.value = tag || input.value
+  await navigateTo(`/hashtags?q=${input.value}`)
+}
+
+const onClickEnter = (e: any) => {
+  // @note 非推奨だけど実装めんどいので一旦これで
+  if (e.keyCode === 13) {
+    onClickSearch()
+  }
+}
+
 const fetch = () => {
   if (!input.value) {
+    suggests.value = defaultSugests
     return
   }
 
@@ -90,19 +117,6 @@ const fetch = () => {
 }
 
 const debouncedFetch = debounce(fetch, 300)
-
-const onClickBack = async () => {
-  window.history.back()
-}
-
-const onInput = async () => {
-  debouncedFetch()
-}
-
-const onClickSearch = async (tag?: string) => {
-  input.value = tag || input.value
-  await navigateTo(`/hashtags?q=${input.value}`)
-}
 </script>
 
 <style scoped>
