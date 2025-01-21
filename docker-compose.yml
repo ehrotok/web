@@ -1,12 +1,19 @@
+volumes:
+  node_modules-data:
+
 services:
   app:
     build: .
     volumes:
       - .:/app
+      - node_modules-data:/app/node_modules
     ports:
       - 5000:3000
     environment:
       - HOST=0.0.0.0
-    command: npm run dev
+    command: sh -c '
+      npm install &&
+      npm run dev
+      '
     # Enable colorized output
     tty: true
