@@ -71,6 +71,7 @@ const isComposing = ref<boolean>(false)
 
 onMounted(async () => {
   inputRef.value?.focus()
+  inputRef.value?.click()
 })
 
 const onClickBack = async () => {
