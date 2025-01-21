@@ -130,7 +130,7 @@ const routeName = computed(
       : undefined) as string | undefined,
 )
 
-const hashtags = computed(() => current.value.video.hashtags.map((v) => `#${v.name}`).join(' '))
+const hashtags = computed(() => current.value.video.hashtags?.map((v) => `#${v.name}`).join(' '))
 
 onMounted(() => {
   useWait(async () => {
@@ -303,8 +303,12 @@ const setVideo = async (newIndex: number) => {
   const prevIndex = currentIndex.value
   currentIndex.value = newIndex
 
-  if (!routeName.value && !videoData.value.result[newIndex + 1]) {
-    await reFetch(++currentPage.value)
+  if (!videoData.value.result[newIndex + 1]) {
+    if (routeName.value && routeName.value !== 'id') {
+      currentIndex.value = prevIndex
+      return
+    }
+    await reFetch(newIndex)
   }
 
   videoSelectorAll.value[newIndex].muted = videoSelectorAll.value[prevIndex].muted
