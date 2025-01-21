@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 5000:3000
+    environment:
+      - HOST=0.0.0.0
+    command: npm run dev
+    # Enable colorized output
+    tty: true
