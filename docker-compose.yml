@@ -10,7 +10,7 @@ services:
     ports:
       - 5000:3000
     environment:
-      - HOST=0.0.0.0
+      HOST: 0.0.0.0
     command: sh -c '
       npm install &&
       npm run dev
