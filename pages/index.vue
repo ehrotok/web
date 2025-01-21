@@ -308,7 +308,7 @@ const setVideo = async (newIndex: number) => {
       currentIndex.value = prevIndex
       return
     }
-    await reFetch(newIndex)
+    await reFetch(++currentPage.value)
   }
 
   videoSelectorAll.value[newIndex].muted = videoSelectorAll.value[prevIndex].muted
