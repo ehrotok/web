@@ -88,7 +88,7 @@ const onClickSearch = async (tag?: string) => {
   }
 
   input.value = tag || input.value
-  await navigateTo(`/hashtags?q=${input.value}`)
+  await navigateTo(`/?q=${input.value}`)
 }
 
 const onClickEnter = (e: any) => {

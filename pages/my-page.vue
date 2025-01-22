@@ -177,7 +177,7 @@ const onClickTile = async (index: number) => {
     param = PATHS.HISTORY
   }
 
-  await navigateTo(`/${param}?content_id=${videoItems[index].content_id}`)
+  await navigateTo(`/${videoItems[index].content_id}?ref=${param}`)
 }
 
 const onClickIcon = async (selected: (typeof PATHS)[keyof typeof PATHS]) => {
