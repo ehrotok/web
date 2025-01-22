@@ -1,7 +1,7 @@
 import {
   mdiAccountOutline,
   mdiArrowDown,
-  mdiArrowULeftTop,
+  mdiArrowLeft,
   mdiArrowUp,
   mdiBookmark,
   mdiBookmarkOutline,
@@ -13,7 +13,7 @@ import {
 } from '@mdi/js'
 
 export {
-  mdiArrowULeftTop,
+  mdiArrowLeft,
   mdiHistory,
   mdiBookmarkOutline,
   mdiHomeOutline,
