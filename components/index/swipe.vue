@@ -220,7 +220,7 @@ const onSwipeEnd = async (e: any) => {
     const direction = deltaY > 0 ? -1 : 1
     const newIndex = currentIndex.value + direction
 
-    if (newIndex >= 0 && newIndex < videos.value.result.length) {
+    if (newIndex >= 0 && newIndex <= videos.value.result.length) {
       setVideo(newIndex)
     }
   }
@@ -319,16 +319,16 @@ const setVideo = async (newIndex: number) => {
   if (isEnd.value) {
     return
   }
-
   finish()
   const prevIndex = currentIndex.value
   currentIndex.value = newIndex
 
   if (!videoData.value.result[newIndex]) {
     await reFetch(++currentPage.value)
+  } else {
+    videoSelectorAll.value[newIndex].muted = videoSelectorAll.value[prevIndex].muted
   }
 
-  videoSelectorAll.value[newIndex].muted = videoSelectorAll.value[prevIndex].muted
   cleanupResources()
   replaceDom(currentIndex.value).then(() => {
     play(currentIndex.value)
