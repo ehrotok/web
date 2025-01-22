@@ -15,7 +15,7 @@
       <path :d="icon" />
     </svg>
   </button>
-  <span v-if="text" class="text-white text-sm mt-1">{{ text }}</span>
+  <span v-if="text" class="leading-none text-white text-sm mt-1">{{ text }}</span>
 </template>
 
 <script setup lang="ts">

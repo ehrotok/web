@@ -1,7 +1,7 @@
 <template>
   <IconButton
-      buttonClass="absolute top-10 m-4 rounded-full shadow-lg z-50 transition active:scale-150"
-      :icon="mdiArrowULeftTop"
+      buttonClass="absolute top-2 m-3 rounded-full shadow-lg z-50 transition active:scale-150"
+      :icon="mdiArrowLeft"
       @click="onClickReturn"
     ></IconButton>
   <Swipe

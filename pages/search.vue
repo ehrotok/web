@@ -6,7 +6,7 @@
       <IconButton
         buttonClass="p-1 rounded-full z-50 transition active:scale-150"
         iconClass="h-6 w-6 text-black"
-        :icon="mdiArrowULeftTop"
+        :icon="mdiArrowLeft"
         @click="onClickBack"
       ></IconButton>
       <label for="search" class="mb-2 text-sm text-gray-900 sr-only">検索</label>

@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute bottom-20 right-5 flex flex-col items-center space-y-4">
+  <div class="absolute bottom-20 right-2 flex flex-col items-center space-y-3">
     <div
       class="h-12 w-12 flex flex-col items-center rounded-full"
       :class="{ ' bg-gradient-to-br from-[#f67b01] to-[#eaf601]': isRecommend }"
