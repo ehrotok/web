@@ -91,14 +91,14 @@
     <div v-if="!isTouchDevice">
       <IconButton
         v-if="currentIndex > 0"
-        buttonClass="text-lg absolute top-2 left-1/2 transform -translate-x-1/2 rounded-full shadow-lg z-50 transition active:scale-150"
-        iconClass="h-10 w-10 text-white m-auto"
+        buttonClass="absolute top-5 left-1/2 transform -translate-x-1/2 rounded-full shadow-lg z-50 transition active:scale-150"
+        iconClass="h-8 w-8 text-white m-auto"
         :icon="mdiArrowUp"
         @click="onClickArrow(-1)"
       ></IconButton>
       <IconButton
-        buttonClass="text-lg absolute bottom-2 left-1/2 transform -translate-x-1/2 rounded-full shadow-lg z-50 transition active:scale-150"
-        iconClass="h-10 w-10 text-white m-auto"
+        buttonClass="absolute bottom-5 left-1/2 transform -translate-x-1/2 rounded-full shadow-lg z-50 transition active:scale-150"
+        iconClass="h-8 w-8 text-white m-auto"
         :icon="mdiArrowDown"
         @click="onClickArrow(1)"
       ></IconButton>
