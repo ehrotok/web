@@ -42,14 +42,40 @@
               {{ video.actress_name }}
             </h3>
           </a>
-          <p class="text-sm text-gray-300 line-clamp-3 mb-2">
-            {{ video.title }}
-          </p>
-          <p class="text-xs text-gray-300 line-clamp-2">
-            {{ hashtags }}
-          </p>
+          <div class="text-sm text-gray-300">
+            <div class="flex">
+              <p
+                class="flex-1 mb-2"
+                :class="{ 'line-clamp-1': isMore }">
+                {{ video.title }}
+              </p>
+              <div 
+                v-if="isMore"
+                @touchend="onClickMore"
+                @click="onClickMore"
+                class="flex-none font-bold"
+              >もっと見る</div>
+            </div>
+            <p v-if="!isMore" class="">
+              <span
+                class="ml-1"
+                @touchend="onClickHashtag(hashtag)"
+                @click="onClickHashtag(hashtag)"
+                v-for="(hashtag, index) in hashtags"
+                :key="index"  
+              >
+              {{ hashtag }}
+              </span>
+            </p>
+            
+            <div 
+                v-if="!isMore"
+                @touchend="onClickMore"
+                @click="onClickMore"
+                class="mt-2 flex justify-end font-bold"
+              >表示を減らす</div>
+          </div>
         </div>
-
         <IndexSideMenu
           :reviewCount="video.review_count"
           :reviewAverage="video.review_average"
@@ -108,6 +134,7 @@ const currentIndex = ref(0)
 const itemHeight = ref(0)
 const currentPage = ref(1)
 const isTouchDevice = ref(true)
+const isMore = ref(true)
 
 const videoSelectorAll = computed(() => Array.from(document.querySelectorAll('video')))
 const current = computed(() => {
@@ -118,7 +145,7 @@ const current = computed(() => {
   }
 })
 
-const hashtags = computed(() => current.value.video.hashtags?.map((v) => `#${v.name}`).join(' '))
+const hashtags = computed(() => current.value.video.hashtags?.map((v) => `#${v.name}`))
 const isEnd = computed(
   () =>
     !videoData.value.result[currentIndex.value + 1] && videoData.value.pages === currentPage.value,
@@ -146,6 +173,10 @@ const onClickHome = async () => {
 
 const onClickSearch = async () => {
   await navigateTo('/search')
+}
+
+const onClickHashtag = async (q: string) => {
+  await navigateTo(`/?q=${q.replace('#', '')}`, { external: true })
 }
 
 const onClickBookmark = async () => {
@@ -209,6 +240,11 @@ const onClickArrow = async (direction: number) => {
   const newIndex = currentIndex.value + direction
   setVideo(newIndex)
   setOffset()
+}
+
+const onClickMore = async () => {
+  console.log(isMore.value)
+  isMore.value = !isMore.value
 }
 
 const fetch = async (page: number) => {
