@@ -1,13 +1,11 @@
 <template>
-  <Swipe
+  <IndexSwipe
     :contentId="contentId"
     :fetchFunc="fetch"
   />
 </template>
 
 <script setup lang="ts">
-import Swipe from '~/components/index/swipe.vue'
-
 const route = useRoute()
 const contentId = ref<string>(route.params.id as string)
 
