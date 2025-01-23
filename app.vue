@@ -23,6 +23,9 @@ onMounted(async () => {
   init()
   setupEvents()
   setupWebStorage()
+  const response = await fetch('https://example.com/user')
+  const user = await response.json()
+  console.log(user)
 })
 
 onUnmounted(() => {
