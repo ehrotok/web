@@ -25,6 +25,6 @@
     "msw": "^2.7.0"
   },
   "msw": {
-    "workerDirectory": ["assets"]
+    "workerDirectory": ["public"]
   }
 }

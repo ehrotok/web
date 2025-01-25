@@ -249,6 +249,7 @@ const onClickMore = async () => {
 
 const fetch = async (page: number) => {
   videoData.value = await props.fetchFunc(page)
+  console.log(videoData.value)
   videos.value.result =
     videoData.value.result.length > 1
       ? Array.from(
