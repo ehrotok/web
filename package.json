@@ -8,7 +8,9 @@
     "dev-local": "HOST=0.0.0.0 nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "biome lint .",
+    "format": "biome format . --write"
   },
   "dependencies": {
     "@mdi/js": "^7.4.47",
@@ -21,6 +23,11 @@
     "vue-router": "latest"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.6"
+    "@biomejs/biome": "1.9.4",
+    "@types/js-cookie": "^3.0.6",
+    "msw": "^2.7.0"
+  },
+  "msw": {
+    "workerDirectory": ["public"]
   }
 }

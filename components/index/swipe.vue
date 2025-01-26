@@ -243,7 +243,6 @@ const onClickArrow = async (direction: number) => {
 }
 
 const onClickMore = async () => {
-  console.log(isMore.value)
   isMore.value = !isMore.value
 }
 

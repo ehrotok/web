@@ -1,5 +1,5 @@
 {
-  "files": { "ignore": [".nuxt/*"] },
+  "files": { "ignore": [".nuxt/*", "./public/mockServiceWorker.js"] },
   "formatter": {
     "enabled": true,
     "useEditorconfig": true,
@@ -15,7 +15,13 @@
     "enabled": true,
     "rules": {
       "complexity": { "noForEach": "off" },
-      "suspicious": { "noExplicitAny": "off" }
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noConsole": {
+          "level": "error",
+          "options": { "allow": ["error", "warn"] }
+        }
+      }
     }
   },
   "javascript": {
