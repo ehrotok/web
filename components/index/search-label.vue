@@ -1,6 +1,6 @@
 <template>
   <div
-    class="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-lg p-4 z-50 flex flex-col w-full min-h-dvh perspective-[100px] fixed top-0 left-0"
+    class="left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-lg p-4 z-50 flex flex-col w-full perspective-[100px] fixed top-10"
   >
     <div class="flex">   
       <IconButton
