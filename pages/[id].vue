@@ -4,6 +4,14 @@
       :icon="mdiArrowLeft"
       @click="onClickReturn"
     ></IconButton>
+  <div
+    class="relative">
+    <IconButton
+      buttonClass="absolute top-2 right-0 m-3 rounded-full shadow-lg z-50 transition active:scale-150"
+      :icon="mdiMagnify"
+      @click="navigateTo('/search') "
+    />
+  </div>
   <IndexSwipe
     :contentId="contentId"
     :fetchFunc="fetch"
