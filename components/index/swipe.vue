@@ -243,13 +243,11 @@ const onClickArrow = async (direction: number) => {
 }
 
 const onClickMore = async () => {
-  console.log(isMore.value)
   isMore.value = !isMore.value
 }
 
 const fetch = async (page: number) => {
   videoData.value = await props.fetchFunc(page)
-  console.log(videoData.value)
   videos.value.result =
     videoData.value.result.length > 1
       ? Array.from(
