@@ -3,7 +3,7 @@
     v-if="query"
     :value="query"
     @click="navigateTo(`/search?q=${query}`)"
-    @back="navigateTo('/', { external: true })"
+    @back="navigateTo('/')"
   />
   <div
     class="relative" v-if="!query">

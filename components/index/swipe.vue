@@ -148,11 +148,13 @@ const isEnd = computed(
 
 onMounted(() => {
   useWait(async () => {
-    init()
-    await fetch(currentPage.value)
-    await replaceDom(currentIndex.value, 0)
-    await play(currentIndex.value)
-    setOffset()
+    await init()
+  })
+})
+
+onBeforeRouteUpdate(() => {
+  useWait(async () => {
+    await init()
   })
 })
 
@@ -167,7 +169,7 @@ const onClickHome = async () => {
 }
 
 const onClickHashtag = async (q: string) => {
-  await navigateTo(`/?q=${q.replace('#', '')}`, { external: true })
+  await navigateTo(`/?q=${q.replace('#', '')}`)
 }
 
 const onClickBookmark = async () => {
@@ -223,7 +225,7 @@ const onSwipeEndByTitle = async (e: any) => {
   const prevIndex = currentIndex.value
   onSwipeEnd(e)
   if (prevIndex === currentIndex.value) {
-    await navigateTo(`/?q=${current.value.video.actress_name}`, { external: true })
+    await navigateTo(`/?q=${current.value.video.actress_name}`)
   }
 }
 
@@ -248,10 +250,15 @@ const fetch = async (page: number) => {
       : []
 }
 
-const init = () => {
+const init = async () => {
+  isMore.value = true
   isTouchDevice.value = 'ontouchstart' in window
   setupEvents()
   updateItemHeight()
+  await fetch(currentPage.value)
+  await replaceDom(currentIndex.value, 0)
+  await play(currentIndex.value)
+  setOffset()
 }
 
 const setupEvents = () => {
@@ -306,6 +313,7 @@ const unbookmark = async (query: object) => {
 }
 
 const setVideo = async (newIndex: number) => {
+  isMore.value = true
   if (isEnd.value) {
     return
   }
