@@ -52,6 +52,7 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
 const defaultSugests = [
   '巨乳',
   '中出し',
@@ -65,7 +66,7 @@ const defaultSugests = [
 ]
 const hasInput = computed(() => !!input.value.length)
 const suggests = ref<string[]>(defaultSugests)
-const input = ref<string>('')
+const input = ref<string>((route.query.q as string) || '')
 const inputRef: Ref<HTMLInputElement | null> = ref(null)
 const isComposing = ref<boolean>(false)
 
@@ -105,7 +106,7 @@ const fetch = () => {
   }
 
   $envFetch<string[]>(formatUtil.replace(Constants.API_URLS.SUGGEST, input.value))
-    .then((v) => {
+    .then((v: string[]) => {
       if (v.length === 0) {
         suggests.value = defaultSugests
         return
