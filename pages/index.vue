@@ -22,10 +22,10 @@
 <script setup lang="ts">
 const route = useRoute()
 const contentId = ref<string>(route.params.id as string)
-const query = computed(() => (route.query.q ? [route.query.q as string] : undefined))
+const query = computed(() => (route.query.q ? (route.query.q as string) : undefined))
 
 const fetch = async (page: number) => {
-  return await fetchVideos(page, query.value)
+  return await fetchVideos(page, [query.value as string])
 }
 
 const onClickSearch = async () => {

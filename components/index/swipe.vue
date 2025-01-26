@@ -166,10 +166,6 @@ const onClickHome = async () => {
   await navigateTo('/my-page')
 }
 
-const onClickSearch = async () => {
-  await navigateTo('/search')
-}
-
 const onClickHashtag = async (q: string) => {
   await navigateTo(`/?q=${q.replace('#', '')}`, { external: true })
 }
@@ -227,7 +223,7 @@ const onSwipeEndByTitle = async (e: any) => {
   const prevIndex = currentIndex.value
   onSwipeEnd(e)
   if (prevIndex === currentIndex.value) {
-    location.href = current.value.video.product_url
+    await navigateTo(`/?q=${current.value.video.actress_name}`, { external: true })
   }
 }
 
