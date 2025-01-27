@@ -3,7 +3,7 @@
     v-if="query"
     :value="query"
     @click="navigateTo(`/search?q=${query}`)"
-    @back="navigateTo('/')"
+    @back="navigateTo('/', { external: true })"
   />
   <div
     class="relative" v-if="!query">
@@ -25,7 +25,8 @@ const contentId = ref<string>(route.params.id as string)
 const query = computed(() => (route.query.q ? (route.query.q as string) : undefined))
 
 const fetch = async (page: number) => {
-  return await fetchVideos(page, [query.value as string])
+  const hashtags = query.value ? [query.value as string] : undefined
+  return await fetchVideos(page, hashtags)
 }
 
 const onClickSearch = async () => {

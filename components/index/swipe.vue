@@ -169,7 +169,7 @@ const onClickHome = async () => {
 }
 
 const onClickHashtag = async (q: string) => {
-  await navigateTo(`/?q=${q.replace('#', '')}`)
+  await navigateTo(`/?q=${q.replace('#', '')}`, { external: true })
 }
 
 const onClickBookmark = async () => {
@@ -225,7 +225,7 @@ const onSwipeEndByTitle = async (e: any) => {
   const prevIndex = currentIndex.value
   onSwipeEnd(e)
   if (prevIndex === currentIndex.value) {
-    await navigateTo(`/?q=${current.value.video.actress_name}`)
+    await navigateTo(`/?q=${current.value.video.actress_name}`, { external: true })
   }
 }
 
