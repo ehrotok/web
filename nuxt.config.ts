@@ -2,7 +2,7 @@ const isDevelopment = process.env.NODE_ENV === 'development'
 const title: string = 'EhroTok（エロトック） - 大人のためのショート動画プラットフォーム'
 const description: string =
   'EhroTok（エロトック）は、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。'
-const url = 'https://ehrotok.netlify.app'
+const url = 'https://ehrotok.com'
 const imagePath: string = 'ogp.png'
 const twitterCard: string = 'summary'
 const image = `${url}/${imagePath}`
@@ -111,7 +111,6 @@ export default defineNuxtConfig({
       isDevelopment: isDevelopment,
       bearerToken: process.env.BEARER_TOKEN,
       googleTag: process.env.GTAG,
-      isNetlify: process.env.IS_NETLIFY,
     },
   },
   imports: {

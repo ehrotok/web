@@ -32,7 +32,7 @@ const useHeadTag =
     type = 'website',
     twitterCard = 'summary',
   ) => {
-    const url = 'https://ehrotok.netlify.app'
+    const url = 'https://ehrotok.com'
     const image = `${url}/${imagePath}`
 
     useHead({
