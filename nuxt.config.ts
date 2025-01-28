@@ -100,7 +100,7 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', 'nuxt-gtag'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/image', 'nuxt-gtag', '@nuxtjs/sitemap'],
   runtimeConfig: {
     public: {
       token: process.env.TOKEN,
@@ -126,5 +126,36 @@ export default defineNuxtConfig({
   gtag: {
     id: process.env.GTAG,
     loadingStrategy: 'async',
+  },
+
+  sitemap: {
+    cacheMaxAgeSeconds: 1000 * 60 * 1440,
+    autoLastmod: true,
+    experimentalWarmUp: true,
+    experimentalCompression: true,
+    xsl: false,
+    debug: isDevelopment,
+    urls: async () => {
+      return [
+        {
+          loc: '/',
+          priority: 1,
+        },
+        {
+          loc: '/my-page',
+          priority: 0.9,
+        },
+        {
+          loc: '/search',
+          priority: 0.9,
+        },
+        {
+          loc: '/genre',
+          priority: 0.8,
+        },
+      ]
+    },
+    sitemaps: true,
+    defaultSitemapsChunkSize: 10000,
   },
 })
