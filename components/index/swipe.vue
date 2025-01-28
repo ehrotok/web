@@ -118,6 +118,7 @@ const props = defineProps({
     default: () => {},
   },
 })
+const route = useRoute()
 const tokenState = useTokenState()
 const isFullscreenMode = useFullScreenMode()
 
@@ -148,7 +149,7 @@ const isEnd = computed(
 
 onMounted(() => {
   useWait(async () => {
-    await init()
+    await init(route.query.q as string)
   })
 })
 
