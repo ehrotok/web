@@ -33,6 +33,7 @@ const API_URLS = {
   HASHTAGS: '/v1/api/hashtags',
   HASHTAG_INTEREST: '/v1/api/hashtags/interest',
   SUGGEST: '/v1/api/hashtags/{0}/suggest',
+  HASHTAG_NAMES: '/v1/api//hashtags/names',
 } as const
 
 export const Constants = {

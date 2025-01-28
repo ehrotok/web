@@ -65,14 +65,23 @@ const defaultSugests = [
   '淫乱・ハード系',
 ]
 const hasInput = computed(() => !!input.value.length)
-const suggests = ref<string[]>(defaultSugests)
+const suggests = ref<string[]>([])
 const input = ref<string>((route.query.q as string) || '')
 const inputRef: Ref<HTMLInputElement | null> = ref(null)
 const isComposing = ref<boolean>(false)
+const hashtags = ref<string[]>([])
 
 onMounted(async () => {
   inputRef.value?.focus()
   inputRef.value?.click()
+  $envFetch<string[]>(Constants.API_URLS.HASHTAG_NAMES).then((v: string[]) => {
+    hashtags.value = v
+    if (input.value) {
+      fetch()
+    } else {
+      suggests.value = defaultSugests
+    }
+  })
 })
 
 const onClickBack = async () => {
@@ -105,17 +114,7 @@ const fetch = () => {
     return
   }
 
-  $envFetch<string[]>(formatUtil.replace(Constants.API_URLS.SUGGEST, input.value))
-    .then((v: string[]) => {
-      if (v.length === 0) {
-        suggests.value = defaultSugests
-        return
-      }
-      suggests.value = v
-    })
-    .catch(() => {
-      suggests.value = defaultSugests
-    })
+  suggests.value = hashtags.value.filter((v) => v.includes(input.value))
 }
 
 const debouncedFetch = debounce(fetch, 300)
