@@ -114,7 +114,7 @@ const onClickShare = () => {
 }
 
 const onClickStar = () => {
-  window.open(`${props.productUrl}/#review`, '_blank') // 新しいタブで開く
+  window.open(`${props.productUrl}/#review`, '_blank')
 }
 </script>
 

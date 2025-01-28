@@ -262,6 +262,11 @@ const init = async (hashtag?: string) => {
   setOffset()
 }
 
+const setupSeo = async () => {
+  const video = videoData.value.result[currentIndex.value]
+  useSeoWithSpa(`/${video.content_id}`, `${video.title} - EhroTok`, video.image_url)
+}
+
 const setupEvents = () => {
   window.addEventListener('resize', updateItemHeight)
   window.addEventListener('fullscreenchange', checkFullscreen)
@@ -387,6 +392,7 @@ const play = async (currentIndex: number): Promise<void> => {
   })
 
   checkVolumeChange()
+  setupSeo()
 }
 
 const finish = async (): Promise<void> => {
