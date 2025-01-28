@@ -121,7 +121,6 @@ const props = defineProps({
   },
 })
 const route = useRoute()
-const tokenState = useTokenState()
 const isFullscreenMode = useFullScreenMode()
 
 const videos = ref<ExtendedVideo>({} as ExtendedVideo)
@@ -177,7 +176,6 @@ const onClickHashtag = async (q: string) => {
 
 const onClickBookmark = async () => {
   const query = {
-    token: tokenState.value,
     content_id: current.value.video.content_id,
   }
 
@@ -401,7 +399,6 @@ const finish = async (): Promise<void> => {
   $envFetch<Videos>(Constants.API_URLS.WATCH, {
     method: 'POST',
     query: {
-      token: tokenState.value,
       content_id: current.value.video.content_id,
       time: Math.floor(time),
       fullscreened: !!current.value.video.is_fullscreen,

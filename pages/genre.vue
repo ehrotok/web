@@ -38,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-const tokenState = useTokenState()
 const hashtags = ref<Hashtags>({} as Hashtags)
 const isSelected = computed(() => hashtags.value?.result.some((v) => v.checked))
 
@@ -61,7 +60,6 @@ const onClickStart = async () => {
     $envFetch(Constants.API_URLS.HASHTAG_INTEREST, {
       method: 'POST',
       query: {
-        token: tokenState.value,
         'hashtags[]': _hashtags,
       },
     })
