@@ -9,6 +9,7 @@ import {
   mdiHistory,
   mdiHomeOutline,
   mdiMagnify,
+  mdiShare,
   mdiStar,
 } from '@mdi/js'
 
@@ -24,4 +25,5 @@ export {
   mdiArrowDown,
   mdiArrowUp,
   mdiMagnify,
+  mdiShare,
 }
