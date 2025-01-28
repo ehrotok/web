@@ -12,7 +12,7 @@
         target="_blank"
       >
         <nuxt-img
-          class="h-11 w-11 object-cover m-0.5 rounded-full"
+          class="animate-custom-spin h-11 w-11 object-cover m-0.5 rounded-full"
           :placeholder="Constants.IMAGES.BG_GRAY"
           :src="imageUrl"
         />
@@ -23,7 +23,11 @@
     </div>
 
     <div class="flex flex-col items-center">
-      <IconButton :icon="mdiStar" :text="reviewAverageText"></IconButton>
+      <IconButton 
+        :icon="mdiStar"
+        @click="onClickStar"
+        :text="reviewAverageText"
+      ></IconButton>
     </div>
 
     <div class="flex flex-col items-center">
@@ -108,4 +112,23 @@ const onClickShare = () => {
     })
   }
 }
+
+const onClickStar = () => {
+  window.open(`${props.productUrl}/#review`, '_blank') // 新しいタブで開く
+}
 </script>
+
+<style scoped>
+@keyframes slow-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-custom-spin {
+  animation: slow-spin 5s linear infinite; /* 5秒で1回転 */
+}
+</style>
