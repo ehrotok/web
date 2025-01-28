@@ -72,6 +72,8 @@
           </div>
         </div>
         <IndexSideMenu
+          :content-id="video.content_id"
+          :text="video.title"
           :reviewCount="video.review_count"
           :reviewAverage="video.review_average"
           :imageUrl="video.image_url"

@@ -35,6 +35,13 @@
     </div>
 
     <div class="flex flex-col items-center">
+      <IconButton
+        @click="onClickShare"
+        :icon="mdiShare"
+      ></IconButton>
+    </div>
+
+    <div class="flex flex-col items-center">
       <IconButton @click="onClickHome" :icon="mdiAccountOutline"></IconButton>
     </div>
   </div>
@@ -42,6 +49,14 @@
 
 <script setup lang="ts">
 const props = defineProps({
+  contentId: {
+    type: String,
+    required: true,
+  },
+  text: {
+    type: String,
+    required: true,
+  },
   reviewCount: {
     type: Number,
     default: 0,
@@ -82,5 +97,15 @@ const onClickBookmark = () => {
     navigator.vibrate(100)
   }
   emit('click:bookmark')
+}
+
+const onClickShare = () => {
+  if (navigator.share) {
+    navigator.share({
+      title: props.text,
+      text: props.text,
+      url: `https://ja.ehrotok.com/${props.contentId}`,
+    })
+  }
 }
 </script>
