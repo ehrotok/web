@@ -1,22 +1,22 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">
     <url>
         <lastmod>2025-01-29T00:09:01Z</lastmod>
-        <loc>http://localhost:3000/</loc>
+        <loc>https://ehrotok.com/</loc>
         <priority>1</priority>
     </url>
     <url>
         <lastmod>2025-01-29T00:09:01Z</lastmod>
-        <loc>http://localhost:3000/genre</loc>
+        <loc>https://ehrotok.com/genre</loc>
         <priority>0.8</priority>
     </url>
     <url>
         <lastmod>2025-01-29T00:09:01Z</lastmod>
-        <loc>http://localhost:3000/my-page</loc>
+        <loc>https://ehrotok.com/my-page</loc>
         <priority>0.9</priority>
     </url>
     <url>
         <lastmod>2025-01-29T00:09:01Z</lastmod>
-        <loc>http://localhost:3000/search</loc>
+        <loc>https://ehrotok.com/search</loc>
         <priority>0.9</priority>
     </url>
 </urlset>
