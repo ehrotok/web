@@ -20,8 +20,7 @@
     "nuxt": "^3.15.0",
     "nuxt-gtag": "^3.0.2",
     "vue": "latest",
-    "vue-router": "latest",
-    "@nuxtjs/sitemap": "^7.0.1"
+    "vue-router": "latest"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
