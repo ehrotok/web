@@ -53,6 +53,8 @@
 
 <script setup lang="ts">
 const route = useRoute()
+useSeoWithSpa('検索')
+
 const defaultSugests = [
   '巨乳',
   '中出し',

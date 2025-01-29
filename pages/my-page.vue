@@ -88,6 +88,7 @@
 
 <script setup lang="ts">
 const route = useRoute()
+useSeoWithSpa('マイページ')
 
 const PATHS = {
   BOOKMARK: 'bookmarks',

@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+useSeoWithSpa('ジャンル')
 const hashtags = ref<Hashtags>({} as Hashtags)
 const isSelected = computed(() => hashtags.value?.result.some((v) => v.checked))
 

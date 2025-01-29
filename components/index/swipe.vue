@@ -264,7 +264,7 @@ const init = async (hashtag?: string) => {
 
 const setupSeo = async () => {
   const video = videoData.value.result[currentIndex.value]
-  useSeoWithSpa(`/${video.content_id}`, `${video.title} - EhroTok`, video.image_url)
+  useSeoWithSpa(`${video.title}`, `/${video.content_id}`, video.image_url)
 }
 
 const setupEvents = () => {
