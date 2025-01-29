@@ -35,6 +35,11 @@ const init = async () => {
 
 const setupEvents = async () => {
   window.addEventListener('resize', checkOrientation)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      cleanupResources()
+    }
+  })
 }
 
 const removeEvents = async () => {
@@ -53,5 +58,15 @@ const checkOrientation = () => {
   }
 
   isLandscapeMode.value = window.innerHeight < window.innerWidth
+}
+
+const cleanupResources = async (): Promise<void> => {
+  try {
+    Array.from(document.querySelectorAll('video'))
+      .filter((v) => !v.paused)
+      .forEach((video) => {
+        video.pause()
+      })
+  } catch {}
 }
 </script>
