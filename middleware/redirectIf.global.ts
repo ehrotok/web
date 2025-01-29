@@ -10,7 +10,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   const storage = await localStorageUtil.getItem<string[]>(Constants.STORAGE_KEYS.HASHTAGS)
-  if (storage.length || to.path === '/genre') {
+
+  if (storage.length || to.path === '/genre' || to.params.id) {
     return
   }
 
