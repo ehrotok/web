@@ -36,18 +36,27 @@
       </div>
     </div> 
     
-    <div class="text-lg my-3 font-bold">あなたにおすすめ</div>
-    <ul class="overflow-y-auto max-h-[calc(100dvh-150px)]">
-    <li 
+    <ul class="my-2">
+      <li 
       class="p-2 hover:bg-gray-300"
-      v-for="(tag, index) in suggests"
-      :key="index"
-      @click="onClickSearch(tag)"
+      @click="onClickGenre"
       >
-      <span class="font-bold text-red-400">・</span>
-      <span class="text-black">{{ tag }}</span>
-    </li>
-  </ul>
+        <span class="font-bold text-red-400">・</span>
+        <span class="text-black">ジャンルからさがす</span>
+      </li>
+    </ul>
+    <div class="text-lg my-3 font-bold">あなたにおすすめ</div>
+    <ul class="overflow-y-auto max-h-[calc(100dvh-200px)]">
+      <li 
+        class="p-2 hover:bg-gray-300"
+        v-for="(tag, index) in suggests"
+        :key="index"
+        @click="onClickSearch(tag)"
+        >
+        <span class="font-bold text-red-400">・</span>
+        <span class="text-black">{{ tag }}</span>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -108,6 +117,10 @@ const onClickEnter = (e: any) => {
   if (e.keyCode === 13) {
     onClickSearch()
   }
+}
+
+const onClickGenre = async () => {
+  await navigateTo('/genre')
 }
 
 const fetch = () => {
