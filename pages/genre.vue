@@ -12,6 +12,9 @@
       <div class="text-white text-center font-bold">
         選択したジャンル合わせた動画をお送りします
       </div>
+      <div class="text-white text-center text-xs m-3">
+        ※ 次回アクセスする際は選択したジャンルに沿った動画をお届けします
+      </div>
     </div>
 
     <div class="flex flex-wrap justify-center mb-3">
