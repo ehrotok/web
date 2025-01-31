@@ -1,5 +1,13 @@
 <template>
+  <MyPageModal ref="settingRef"></MyPageModal>
   <div class="text-white text-center p-5">
+    <div class="flex justify-end">
+      <IconButton
+        buttonClass="rounded-full shadow-lg"
+        :icon="mdiCogOutline"
+        @click="onClickSetting"
+      ></IconButton>
+    </div>
     <nuxt-img
       class="m-auto rounded-full h-20 w-20 object-contain"
       :placeholder="Constants.IMAGES.BG_GRAY"
@@ -87,6 +95,8 @@
 </template>
 
 <script setup lang="ts">
+import type { MyPageModal } from '#build/components'
+
 const route = useRoute()
 useSeoWithSpa('マイページ')
 
@@ -99,6 +109,7 @@ const page = ref(1)
 const isLoading = ref(false)
 const bookmarks = ref<Videos>({} as Videos)
 const histories = ref<Videos>({} as Videos)
+const settingRef = ref<InstanceType<typeof MyPageModal> | null>(null)
 
 const isSelectBookmarkTab = computed(
   () => !route.query.selected || route.query.selected === PATHS.BOOKMARK,
@@ -119,6 +130,38 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
+
+const onClickHome = async () => {
+  await navigateTo('/')
+}
+
+const onClickTile = async (index: number) => {
+  let param: 'bookmarks' | 'histories'
+  let videoItems: VideoItem[] = []
+  if (isSelectBookmarkTab.value) {
+    videoItems = bookmarks.value.result
+    param = PATHS.BOOKMARK
+  } else {
+    videoItems = histories.value.result
+    param = PATHS.HISTORY
+  }
+
+  await navigateTo(`/${videoItems[index].content_id}?ref=${param}`)
+}
+
+const onClickIcon = async (selected: (typeof PATHS)[keyof typeof PATHS]) => {
+  await fetch()
+  await navigateTo({
+    path: '/my-page',
+    query: {
+      selected: selected,
+    },
+  })
+}
+
+const onClickSetting = async () => {
+  settingRef.value?.open()
+}
 
 const handleScroll = async () => {
   const scrollPosition = window.scrollY + window.innerHeight
@@ -161,33 +204,5 @@ const fetchHistory = async () => {
   }
 
   histories.value.result.push(..._histories.result)
-}
-
-const onClickHome = async () => {
-  await navigateTo('/')
-}
-
-const onClickTile = async (index: number) => {
-  let param: 'bookmarks' | 'histories'
-  let videoItems: VideoItem[] = []
-  if (isSelectBookmarkTab.value) {
-    videoItems = bookmarks.value.result
-    param = PATHS.BOOKMARK
-  } else {
-    videoItems = histories.value.result
-    param = PATHS.HISTORY
-  }
-
-  await navigateTo(`/${videoItems[index].content_id}?ref=${param}`)
-}
-
-const onClickIcon = async (selected: (typeof PATHS)[keyof typeof PATHS]) => {
-  await fetch()
-  await navigateTo({
-    path: '/my-page',
-    query: {
-      selected: selected,
-    },
-  })
 }
 </script>
