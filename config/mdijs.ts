@@ -5,6 +5,7 @@ import {
   mdiArrowUp,
   mdiBookmark,
   mdiBookmarkOutline,
+  mdiCogOutline,
   mdiHeart,
   mdiHistory,
   mdiHomeOutline,
@@ -26,4 +27,5 @@ export {
   mdiArrowUp,
   mdiMagnify,
   mdiShare,
+  mdiCogOutline,
 }
