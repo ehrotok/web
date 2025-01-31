@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="loading.value"
-    class="bg-black flex justify-center items-center w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[100]"
+    class="bg-black flex justify-center items-start w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[100]"
   >
     <nuxt-img
       :src="Constants.IMAGES.LOGO_WITH_TEXT"
-      class="w-[120px] h-auto animation origin-center"
+      class="w-[150px] mt-[30vh] h-auto animation origin-center"
     />
   </div>
 </template>
@@ -22,15 +22,15 @@ const loading = computed(() => useLoader())
 @keyframes bounceScale {
   0% {
     transform: translateY(0) scale(1);
-    opacity: 0.7;
+    opacity: 0.8;
   }
   50% {
-    transform: translateY(-10px) scale(1.1);
+    transform: translateY(-5px) scale(1.05);
     opacity: 1;
   }
   100% {
     transform: translateY(0) scale(1);
-    opacity: 0.7;
+    opacity: 0.8;
   }
 }
 </style>
