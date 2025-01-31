@@ -8,8 +8,7 @@
         @touchstart.stop
         @touchmove.stop
         @touchend.stop
-        :href="productUrl"
-        target="_blank"
+        :href="`/${contentId}/details`"
       >
         <nuxt-img
           class="animate-custom-spin h-11 w-11 object-cover m-0.5 rounded-full"
@@ -114,7 +113,7 @@ const onClickShare = () => {
 }
 
 const onClickStar = () => {
-  window.open(`${props.productUrl}/#review`, '_blank')
+  window.open(`/${props.contentId}/details`)
 }
 </script>
 
