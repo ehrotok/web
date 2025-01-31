@@ -77,7 +77,7 @@
           :src="tile.image"
         />
         <div
-          class="absolute bottom-0 left-0 w-full bg-black bg-opacity-60 text-white p-2"
+          class="absolute bottom-0 left-0 w-full bg-gradient-to-b from-black/0 to-black/50 text-white p-2"
         >
           <p class="line-clamp-1 text-xs mt-1">{{ tile.title }}</p>
         </div>
