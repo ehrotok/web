@@ -12,6 +12,14 @@
       class="rounded-md m-auto h-40 object-cover"
       :src="currentVideo.image_url" 
     />
+    <NuxtLink
+      v-if="currentVideo.actress_name"
+      :to="`/?q=${currentVideo.actress_name}`"
+    >
+      <div  class="w-full m-3 font-bold hover:underline text-sky-400">
+        {{ currentVideo.actress_name }}
+      </div>
+    </NuxtLink>
     <div class="w-full m-3">
       {{ currentVideo.title }}
     </div>
