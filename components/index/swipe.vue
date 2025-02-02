@@ -24,6 +24,7 @@
           loop
           autoplay
           :poster="video.image_url?.replace('ps.jpg', 'pl.jpg')"
+          preload="auto"
         ></video>
 
         <div class="absolute bottom-20 left-0 pr-16 pt-8 pb-2 pl-5 text-white w-3/4 bg-gradient-to-b from-black/0 to-black w-full">
