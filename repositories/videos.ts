@@ -1,6 +1,6 @@
-export const fetchVideos = async (page: number, hashtag?: string[]): Promise<Videos> => {
+export const fetchVideos = async (page: number, hashtag?: string): Promise<Videos> => {
   const videos = await $envFetch<Videos>(Constants.API_URLS.VIDEOS, {
-    query: { page, 'hashtag[]': hashtag },
+    query: { page, hashtag: hashtag },
   })
   return videos
 }
