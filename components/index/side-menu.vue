@@ -8,7 +8,7 @@
         @touchstart.stop
         @touchmove.stop
         @touchend.stop
-        :href="`/${contentId}/details`"
+        @click="onClickDetails"
       >
         <nuxt-img
           class="animate-custom-spin h-11 w-11 object-cover m-0.5 rounded-full"
@@ -24,7 +24,7 @@
     <div class="flex flex-col items-center">
       <IconButton 
         :icon="mdiStar"
-        @click="onClickStar"
+        @click="onClickDetails"
         :text="reviewAverageText"
       ></IconButton>
     </div>
@@ -112,8 +112,8 @@ const onClickShare = () => {
   }
 }
 
-const onClickStar = () => {
-  window.open(`/${props.contentId}/details`)
+const onClickDetails = () => {
+  navigateTo(`/${props.contentId}/details`)
 }
 </script>
 
