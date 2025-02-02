@@ -108,17 +108,8 @@ const onClickHome = async () => {
 }
 
 const onClickTile = async (index: number) => {
-  let param: 'bookmarks' | 'histories'
-  let videoItems: VideoItem[] = []
-  if (isSelectBookmarkTab.value) {
-    videoItems = bookmarks.value.result
-    param = PATHS.BOOKMARK
-  } else {
-    videoItems = histories.value.result
-    param = PATHS.HISTORY
-  }
-
-  await navigateTo(`/${videoItems[index].content_id}?ref=${param}`)
+  const video = isSelectBookmarkTab.value ? bookmarks.value : histories.value
+  await navigateTo(`/${video.result[index].content_id}`)
 }
 
 const onClickIcon = async (selected: (typeof PATHS)[keyof typeof PATHS]) => {
