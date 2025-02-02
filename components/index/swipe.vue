@@ -34,6 +34,7 @@
             @touchend="onSwipeEndByTitle"
             :href="video.product_url"
             target="_blank"
+            class="w-fit block"
           >
             <h3 class="text-lg font-semibold mb-2">
               {{ video.actress_name }}
