@@ -80,8 +80,8 @@ const onClickTile = async (index: number) => {
 const fetch = async (page: number) => {
   currentVideo.value = await fetchVideo(route.params.id as string)
   const hashtag = currentVideo.value.actress_name || currentVideo.value.hashtags[0].name
-  const items = (await fetchVideos(page, [hashtag])).result
-  useSeoWithSpa(`${hashtag}をくわしく`)
+  const items = (await fetchVideos(page, hashtag)).result
+  useSeoWithSpa(`${currentVideo.value.title}をくわしく`)
   videos.value = items.filter((v) => v.content_id !== currentVideo.value.content_id)
 }
 

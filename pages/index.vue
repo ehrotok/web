@@ -25,8 +25,7 @@ const contentId = ref<string>(route.params.id as string)
 const query = computed(() => (route.query.q ? (route.query.q as string) : undefined))
 
 const fetch = async (page: number, hashtag?: string) => {
-  const hashtags = hashtag ? [hashtag as string] : undefined
-  return await fetchVideos(page, hashtags)
+  return await fetchVideos(page, hashtag)
 }
 
 const onClickSearch = async () => {
