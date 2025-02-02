@@ -5,7 +5,7 @@
   >
     <nuxt-img
       :src="Constants.IMAGES.LOGO_WITH_TEXT"
-      class="w-[150px] mt-[30vh] h-auto animation origin-center"
+      class="w-[150px] mt-[20vh] h-auto animation origin-center"
     />
   </div>
 </template>
