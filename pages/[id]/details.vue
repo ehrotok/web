@@ -17,6 +17,12 @@
     </div>
     <div class="flex w-full justify-evenly my-3">
       <button
+        @click="onClickVideo"
+        class="bg-red-400 rounded-md text-neutral-50 font-bold p-2 transition active:scale-150"
+      >
+        この動画をみる
+      </button>
+      <button
         @click="onClickFanza"
         class="bg-red-400 rounded-md text-neutral-50 font-bold p-2 transition active:scale-150"
       >
@@ -73,6 +79,10 @@ const fetch = async (page: number) => {
 
 const onClickSetting = async () => {
   settingRef.value?.open()
+}
+
+const onClickVideo = async () => {
+  navigateTo(`/${currentVideo.value.content_id}`)
 }
 
 const onClickFanza = async () => {
