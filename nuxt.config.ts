@@ -94,6 +94,12 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        {
+          rel: 'alternate',
+          href: 'https://ja.ehrotok.com/feed.rss',
+          type: 'application/rss+xml',
+          title: 'EhroTok',
+        },
       ],
     },
   },
