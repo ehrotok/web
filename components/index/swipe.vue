@@ -333,7 +333,7 @@ const setVideo = async (newIndex: number) => {
   if (!videoData.value.result[newIndex]) {
     await reFetch(++currentPage.value)
   } else {
-    videoSelectorAll.value[newIndex].muted = false
+    videoSelectorAll.value[newIndex].muted = videoSelectorAll.value[prevIndex].muted
   }
 
   cleanupResources()
