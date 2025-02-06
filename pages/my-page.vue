@@ -152,12 +152,12 @@ const fetch = async () => {
 }
 
 const fetchBookmark = async () => {
-  const _histories = await fetchBookmarks(page.value)
-  if (!histories.value.count) {
-    histories.value = _histories
+  const _bookmarks = await fetchBookmarks(page.value)
+  if (!bookmarks.value.count) {
+    bookmarks.value = _bookmarks
   }
 
-  histories.value.result.push(..._histories.result)
+  bookmarks.value.result.push(..._bookmarks.result)
 }
 
 const fetchHistory = async () => {
