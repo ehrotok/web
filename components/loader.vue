@@ -5,13 +5,13 @@
   >
     <nuxt-img
       :src="Constants.IMAGES.LOGO_WITH_TEXT"
-      class="w-40 mt-[25vh] h-auto animation origin-center"
+      class="w-36 mt-[20vh] h-auto animation origin-center"
     />
-    <div class="absolute bottom-20">
+    <div class="absolute bottom-10">
       <div class="text-white text-xs">powered by</div>
       <nuxt-img
         src="/FANZA_logo.svg.png"
-        class="w-24 h-auto origin-center"
+        class="w-16 h-auto origin-center"
       />
     </div>
   </div>
