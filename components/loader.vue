@@ -7,8 +7,8 @@
       :src="Constants.IMAGES.LOGO_WITH_TEXT"
       class="w-36 mt-[20vh] h-auto animation origin-center"
     />
-    <div class="absolute bottom-10">
-      <div class="text-white text-xs">powered by</div>
+    <div class="flex items-center absolute bottom-10">
+      <div class="text-white text-xs mr-2">powered by</div>
       <nuxt-img
         src="/FANZA_logo.svg.png"
         class="w-16 h-auto origin-center"
