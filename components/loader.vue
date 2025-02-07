@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="true"
+    v-if="loading.value"
     class="bg-black flex flex-col items-center items-start w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[100]"
   >
     <nuxt-img
