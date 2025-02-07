@@ -1,13 +1,21 @@
 <template>
   <div
-    v-if="loading.value"
-    class="bg-black flex justify-center items-start w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[100]"
+    v-if="true"
+    class="bg-black flex flex-col items-center items-start w-full min-h-dvh perspective-[100px] fixed top-0 left-0 z-[100]"
   >
     <nuxt-img
       :src="Constants.IMAGES.LOGO_WITH_TEXT"
-      class="w-[150px] mt-[20vh] h-auto animation origin-center"
+      class="w-40 mt-[25vh] h-auto animation origin-center"
     />
+    <div class="absolute bottom-20">
+      <div class="text-white text-xs">powered by</div>
+      <nuxt-img
+        src="/FANZA_logo.svg.png"
+        class="w-24 h-auto origin-center"
+      />
+    </div>
   </div>
+  
 </template>
 
 <script setup lang="ts">
