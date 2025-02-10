@@ -44,6 +44,7 @@
 useSeoWithSpa('ジャンル')
 const hashtags = ref<Hashtags>({} as Hashtags)
 const isSelected = computed(() => hashtags.value?.result.some((v) => v.checked))
+const route = useRoute()
 
 onMounted(() => {
   useWait(async () => {
@@ -69,7 +70,11 @@ const onClickStart = async () => {
     })
     useGenreState().value = _hashtags
     alert('あなたにとって最高の動画体験をお届けします。さあ、楽しみましょう！')
-    navigateTo('/')
+
+    navigateTo({
+      path: '/',
+      query: route.query,
+    })
   })
 }
 </script>
