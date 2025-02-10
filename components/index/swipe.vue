@@ -297,7 +297,7 @@ const checkVolumeChange = () => {
 const reFetch = async (page: number) => {
   useWait(async () => {
     currentIndex.value = 0
-    await fetch(page)
+    await fetch(page, route.query.q as string)
     await replaceDom(currentIndex.value, 0)
     await play(currentIndex.value)
   })
