@@ -1,5 +1,6 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const config = useRuntimeConfig()
+  const route = useRoute()
 
   if (config.public.isNetlify) {
     return navigateTo('https://ehrotok.com/', { external: true })
@@ -15,5 +16,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return
   }
 
-  return navigateTo('/genre')
+  return navigateTo({
+    path: '/genre',
+    query: route.query,
+  })
 })
