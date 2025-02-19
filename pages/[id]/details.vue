@@ -40,9 +40,9 @@
   </div>
   <div>
     <div class="text-sm text-center m-3 text-white">この動画に関連する作品</div>
-    <Thumbnails :tiles="tiles" v-model:isLoading="isLoading" @click="onClickTile"></Thumbnails>
-    <div class="text-sm text-center m-3 text-white">動画エロタレスト</div>
-    <EroterestPartsv2></EroterestPartsv2>
+    <Thumbnails :tiles="relatedTiles" v-model:isLoading="isLoading" @click="onClickTile"></Thumbnails>
+    <div class="text-sm text-center m-3 text-white">この女優に関連する作品</div>
+    <Thumbnails :tiles="actressTiles" v-model:isLoading="isLoading" @click="onClickTile"></Thumbnails>
   </div>
   
 </template>
@@ -55,11 +55,19 @@ const route = useRoute()
 const page = ref(1)
 const isLoading = ref(false)
 const currentVideo = ref<VideoItem>({} as VideoItem)
-const videos = ref<VideoItem[]>([])
+const relatedVideos = ref<VideoItem[]>([])
+const actressVideos = ref<VideoItem[]>([])
 const settingRef = ref<InstanceType<typeof MyPageModal> | null>(null)
 
-const tiles = computed(() =>
-  videos.value.map((v) => ({
+const relatedTiles = computed(() =>
+  relatedVideos.value.map((v) => ({
+    image: v.image_url,
+    title: v.title,
+  })),
+)
+
+const actressTiles = computed(() =>
+  actressVideos.value.map((v) => ({
     image: v.image_url,
     title: v.title,
   })),
@@ -74,15 +82,18 @@ onMounted(async () => {
 onUnmounted(() => {})
 
 const onClickTile = async (index: number) => {
-  await navigateTo(`/${videos.value[index].content_id}`)
+  await navigateTo(`/${relatedVideos.value[index].content_id}`)
 }
 
 const fetch = async (page: number) => {
   currentVideo.value = await fetchVideo(route.params.id as string)
-  const hashtag = currentVideo.value.actress_name || currentVideo.value.hashtags[0].name
-  const items = (await fetchVideos(page, hashtag)).result
+  relatedVideos.value = currentVideo.value.related_videos
   useSeoWithSpa(`${currentVideo.value.title}をくわしく`)
-  videos.value = items.filter((v) => v.content_id !== currentVideo.value.content_id)
+  if (currentVideo.value.actress_name) {
+    fetchVideos(page, currentVideo.value.actress_name).then((v) => {
+      actressVideos.value = v.result
+    })
+  }
 }
 
 const onClickSetting = async () => {

@@ -28,6 +28,7 @@ export interface VideoItem {
   bookmarked?: boolean
   recommended?: boolean
   hashtags: Hashtag[]
+  related_videos: VideoItem[]
 }
 
 interface Hashtag {
