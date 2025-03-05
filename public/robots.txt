@@ -1,3 +1,4 @@
 User-agent: *
 Sitemap: https://ehrotok.com/__sitemap__/0.xml
+Sitemap: https://ehrotok.com/sitemap_index.xml
 sitemap: https://ja.ehrotok.com/sitemap.xml
