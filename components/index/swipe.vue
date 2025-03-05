@@ -267,6 +267,9 @@ const init = async (hashtag?: string) => {
 }
 
 const setupSeo = async () => {
+  if (route.fullPath === '/') {
+    return
+  }
   const video = videoData.value.result[currentIndex.value]
   useSeoWithSpa(`${video.title}`, `/${video.content_id}`, video.image_url)
 }
