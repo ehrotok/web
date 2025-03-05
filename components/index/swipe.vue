@@ -159,6 +159,7 @@ onMounted(() => {
 
 onBeforeRouteUpdate((to, _) => {
   useWait(async () => {
+    currentPage.value = 1
     await init(to.query.q as string)
   })
 })
