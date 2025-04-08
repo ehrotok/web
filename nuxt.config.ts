@@ -4,7 +4,7 @@ const description: string =
   'EhroTok（エロトック）は、大人向けの特別なショート動画を楽しむためのプラットフォームです。手軽に楽しめる短い動画で、あなたの日常に新しい刺激をお届けします。'
 const url = 'https://ehrotok.com'
 const imagePath: string = 'ogp.png'
-const twitterCard: string = 'summary'
+const twitterCard: string = 'summary_large_image'
 const image = `${url}/${imagePath}`
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
