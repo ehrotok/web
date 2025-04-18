@@ -127,6 +127,9 @@ export default defineNuxtConfig({
     '/v1/**': {
       proxy: `${process.env.PROXY_URL}/**`,
     },
+    '/sitemap.xml': {
+      proxy: 'https://ja.ehrotok.com/sitemap.xml',
+    },
   },
 
   gtag: {
